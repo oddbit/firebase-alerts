@@ -1,2 +1,2 @@
-# crashlytics-ext
-Firebase extension for crashlytics notifications
+# About
+Firebase extension for alert notifications to Google Chat.
