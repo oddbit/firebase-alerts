@@ -1,20 +1,21 @@
 import {initializeApp} from "firebase-admin/app";
 import {firestore, logger} from "firebase-functions/v1";
-import {IWebhook, Webhook, WebhookPlatform} from "./webhook";
+import {IWebhook, WebhookPlatform} from "./webhook";
+import * as crashlyticsFunctions from "./crashlytics/functions";
 
 initializeApp();
 
-export * from "./crashlytics/functions";
+export const crashlytics = crashlyticsFunctions;
 
 /**
  * Update new webhook documents default values.
  */
 export const bootstrapwebhook = firestore
-    .document("system-alert-webhooks/{id}")
+    .document("firebase-alert-webhooks/{id}")
     .onWrite((snap) => {
       if (!snap.after.exists) {
         logger.debug("Nothing to do on delete");
-        return;
+        return null;
       }
 
       const webhook = snap.after.data() as IWebhook;
@@ -28,7 +29,7 @@ export const bootstrapwebhook = firestore
 
       if (JSON.stringify(webhook) === JSON.stringify(snap.after.data())) {
         logger.debug("No changes applied. Stop here.");
-        return;
+        return null;
       }
 
       return snap.after.ref.update(webhook as object);
