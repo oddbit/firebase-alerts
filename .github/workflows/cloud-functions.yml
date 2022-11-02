@@ -17,6 +17,7 @@ jobs:
         with:
           node-version: 16
           cache: 'yarn'
+          cache-dependency-path: 'functions/yarn.lock'
 
       - name: Install global NPM tools
         run: |
@@ -66,6 +67,7 @@ jobs:
         with:
           node-version: 16
           cache: 'yarn'
+          cache-dependency-path: 'functions/yarn.lock'
 
       - name: Install global NPM tools
         run: |
@@ -85,13 +87,6 @@ jobs:
           echo ${{ env.FIREBASE_SERVICE_ACCOUNT }} | base64 -d - > service_account.json
 
       - run: firebase use ${{ env.PROJECT_ID }}
-
-      - name: Cache functions NPM packages
-        uses: actions/cache@v3
-        with:
-          path: functions/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
 
       - name: Install node dependencies
         run: yarn --cwd functions install
