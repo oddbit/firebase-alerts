@@ -1,0 +1,124 @@
+name: Cloud Functions
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Testing
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout code
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install global NPM tools
+        run: |
+          yarn global add firebase-tools@latest 
+          firebase --version
+
+      - name: Cache functions NPM packages
+        uses: actions/cache@v3
+        with:
+          path: functions/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Cache Firebase
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/firebase/
+          key: ${{ runner.os }}-firebase-${{ hashFiles('~/.cache/firebase/**') }}
+
+      - name: Install node dependencies
+        run: yarn --cwd functions install
+
+      - name: Build typescript functions
+        run: yarn --cwd functions build
+
+      - run: |
+          echo "PROJECT_ID=${{ secrets.PROJECT_ID }}" >> $GITHUB_ENV
+          echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SA }}" >> $GITHUB_ENV
+
+      # The variable `FIREBASE_SERVICE_ACCOUNT` must be a base64 encoded string
+      # of the service account JSON to avoid problems with quote escaping and
+      # conversion of '\n' characters generating invalid JSON
+      - name: Set service account for Firebase CLI
+        run: |
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
+          echo ${{ env.FIREBASE_SERVICE_ACCOUNT }} | base64 -d - > service_account.json
+
+      - run: firebase use ${{ env.PROJECT_ID }}
+
+      - name: Run testing
+        run: >-
+          firebase
+          emulators:exec 'yarn --cwd functions test'
+
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout code
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install global NPM tools
+        run: |
+          yarn global add firebase-tools@latest
+          firebase --version
+
+      - run: |
+          echo "PROJECT_ID=${{ secrets.PROJECT_ID }}" >> $GITHUB_ENV
+          echo "FIREBASE_SERVICE_ACCOUNT=${{ secrets.FIREBASE_SA }}" >> $GITHUB_ENV
+
+      # The variable `FIREBASE_SERVICE_ACCOUNT` must be a base64 encoded string
+      # of the service account JSON to avoid problems with quote escaping and
+      # conversion of '\n' characters generating invalid JSON
+      - name: Set service account for Firebase CLI
+        run: |
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
+          echo ${{ env.FIREBASE_SERVICE_ACCOUNT }} | base64 -d - > service_account.json
+
+      - run: firebase use ${{ env.PROJECT_ID }}
+
+      - name: Cache functions NPM packages
+        uses: actions/cache@v3
+        with:
+          path: functions/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Install node dependencies
+        run: yarn --cwd functions install
+
+      - run: yarn --cwd functions build
+
+      - name: Deploy only functions
+        run: >-
+            firebase deploy
+            --only functions
+            -m "Github action run $GITHUB_RUN_ID"
+            --non-interactive
+            --force
+            --json
+
+      # Try to save potential log files if something went wrong
+      - name: Upload debug log
+        uses: actions/upload-artifact@v3
+        if: ${{ failure() }}
+        with:
+          name: debug-log-functions
+          path: firebase-debug.log
+          if-no-files-found: ignore
