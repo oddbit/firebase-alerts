@@ -6,7 +6,7 @@ import {IWebhook, WebhookPlatform} from "./webhook";
  * Update new webhook documents default values.
  */
 export const bootstrap = firestore
-    .document("firebase-alert-webhooks/{id}")
+    .document("firebase-alerts-webhooks/{id}")
     .onWrite((snap) => {
       if (!snap.after.exists) {
         logger.debug("Nothing to do on delete");

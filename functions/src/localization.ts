@@ -4,8 +4,26 @@ export type LocalizedString = {[key: string]: string};
  * Support for translating the webhook information to other languages
  */
 const l10n = {
-  "openFirebaseConsole": {
-    "en": "Open Firebase Console",
+  "labelAppInfo": {
+    "en": "App Info",
+  },
+  "labelVersion": {
+    "en": "Version",
+  },
+  "labelBundleId": {
+    "en": "Bundle Id",
+  },
+  "missingBundleId": {
+    "en": "Missing bundle id",
+  },
+  "openCrashlyticsIssue": {
+    "en": "Open Crashlytics",
+  },
+  "openFirebaseAppsSettings": {
+    "en": "Open Firebase Apps List",
+  },
+  "openFirestoreAppInfo": {
+    "en": "Update Firestore Document",
   },
   "createGithubIssue": {
     "en": "Create Github Issue",

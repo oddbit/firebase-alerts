@@ -1,3 +1,6 @@
+import {AppInfo} from "../app-info/app-info";
+import {AppCrash} from "../crashlytics/app-crash";
+
 export enum WebhookPlatform {
   GoogleChat = "google-chat",
 }
@@ -11,9 +14,10 @@ export interface IWebhook {
 /**
  * Declares Webhook class
  */
-export class Webhook implements IWebhook {
+export abstract class Webhook implements IWebhook {
   /**
    * Constructor
+   *
    * @param {IWebhook} webhook Webhook data
    */
   constructor(webhook: IWebhook) {
@@ -25,4 +29,16 @@ export class Webhook implements IWebhook {
   public readonly url: string;
   public readonly platform: WebhookPlatform;
   public readonly language: string;
+
+  /**
+   * Create message payload for the webhook to send a crashlytics message
+   *
+   * @param {AppInfo} appInfo
+   * @param {AppCrash} appCrash
+   * @return {object} Webhook body payload
+   */
+  abstract createCrashlyticsMessage(
+    appInfo: AppInfo,
+    appCrash: AppCrash,
+  ): object;
 }
