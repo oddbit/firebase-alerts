@@ -1,6 +1,18 @@
 {
-    "cSpell.words": [
-        "Firestore",
-        "Oddbit"
-    ]
+  "cSpell.words": [
+    "Firestore",
+    "Oddbit"
+  ],
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[json]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
 }
