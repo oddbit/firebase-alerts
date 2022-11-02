@@ -1,0 +1,27 @@
+{
+    "specversion": "1.0",
+    "message": "onNewFatalIssuePublished",
+    "alertType": "crashlytics.newFatalIssue",
+    "traceparent": "00-eef1c8824bb28de54778ea5b2480f2cb-00698bf6e446c76b-01",
+    "alerttype": "crashlytics.newFatalIssue",
+    "project": "269808624035",
+    "id": "3766676686655119100",
+    "type": "google.firebase.firebasealerts.alerts.v1.published",
+    "appid": "1:269808624035:android:296863cf1f5b6817c87a16",
+    "source": "//firebasealerts.googleapis.com/projects/269808624035",
+    "appId": "1:269808624035:android:296863cf1f5b6817c87a16",
+    "data": {
+        "createTime": "2022-11-01T15:46:28.013625Z",
+        "payload": {
+            "issue": {
+                "id": "20341b53d5c20227858fc5ed7934f196",
+                "title": "FlutterFirebaseCrashlyticsPlugin.java line 85",
+                "appVersion": "0.0.1",
+                "subtitle": "io.flutter.plugins.firebase.crashlytics.FlutterFirebaseCrashlyticsPlugin.lambda$crash$1"
+            },
+            "@type": "type.googleapis.com/google.events.firebase.firebasealerts.v1.CrashlyticsNewFatalIssuePayload"
+        },
+        "@type": "type.googleapis.com/google.events.firebase.firebasealerts.v1.AlertData",
+        "endTime": "2022-11-01T15:46:28.013625Z"
+    }
+}
