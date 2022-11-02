@@ -6,8 +6,6 @@ import {
   RegressionAlertPayload,
 } from "firebase-functions/v2/alerts/crashlytics";
 
-import {projectId} from "../config";
-
 export interface IAppCrash {
   eventTitle: string;
   issueId: string;
@@ -46,13 +44,26 @@ export class AppCrash implements IAppCrash {
    * @return {AppCrash} An instance of `AppCrash` class
    */
   public static fromCrashlytics(event: SupportedCrashlyticsEvent): AppCrash {
-    return new AppCrash({
-      eventTitle: event.type,
+    const appCrash = {
       issueId: event.data.payload.issue.id,
       issueTitle: event.data.payload.issue.title,
       appId: event.appId,
       appVersion: event.data.payload.issue.appVersion,
-    });
+    } as IAppCrash;
+
+    if (event.alertType === "crashlytics.NewAnrIssue") {
+      appCrash.eventTitle = "App Non Responsive";
+    } else if (event.alertType === "crashlytics.newFatalIssue") {
+      appCrash.eventTitle = "Fatal Issue";
+    } else if (event.alertType === "crashlytics.newNonFatalIssue") {
+      appCrash.eventTitle = "Non Fatal Issue";
+    } else if (event.alertType === "crashlytics.RegressionAlert") {
+      appCrash.eventTitle = "Regression Alert";
+    } else {
+      appCrash.eventTitle = "Unknown";
+    }
+
+    return new AppCrash(appCrash);
   }
 
   public readonly eventTitle: string;
@@ -61,11 +72,4 @@ export class AppCrash implements IAppCrash {
   public readonly appId: string;
   public readonly appVersion: string;
   public readonly tags = ["bug"];
-
-  /**
-   * Get the firebase console URL from this app crash
-   */
-  public get firebaseConsoleUrl(): string {
-    return `https://console.firebase.google.com/project/${projectId}/crashlytics/app/${this.appId}/issues/${this.issueId}`;
-  }
 }

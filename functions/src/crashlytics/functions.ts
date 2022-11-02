@@ -2,34 +2,59 @@
 import {crashlytics} from "firebase-functions/v2/alerts";
 import {logger} from "firebase-functions/v2";
 import {firestore} from "firebase-admin";
-import {postRequest} from "../utils/https";
 import {AppCrash} from "./app-crash";
-import {IWebhook, Webhook, WebhookPlatform} from "../webhook";
+import {IWebhook, Webhook, WebhookPlatform} from "../webhook/webhook";
 import {
   GoogleChatCard,
   GoogleChatCardButton,
   GoogleChatCardSection,
 } from "../google-chat/card";
-import {GithubInfo, IGithubInfo} from "../github/github-info";
 import {Localization} from "../localization";
+import {AppInfo, IAppInfo} from "../app-info/app-info";
+import {projectId} from "../config";
+import {post} from "request";
 
 
 const crashlyticsImg = "https://firebase.google.com/static/images/summit/pathways/crashlytics.png";
 
 /**
- * Support for translating the webhook information to other languages
+ * Generate a URL to Firebase Console for the issue
+ *
+ * @param {AppInfo} appInfo
+ * @param {AppCrash} appCrash
+ * @return {string} URL to Firebase console
  */
-const l10n = {
-  "openFirebaseConsole": {
-    "en": "Open Firebase Console",
-  },
-  "createGithubIssue": {
-    "en": "Create Github Issue",
-  },
-  "searchGithubIssue": {
-    "en": "Search Similar Github Issues",
-  },
-};
+function makeFirebaseConsoleUrl(appInfo: AppInfo, appCrash: AppCrash): string {
+  return `https://console.firebase.google.com/project/${projectId}/crashlytics/app/${appInfo.platform}:${appInfo.bundleId}/issues/${appCrash.issueId}`;
+}
+
+
+/**
+ * Make an Github URL to create an issue from this app crash
+ *
+ * @param {AppInfo} appInfo
+ * @param {AppCrash} appCrash
+ * @return {string} URL to create a github issue
+ */
+function makeGithubIssueUrl(appInfo: AppInfo, appCrash: AppCrash): string {
+  const attributes = [
+    `title=${encodeURI(appCrash.eventTitle)}`,
+    `labels=${appCrash.tags.map((tag) => encodeURI(tag)).join(",")}`,
+  ];
+
+  return `https://github.com/${appInfo.repo}/issues/new?${attributes.join("&")}`;
+}
+
+/**
+ * Make an Github URL to search for issues from this app crash
+ *
+ * @param {AppInfo} appInfo
+ * @param {AppCrash} appCrash
+ * @return {string} URL to search for github issues
+ */
+function makeGithubSearchUrl(appInfo: AppInfo, appCrash: AppCrash): string {
+  return `https://github.com/${appInfo.repo}/issues?q=${encodeURI(appCrash.eventTitle)}`;
+}
 
 /**
  * Handle crashlytics event
@@ -41,22 +66,31 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
   Promise<Promise<object | null>> {
   logger.debug("[handleCrashlyticsEvent]", appCrash);
 
-  const githubInfoSnap = await firestore().collection("firebase-alert-github")
+  // Update and ensure that there is a Firestore document for this app id
+  await firestore()
+      .collection("firebase-alert-apps")
+      .doc(appCrash.appId)
+      .set({
+        lastIssue: firestore.FieldValue.serverTimestamp(),
+        issueCount: firestore.FieldValue.increment(1),
+      }, {merge: true});
+
+
+  const appInfoSnap = await firestore().collection("firebase-alert-apps")
       .doc(appCrash.appId)
       .get();
 
-  logger.debug("[handleCrashlyticsEvent] Github info", githubInfoSnap.data());
+  logger.debug("[handleCrashlyticsEvent] App info", appInfoSnap.data());
 
-  const githubInfo = githubInfoSnap.exists ?
-    new GithubInfo(githubInfoSnap.data() as IGithubInfo) :
-    null;
+  const appInfo = new AppInfo(appInfoSnap.data() as IAppInfo);
 
-  appCrash.tags.push(...(githubInfo?.defaultTags ?? []));
+  const webhooksSnap = await firestore()
+      .collection("firebase-alert-webhooks")
+      .get();
 
-  const snap = await firestore().collection("firebase-alert-webhooks").get();
-  const promises = snap.docs.map((doc) => {
+  const promises = webhooksSnap.docs.map((doc) => {
     const webhook = new Webhook(doc.data() as IWebhook);
-    const localizations = new Localization(l10n, webhook.language);
+    const localizations = new Localization(webhook.language);
 
     if (webhook.platform == WebhookPlatform.GoogleChat) {
       logger.debug("[handleCrashlyticsEvent] Google Chat webhook", webhook);
@@ -70,22 +104,27 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
         header: appCrash.issueTitle,
       });
 
-      cardSection.buttons.push(
-          new GoogleChatCardButton({
-            text: localizations.translate("openFirebaseConsole"),
-            url: appCrash.firebaseConsoleUrl,
-          })
-      );
+      if (!appInfo.bundleId) {
+        logger.warn("[handleCrashlyticsEvent] No bundle id for app", appInfo);
+      } else {
+        // Need the package ID in order to link to Firebase Console
+        cardSection.buttons.push(
+            new GoogleChatCardButton({
+              text: localizations.translate("openFirebaseConsole"),
+              url: makeFirebaseConsoleUrl(appInfo, appCrash),
+            })
+        );
+      }
 
-      if (githubInfo) {
+      if (appInfo.repo) {
         // Github info is an optional state.
         cardSection.buttons.push(
             new GoogleChatCardButton({
               text: localizations.translate("createGithubIssue"),
-              url: githubInfo.makeGithubIssueUrl(appCrash),
+              url: makeGithubIssueUrl(appInfo, appCrash),
             }), new GoogleChatCardButton({
               text: localizations.translate("searchGithubIssue"),
-              url: githubInfo.makeGithubSearchUrl(appCrash),
+              url: makeGithubSearchUrl(appInfo, appCrash),
             }),
         );
       }
@@ -93,7 +132,14 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
       googleChatCard.sections.push(cardSection);
 
       try {
-        return postRequest(webhook.url, googleChatCard.toJson());
+        const opts = {body: JSON.stringify(googleChatCard.toJson())};
+        logger.info("[handleCrashlyticsEvent] Call webhook", opts);
+        return post(webhook.url, opts, (err, res) => {
+          if (err) {
+            throw err;
+          }
+          logger.info("[handleCrashlyticsEvent] Webhook call OK", res);
+        });
       } catch (error) {
         logger.error("[handleCrashlyticsEvent] Failed posting webhook.", {
           error,

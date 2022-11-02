@@ -1,22 +1,36 @@
 export type LocalizedString = {[key: string]: string};
 
 /**
+ * Support for translating the webhook information to other languages
+ */
+const l10n = {
+  "openFirebaseConsole": {
+    "en": "Open Firebase Console",
+  },
+  "createGithubIssue": {
+    "en": "Create Github Issue",
+  },
+  "searchGithubIssue": {
+    "en": "Search Similar Github Issues",
+  },
+};
+
+
+/**
  * Declares a class for handling translation assets with language fallback.
  */
 export class Localization {
   /**
    * Constructor
    *
-   * @param {object} strings Object with string translations
    * @param {string} language The language to use
    */
-  constructor(strings: {[key: string]: LocalizedString}, language?: string) {
-    this.strings = strings;
+  constructor(language?: string) {
     this.language = language ?? Localization.defaultLanguage;
   }
 
   public static readonly defaultLanguage = "en";
-  private readonly strings: {[key: string]: LocalizedString};
+  private readonly strings: {[key: string]: LocalizedString} = l10n;
   private readonly language: string;
 
   /**

@@ -1,50 +1,10 @@
 import {initializeApp} from "firebase-admin/app";
-import {firestore, logger} from "firebase-functions/v1";
-import {IWebhook, WebhookPlatform} from "./webhook";
+import * as appInfoFunctions from "./app-info/functions";
 import * as crashlyticsFunctions from "./crashlytics/functions";
+import * as webhookFunctions from "./webhook/functions";
 
 initializeApp();
 
+export const appinfo = appInfoFunctions;
 export const crashlytics = crashlyticsFunctions;
-
-/**
- * Update new webhook documents default values.
- */
-export const bootstrapwebhook = firestore
-    .document("firebase-alert-webhooks/{id}")
-    .onWrite((snap) => {
-      if (!snap.after.exists) {
-        logger.debug("Nothing to do on delete");
-        return null;
-      }
-
-      const webhook = snap.after.data() as IWebhook;
-      if (!webhook.url) {
-        logger.warn("Document didn't contain any webhook URL. Removing");
-        return snap.after.ref.delete();
-      }
-
-      webhook.platform = derivePlatformTypeFromUrl(webhook.url);
-      webhook.language ??= "en";
-
-      if (JSON.stringify(webhook) === JSON.stringify(snap.after.data())) {
-        logger.debug("No changes applied. Stop here.");
-        return null;
-      }
-
-      return snap.after.ref.update(webhook as object);
-    });
-
-/**
- * Derive which platform that this webhook is referring to based on its URL
- *
- * @param {string} url Webhook URL
- * @return {WebhookPlatform}
- */
-function derivePlatformTypeFromUrl(url: string): WebhookPlatform {
-  if (url.startsWith("https://chat.googleapis.com")) {
-    return WebhookPlatform.GoogleChat;
-  }
-
-  throw Error("Unsupported webhook URL: " + url);
-}
+export const webhook = webhookFunctions;
