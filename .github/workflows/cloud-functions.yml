@@ -16,19 +16,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Install global NPM tools
         run: |
           yarn global add firebase-tools@latest 
           firebase --version
-
-      - name: Cache functions NPM packages
-        uses: actions/cache@v3
-        with:
-          path: functions/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
 
       - name: Cache Firebase
         uses: actions/cache@v3
@@ -72,7 +65,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Install global NPM tools
         run: |
