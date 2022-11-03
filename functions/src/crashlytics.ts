@@ -3,11 +3,11 @@ import {firestore} from "firebase-admin";
 import {logger} from "firebase-functions/v2";
 import {crashlytics} from "firebase-functions/v2/alerts";
 import {post} from "request";
-import {AppInfo, IAppInfo} from "../app-info/app-info";
-import {makeFirebaseAppsSettingsUrl, makeFirestoreAppInfoUrl} from "../utils";
-import {GoogleChatWebhook} from "../webhook/google-chat";
-import {IWebhook, Webhook, WebhookPlatform} from "../webhook/webhook";
-import {AppCrash} from "./app-crash";
+import {AppInfo, IAppInfo} from "./models/app-info";
+import {makeFirebaseAppsSettingsUrl, makeFirestoreAppInfoUrl} from "./urls";
+import {GoogleChatWebhook} from "./webhook-plugins/google-chat";
+import {IWebhook, Webhook, WebhookPlatform} from "./models/webhook";
+import {AppCrash} from "./models/app-crash";
 
 /**
  * Declares a webhook builder type that is used to generically support
@@ -38,6 +38,7 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
       .collection("firebase-alerts-apps")
       .doc(appCrash.appId)
       .set({
+        appId: appCrash.appId,
         lastIssue: firestore.FieldValue.serverTimestamp(),
         issueCount: firestore.FieldValue.increment(1),
       }, {merge: true});
@@ -70,8 +71,9 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
   const promises = webhooksSnap.docs
       .map((doc) => doc.data() as IWebhook)
       .map((data) => {
+        const platform = Webhook.derivePlatformTypeFromUrl(data.url);
         // Ensure that there is a plugin registered for the current webhook
-        if (!data.platform || !(data.platform in webhookPlugins)) {
+        if (!(platform in webhookPlugins)) {
           logger.error("[handleCrashlyticsEvent] Unsupported webhook: ", data);
           // Failing softly so we can proceed with other webhooks.
           return Promise.resolve();
@@ -79,8 +81,8 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
 
         // Call the builder function to create an instance of the
         // current platform webhook.
-        logger.debug(`[handleCrashlyticsEvent] ${data.platform} webhook`, data);
-        const webhook = webhookPlugins[data.platform](data);
+        logger.debug(`[handleCrashlyticsEvent] ${platform} webhook`, data);
+        const webhook = webhookPlugins[platform](data);
 
         const webhookPayload = {
           body: JSON.stringify(

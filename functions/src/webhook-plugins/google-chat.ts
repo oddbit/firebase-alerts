@@ -1,16 +1,15 @@
-import {AppInfo} from "../app-info/app-info";
-import {AppCrash} from "../crashlytics/app-crash";
-import {crashlyticsImgUrl} from "../images";
+import {AppInfo} from "../models/app-info";
+import {AppCrash} from "../models/app-crash";
 import {Localization} from "../localization";
-import {Webhook} from "./webhook";
+import {Webhook} from "../models/webhook";
 import {
-
+  crashlyticsImgUrl,
   makeCrashlyticsIssueUrl,
   makeFirebaseAppsSettingsUrl,
   makeFirestoreAppInfoUrl,
   makeGithubIssueUrl,
   makeGithubSearchUrl,
-} from "../utils";
+} from "../urls";
 
 
 /**

@@ -1,6 +1,7 @@
 export enum AppPlatform {
   iOS = "ios",
   Android = "android",
+  Unknown = "unknown",
 }
 
 export interface IAppInfo {
@@ -17,12 +18,10 @@ export interface IAppInfo {
    */
   bundleId: string;
 
-  platform: AppPlatform;
-
   /**
    * Last time an issue was reported
    */
-  lastIssue: Date;
+  lastIssue?: Date;
 
   /**
    * Number of issues tracked
@@ -52,18 +51,32 @@ export class AppInfo implements IAppInfo {
   constructor(data: IAppInfo) {
     this.appId = data.appId;
     this.bundleId = data.bundleId;
-    this.platform = data.platform;
     this.lastIssue = data.lastIssue;
-    this.issueCount = data.issueCount;
+    this.issueCount = data.issueCount ?? 0;
     this.repo = data.repo;
     this.project = data.project;
   }
 
   public readonly appId: string;
   public readonly bundleId: string;
-  public readonly platform: AppPlatform;
-  public readonly lastIssue: Date;
+  public readonly lastIssue?: Date;
   public readonly issueCount: number;
   public readonly repo: string;
   public readonly project?: string | undefined;
+
+  /**
+ * Derive which app platform that this app info is referring to
+ * based on its `appId`
+ *
+ * @return {AppPlatform}
+ */
+  public get platform(): AppPlatform {
+    if (this.appId.includes("android")) {
+      return AppPlatform.Android;
+    } else if (this.appId.includes("ios")) {
+      return AppPlatform.iOS;
+    }
+
+    return AppPlatform.Unknown;
+  }
 }

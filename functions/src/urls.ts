@@ -1,6 +1,8 @@
-import {AppInfo} from "./app-info/app-info";
+import {AppInfo} from "./models/app-info";
 import {projectId} from "./config";
-import {AppCrash} from "./crashlytics/app-crash";
+import {AppCrash} from "./models/app-crash";
+
+export const crashlyticsImgUrl = "https://firebase.google.com/static/images/summit/pathways/crashlytics.png";
 
 /**
  * Generate a URL to Firebase Console for the issue

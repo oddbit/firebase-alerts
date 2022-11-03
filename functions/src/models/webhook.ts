@@ -1,13 +1,13 @@
-import {AppInfo} from "../app-info/app-info";
-import {AppCrash} from "../crashlytics/app-crash";
+import {AppInfo} from "./app-info";
+import {AppCrash} from "./app-crash";
 
 export enum WebhookPlatform {
   GoogleChat = "google-chat",
+  Unknown = "unknown",
 }
 
 export interface IWebhook {
   url: string;
-  platform: WebhookPlatform;
   language: string;
 }
 
@@ -22,12 +22,25 @@ export abstract class Webhook implements IWebhook {
    */
   constructor(webhook: IWebhook) {
     this.url = webhook.url;
-    this.platform = webhook.platform;
     this.language = webhook.language;
   }
 
+
+  /**
+   * Derive which platform that this webhook is referring to based on its URL
+   *
+   * @param {string} url Webhook URL
+   * @return {WebhookPlatform}
+   */
+  public static derivePlatformTypeFromUrl(url: string): WebhookPlatform {
+    if (url?.startsWith("https://chat.googleapis.com")) {
+      return WebhookPlatform.GoogleChat;
+    }
+
+    return WebhookPlatform.Unknown;
+  }
+
   public readonly url: string;
-  public readonly platform: WebhookPlatform;
   public readonly language: string;
 
   /**
@@ -37,7 +50,7 @@ export abstract class Webhook implements IWebhook {
    * @param {AppCrash} appCrash
    * @return {object} Webhook body payload
    */
-  abstract createCrashlyticsMessage(
+  public abstract createCrashlyticsMessage(
     appInfo: AppInfo,
     appCrash: AppCrash,
   ): object;
