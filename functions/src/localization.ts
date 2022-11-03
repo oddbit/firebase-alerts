@@ -13,6 +13,21 @@ const l10n = {
   "labelBundleId": {
     "en": "Bundle Id",
   },
+  "anrIssue": {
+    "en": "App Non Responsive",
+  },
+  "fatalIssue": {
+    "en": "Fatal Issue",
+  },
+  "nonFatalIssue": {
+    "en": "Non Fatal Issue",
+  },
+  "regressionIssue": {
+    "en": "Regression Issue",
+  },
+  "unknownIssue": {
+    "en": "Unknown Issue",
+  },
   "missingBundleId": {
     "en": "Missing bundle id",
   },
