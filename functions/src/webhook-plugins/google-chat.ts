@@ -1,5 +1,5 @@
 import {AppInfo} from "../models/app-info";
-import {AppCrash} from "../models/app-crash";
+import {AppCrash, IssueType} from "../models/app-crash";
 import {Localization} from "../localization";
 import {Webhook} from "../models/webhook";
 import {
@@ -10,7 +10,6 @@ import {
   makeGithubIssueUrl,
   makeGithubSearchUrl,
 } from "../urls";
-
 
 /**
  * Declares a webhook implementation for Google Chat
@@ -25,9 +24,15 @@ export class GoogleChatWebhook extends Webhook {
    * @return {object} A Google Chat card message payload
    */
   createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
-    const localizations = new Localization(this.language);
-    const bundleId = appInfo.bundleId ??
-      localizations.translate("missingBundleId");
+    const l10n = new Localization(this.language);
+    const bundleId = appInfo.bundleId ?? l10n.translate("missingBundleId");
+    const eventTitle: {[key: string]: string} = {
+      [IssueType.Anr]: l10n.translate("anrIssue"),
+      [IssueType.Fatal]: l10n.translate("fatalIssue"),
+      [IssueType.NonFatal]: l10n.translate("nonFatalIssue"),
+      [IssueType.Regression]: l10n.translate("regressionIssue"),
+      [IssueType.Unknown]: l10n.translate("unknownIssue"),
+    };
 
     const googleChatCards =
     {
@@ -39,7 +44,7 @@ export class GoogleChatWebhook extends Webhook {
       card: {
         header: {
           title: "Crashlytics",
-          subtitle: appCrash.eventTitle,
+          subtitle: eventTitle[appCrash.issueType],
           imageUrl: crashlyticsImgUrl,
           imageType: "CIRCLE",
           imageAltText: "Avatar for Crashlytics",
@@ -50,13 +55,13 @@ export class GoogleChatWebhook extends Webhook {
             widgets: [
               {
                 decoratedText: {
-                  topLabel: localizations.translate("labelBundleId"),
+                  topLabel: l10n.translate("labelBundleId"),
                   text: `${bundleId} (${appInfo.platform})`,
                 },
               },
               {
                 decoratedText: {
-                  topLabel: localizations.translate("labelVersion"),
+                  topLabel: l10n.translate("labelVersion"),
                   text: appCrash.appVersion,
                 },
               },
@@ -84,7 +89,7 @@ export class GoogleChatWebhook extends Webhook {
         buttonList: {
           buttons: [
             {
-              text: localizations.translate("openCrashlyticsIssue"),
+              text: l10n.translate("openCrashlyticsIssue"),
               onClick: {
                 openLink: {
                   url: makeCrashlyticsIssueUrl(appInfo, appCrash),
@@ -99,7 +104,7 @@ export class GoogleChatWebhook extends Webhook {
         buttonList: {
           buttons: [
             {
-              text: localizations.translate("openFirebaseAppsSettings"),
+              text: l10n.translate("openFirebaseAppsSettings"),
               onClick: {
                 openLink: {
                   url: makeFirebaseAppsSettingsUrl(),
@@ -107,7 +112,7 @@ export class GoogleChatWebhook extends Webhook {
               },
             },
             {
-              text: localizations.translate("openFirestoreAppInfo"),
+              text: l10n.translate("openFirestoreAppInfo"),
               onClick: {
                 openLink: {
                   url: makeFirestoreAppInfoUrl(appInfo),
@@ -132,7 +137,7 @@ export class GoogleChatWebhook extends Webhook {
             buttonList: {
               buttons: [
                 {
-                  text: localizations.translate("createGithubIssue"),
+                  text: l10n.translate("createGithubIssue"),
                   onClick: {
                     openLink: {
                       url: makeGithubIssueUrl(appInfo, appCrash),
@@ -140,7 +145,7 @@ export class GoogleChatWebhook extends Webhook {
                   },
                 },
                 {
-                  text: localizations.translate("searchGithubIssue"),
+                  text: l10n.translate("searchGithubIssue"),
                   onClick: {
                     openLink: {
                       url: makeGithubSearchUrl(appInfo, appCrash),

@@ -7,14 +7,22 @@ import {
 } from "firebase-functions/v2/alerts/crashlytics";
 
 export interface IAppCrash {
-  eventTitle: string;
+  issueType: IssueType;
   issueId: string;
   issueTitle: string;
   appId: string;
   appVersion: string;
 }
 
-type SupportedCrashlyticsEvent = CrashlyticsEvent<NewAnrIssuePayload>
+export enum IssueType {
+  Anr,
+  Fatal,
+  NonFatal,
+  Regression,
+  Unknown,
+}
+
+export type SupportedCrashlyticsEvent = CrashlyticsEvent<NewAnrIssuePayload>
  | CrashlyticsEvent<NewFatalIssuePayload>
  | CrashlyticsEvent<NewNonfatalIssuePayload>
  | CrashlyticsEvent<RegressionAlertPayload>;
@@ -34,7 +42,7 @@ export class AppCrash implements IAppCrash {
     this.appVersion = data.appVersion;
     this.issueId = data.issueId;
     this.issueTitle = data.issueTitle;
-    this.eventTitle = data.eventTitle;
+    this.issueType = data.issueType;
   }
 
   /**
@@ -51,22 +59,26 @@ export class AppCrash implements IAppCrash {
       appVersion: event.data.payload.issue.appVersion,
     } as IAppCrash;
 
-    if (event.alertType === "crashlytics.NewAnrIssue") {
-      appCrash.eventTitle = "App Non Responsive";
-    } else if (event.alertType === "crashlytics.newFatalIssue") {
-      appCrash.eventTitle = "Fatal Issue";
-    } else if (event.alertType === "crashlytics.newNonFatalIssue") {
-      appCrash.eventTitle = "Non Fatal Issue";
-    } else if (event.alertType === "crashlytics.RegressionAlert") {
-      appCrash.eventTitle = "Regression Alert";
+    const alertTypeLower = event.alertType.toLowerCase();
+
+    if (alertTypeLower.includes("anrissue")) {
+      appCrash.issueType= IssueType.Anr;
+    } else if (alertTypeLower.includes("nonfatalissue")) {
+      appCrash.issueType= IssueType.NonFatal;
+    } else if (alertTypeLower.includes("fatalissue") &&
+      !alertTypeLower.includes("nonfatal")) {
+      // Make sure we don't match "nonfatal"
+      appCrash.issueType= IssueType.Fatal;
+    } else if (alertTypeLower.includes("regression")) {
+      appCrash.issueType= IssueType.NonFatal;
     } else {
-      appCrash.eventTitle = "Unknown";
+      appCrash.issueType= IssueType.Unknown;
     }
 
     return new AppCrash(appCrash);
   }
 
-  public readonly eventTitle: string;
+  public readonly issueType: IssueType;
   public readonly issueId: string;
   public readonly issueTitle: string;
   public readonly appId: string;
