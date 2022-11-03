@@ -47,7 +47,7 @@ export function makeGithubIssueUrl(
     appInfo: AppInfo,
     appCrash: AppCrash,): string {
   const attributes = [
-    `title=${encodeURI(appCrash.eventTitle)}`,
+    `title=${encodeURI(appCrash.issueTitle)}`,
     `labels=${appCrash.tags.map((tag) => encodeURI(tag)).join(",")}`,
   ];
 
@@ -64,6 +64,6 @@ export function makeGithubIssueUrl(
 export function makeGithubSearchUrl(
     appInfo: AppInfo,
     appCrash: AppCrash,): string {
-  return `https://github.com/${appInfo.repo}/issues?q=${encodeURI(appCrash.eventTitle)}`;
+  return `https://github.com/${appInfo.repo}/issues?q=${encodeURI(appCrash.issueTitle)}`;
 }
 
