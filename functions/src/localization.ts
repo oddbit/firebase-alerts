@@ -73,10 +73,10 @@ export class Localization {
    * @return {string} Returns the string translation if available
    */
   public translate(key: string): string {
-    const str = this.strings[key][this.language];
-    if (!str) {
+    if (!(key in this.strings)) {
       throw new Error("Key not found: " + key);
     }
-    return str;
+    return this.strings[key][this.language] ??
+      this.strings[key][Localization.defaultLanguage];
   }
 }
