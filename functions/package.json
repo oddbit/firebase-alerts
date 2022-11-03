@@ -1,6 +1,9 @@
 {
   "name": "firebase-alerts",
-  "private": true,
+  "version": "0.1.0",
+  "description": "Firebase alert integration with webhook push notifications to various platforms",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/oddbit/firebase-alerts#readme",
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
     "build": "tsc",
