@@ -56,6 +56,17 @@ Create one document for each of your Firebase app ids in a collection named
  
 ![Webhook Firestore Doc](./doc/images/firestore-doc-app.png)
 
+# Configuring 3rd party
+
+## Google Chat
+Add a webhook to your space (see [official documentation](https://developers.google.com/hangouts/chat/how-tos/webhooks)).
+
+### Configure Google Chat Webhook
+![Google Chat Webhook Config](./doc/images/google-chat-config-webhook.png)
+
+### Receiving Google Chat Alerts
+![Google Chat Alert](./doc/images/google-chat-card.png)
+
 
 # Getting involved
 If you're reading this, you're awesome! 
