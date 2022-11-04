@@ -57,6 +57,12 @@ const l10n = {
   "descriptionSearchSimilarIssues": {
     "en": "Search for similar reports of this issue",
   },
+  "descriptionOpenFirebaseAppsSettings": {
+    "en": "Go to Firebase console and copy the apps bundle id",
+  },
+  "descriptionOpenFirestoreAppInfo": {
+    "en": "Open Firestore and update app info document with bundle id",
+  },
 };
 
 

@@ -1,5 +1,6 @@
 import {IWebhook, Webhook} from "../models/webhook";
 import {GoogleChatWebhook} from "./google-chat";
+import {SlackWebhook} from "./slack";
 
 export enum WebhookPlatform {
   GoogleChat,
@@ -18,8 +19,8 @@ type WebhookBuilder = (webhook: IWebhook) => Webhook;
  * Contains a lookup map of supported webhooks
  */
 export const webhookPlugins: {[key: string]: WebhookBuilder} = {
-  [WebhookPlatform.GoogleChat]:
-    (webhook: IWebhook) => new GoogleChatWebhook(webhook),
+  [WebhookPlatform.GoogleChat]: (webhook) => new GoogleChatWebhook(webhook),
+  [WebhookPlatform.Slack]: (webhook) => new SlackWebhook(webhook),
 };
 
 /**
