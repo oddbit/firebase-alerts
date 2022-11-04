@@ -1,5 +1,6 @@
 import {IWebhook, Webhook} from "../models/webhook";
 import {GoogleChatWebhook} from "./google-chat";
+import {DiscordWebhook} from "./discord";
 import {SlackWebhook} from "./slack";
 
 export enum WebhookPlatform {
@@ -21,6 +22,7 @@ type WebhookBuilder = (webhook: IWebhook) => Webhook;
 export const webhookPlugins: {[key: string]: WebhookBuilder} = {
   [WebhookPlatform.GoogleChat]: (webhook) => new GoogleChatWebhook(webhook),
   [WebhookPlatform.Slack]: (webhook) => new SlackWebhook(webhook),
+  [WebhookPlatform.Discord]: (webhook) => new DiscordWebhook(webhook),
 };
 
 /**
