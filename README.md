@@ -8,7 +8,7 @@ Currently supported platforms and alerts according to [roadmap](https://github.c
 | ----------- | :--------------: | :---------: | :---------: | :-----: | 
 | Google Chat | ❌  | ✅ | ❌ | ❌ |
 | Slack       | ❌  | ✅ | ❌ | ❌ |
-| Discord     | ❌  | ❌ | ❌ | ❌ |
+| Discord     | ❌  | ✅ | ❌ | ❌ |
 
 
 # Configuring your webhooks

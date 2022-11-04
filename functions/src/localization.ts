@@ -27,6 +27,9 @@ const l10n = {
   "labelVersion": {
     "en": "Version",
   },
+  "labelPlatform": {
+    "en": "Platform",
+  },
   "labelBundleId": {
     "en": "Bundle Id",
   },

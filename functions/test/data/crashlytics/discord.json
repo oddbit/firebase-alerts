@@ -1,0 +1,34 @@
+{
+  "content": null,
+  "embeds": [
+    {
+      "title": "NothingCanGoWrong.java line 85",
+      "url": "https://console.firebase.google.com/project/undefined/crashlytics/app/android:id.oddbit.helloworldapp/issues/20341b53d5c20227858fc5ed7934f196",
+      "color": 16763432,
+      "author": {
+        "name": "Crashlytics",
+        "icon_url": "https://github.com/oddbit/firebase-alerts/raw/main/icons/crashlytics.png"
+      },
+      "fields": [
+        {
+          "name": "Version",
+          "value": "`0.0.1`",
+          "inline": true
+        },
+        {
+          "name": "Platform",
+          "value": "android",
+          "inline": true
+        },
+        {
+          "name": "Bundle Id",
+          "value": "`id.oddbit.helloworldapp`"
+        },
+        {
+          "name": "Github",
+          "value": "Create a new bug report for this issue\n[Create Github Issue](https://github.com/oddbit/firebase-alerts/issues/new?title=NothingCanGoWrong.java%20line%2085&labels=bug)\n\nSearch for similar reports of this issue\n[Search Similar Github Issues](https://github.com/oddbit/firebase-alerts/issues?q=NothingCanGoWrong.java%20line%2085)"
+        }
+      ]
+    }
+  ]
+}
