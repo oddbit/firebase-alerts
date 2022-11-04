@@ -13,16 +13,16 @@ import {
 } from "../urls";
 
 /**
- * Declares a webhook implementation for Google Chat
+ * Declares a webhook implementation for Slack
  */
 export class SlackWebhook extends Webhook {
   /**
-   * Creates a JSON payload for a Google Chat card.
+   * Creates a JSON payload for a Slack card.
    * @see https://developers.google.com/chat/api/reference/rest/v1/cards#card
    *
    * @param {AppInfo} appInfo
    * @param {AppCrash} appCrash
-   * @return {object} A Google Chat card message payload
+   * @return {object} A Slack card message payload
    */
   createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
     const l10n = new Localization(this.language);
