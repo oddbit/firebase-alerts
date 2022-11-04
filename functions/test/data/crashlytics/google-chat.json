@@ -1,0 +1,81 @@
+{
+  "cardsV2": [
+    {
+      "cardId": "1667578422098-9878",
+      "card": {
+        "header": {
+          "title": "Crashlytics",
+          "subtitle": "Fatal Issue",
+          "imageUrl": "https://github.com/oddbit/firebase-alerts/raw/main/icons/crashlytics.png",
+          "imageType": "CIRCLE",
+          "imageAltText": "Avatar for Crashlytics"
+        },
+        "sections": [
+          {
+            "header": "NothingCanGoWrong.java line 85",
+            "widgets": [
+              {
+                "decoratedText": {
+                  "topLabel": "Bundle Id",
+                  "text": "id.oddbit.helloworldapp (android)"
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "Version",
+                  "text": "0.0.1"
+                }
+              }
+            ]
+          },
+          {
+            "header": "Firebase",
+            "widgets": [
+              {
+                "buttonList": {
+                  "buttons": [
+                    {
+                      "text": "Open Crashlytics",
+                      "onClick": {
+                        "openLink": {
+                          "url": "https://console.firebase.google.com/project/undefined/crashlytics/app/android:id.oddbit.helloworldapp/issues/20341b53d5c20227858fc5ed7934f196"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "header": "Github",
+            "widgets": [
+              {
+                "buttonList": {
+                  "buttons": [
+                    {
+                      "text": "Create Github Issue",
+                      "onClick": {
+                        "openLink": {
+                          "url": "https://github.com/oddbit/firebase-alerts/issues/new?title=NothingCanGoWrong.java%20line%2085&labels=bug"
+                        }
+                      }
+                    },
+                    {
+                      "text": "Search Similar Github Issues",
+                      "onClick": {
+                        "openLink": {
+                          "url": "https://github.com/oddbit/firebase-alerts/issues?q=NothingCanGoWrong.java%20line%2085"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
