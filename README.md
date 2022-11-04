@@ -20,9 +20,8 @@ webhooks.
 * [Discord](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 There is a square Firebase icon under the [`/icons/`](./icons) folder that you 
-can use for your webhook avatar.
+can use for your webhook avatar. Use this permalink to the image: `https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png`
 
-![Firebase icon](./icons/firebase.png)
 
 # Installation
 You can integrate the notifications with your Firebase project by forking this
