@@ -7,7 +7,7 @@ Currently supported platforms and alerts according to [roadmap](https://github.c
 | Platform    | App Distribution | Crashlytics | Performance | Billing | 
 | ----------- | :--------------: | :---------: | :---------: | :-----: | 
 | Google Chat | ❌  | ✅ | ❌ | ❌ |
-| Slack       | ❌  | ❌ | ❌ | ❌ |
+| Slack       | ❌  | ✅ | ❌ | ❌ |
 | Discord     | ❌  | ❌ | ❌ | ❌ |
 
 
