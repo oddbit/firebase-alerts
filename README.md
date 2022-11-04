@@ -74,10 +74,10 @@ Create one document for each of your Firebase app ids in a collection named
 
  - `appId` - Firebase app id 
  - `bundleId` - Application bundle id (e.g. `id.oddbit.helloworldapp`)
- - `repo` - Github repository owner and name (e.g. `oddbit/firebase-alerts`)
+ - `github` - Optional object for github info
+     - `repo` - Repository owner and name (e.g. `oddbit/firebase-alerts`)
  
 ![Webhook Firestore Doc](./doc/images/firestore-doc-app.png)
-
 
 # Getting involved
 If you're reading this, you're awesome! 
