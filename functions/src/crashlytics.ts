@@ -3,25 +3,11 @@ import {firestore} from "firebase-admin";
 import {logger} from "firebase-functions/v2";
 import {crashlytics} from "firebase-functions/v2/alerts";
 import {post} from "request";
-import {AppInfo, IAppInfo} from "./models/app-info";
-import {makeFirebaseAppsSettingsUrl, makeFirestoreAppInfoUrl} from "./urls";
-import {GoogleChatWebhook} from "./webhook-plugins/google-chat";
-import {IWebhook, Webhook, WebhookPlatform} from "./models/webhook";
 import {AppCrash} from "./models/app-crash";
-
-/**
- * Declares a webhook builder type that is used to generically support
- * future webhook platforms.
- */
-type WebhookBuilder = (webhook: IWebhook) => Webhook;
-
-/**
- * Contains a lookup map of supported webhooks
- */
-const webhookPlugins: {[key: string]: WebhookBuilder} = {
-  [WebhookPlatform.GoogleChat]:
-    (webhook: IWebhook) => new GoogleChatWebhook(webhook),
-};
+import {AppInfo, IAppInfo} from "./models/app-info";
+import {IWebhook} from "./models/webhook";
+import {makeFirebaseAppsSettingsUrl, makeFirestoreAppInfoUrl} from "./urls";
+import {derivePlatformTypeFromUrl, webhookPlugins} from "./webhook-plugins";
 
 /**
  * Handle crashlytics event
@@ -71,7 +57,7 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
   const promises = webhooksSnap.docs
       .map((doc) => doc.data() as IWebhook)
       .map((data) => {
-        const platform = Webhook.derivePlatformTypeFromUrl(data.url);
+        const platform = derivePlatformTypeFromUrl(data.url);
         // Ensure that there is a plugin registered for the current webhook
         if (!(platform in webhookPlugins)) {
           logger.error("[handleCrashlyticsEvent] Unsupported webhook: ", data);
