@@ -26,13 +26,6 @@ export class GoogleChatWebhook extends Webhook {
   createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
     const l10n = new Localization(this.language);
     const bundleId = appInfo.bundleId ?? l10n.translate("missingBundleId");
-    const eventTitle: {[key: string]: string} = {
-      [IssueType.Anr]: l10n.translate("anrIssue"),
-      [IssueType.Fatal]: l10n.translate("fatalIssue"),
-      [IssueType.NonFatal]: l10n.translate("nonFatalIssue"),
-      [IssueType.Regression]: l10n.translate("regressionIssue"),
-      [IssueType.Unknown]: l10n.translate("unknownIssue"),
-    };
 
     const googleChatCards =
     {
@@ -45,7 +38,7 @@ export class GoogleChatWebhook extends Webhook {
       card: {
         header: {
           title: "Crashlytics",
-          subtitle: eventTitle[appCrash.issueType],
+          subtitle: l10n.translate(appCrash.issueType),
           imageUrl: crashlyticsImgUrl,
           imageType: "CIRCLE",
           imageAltText: "Avatar for Crashlytics",
