@@ -51,7 +51,7 @@ export function makeGithubIssueUrl(
     `labels=${appCrash.tags.map((tag) => encodeURI(tag)).join(",")}`,
   ];
 
-  return `https://github.com/${appInfo.repo}/issues/new?${attributes.join("&")}`;
+  return `https://github.com/${appInfo.github?.repo}/issues/new?${attributes.join("&")}`;
 }
 
 /**
@@ -64,6 +64,6 @@ export function makeGithubIssueUrl(
 export function makeGithubSearchUrl(
     appInfo: AppInfo,
     appCrash: AppCrash,): string {
-  return `https://github.com/${appInfo.repo}/issues?q=${encodeURI(appCrash.issueTitle)}`;
+  return `https://github.com/${appInfo.github?.repo}/issues?q=${encodeURI(appCrash.issueTitle)}`;
 }
 

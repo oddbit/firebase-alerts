@@ -1,10 +1,6 @@
 import {AppInfo} from "./app-info";
 import {AppCrash} from "./app-crash";
-
-export enum WebhookPlatform {
-  GoogleChat = "google-chat",
-  Unknown = "unknown",
-}
+import {Localization} from "../localization";
 
 export interface IWebhook {
   url: string;
@@ -22,22 +18,7 @@ export abstract class Webhook implements IWebhook {
    */
   constructor(webhook: IWebhook) {
     this.url = webhook.url;
-    this.language = webhook.language;
-  }
-
-
-  /**
-   * Derive which platform that this webhook is referring to based on its URL
-   *
-   * @param {string} url Webhook URL
-   * @return {WebhookPlatform}
-   */
-  public static derivePlatformTypeFromUrl(url: string): WebhookPlatform {
-    if (url?.startsWith("https://chat.googleapis.com")) {
-      return WebhookPlatform.GoogleChat;
-    }
-
-    return WebhookPlatform.Unknown;
+    this.language = webhook.language ?? Localization.defaultLanguage;
   }
 
   public readonly url: string;

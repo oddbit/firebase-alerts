@@ -1,5 +1,27 @@
 # About
-Firebase extension for alert notifications.
+Firebase extension for sending Firebase alert notifications to your team communication
+platform. 
+
+Currently supported platforms and alerts according to [roadmap](https://github.com/oddbit/firebase-alerts/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+
+| Platform    | App Distribution | Crashlytics | Performance | Billing | 
+| ----------- | :--------------: | :---------: | :---------: | :-----: | 
+| Google Chat | ❌  | ✅ | ❌ | ❌ |
+| Slack       | ❌  | ✅ | ❌ | ❌ |
+| Discord     | ❌  | ❌ | ❌ | ❌ |
+
+
+# Configuring your webhooks
+Read the official documentation for each of the platforms on how to configure 
+webhooks.
+
+* [Google Chat](https://developers.google.com/hangouts/chat/how-tos/webhooks)
+* [Slack](https://slack.com/help/articles/115005265063-Incoming-webhooks-for-Slack)
+* [Discord](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
+
+There is a square Firebase icon under the [`/icons/`](./icons) folder that you 
+can use for your webhook avatar. Use this permalink to the image: `https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png`
+
 
 # Installation
 You can integrate the notifications with your Firebase project by forking this
@@ -56,17 +78,6 @@ Create one document for each of your Firebase app ids in a collection named
  
 ![Webhook Firestore Doc](./doc/images/firestore-doc-app.png)
 
-# Configuring 3rd party
-
-## Google Chat
-Add a webhook to your space (see [official documentation](https://developers.google.com/hangouts/chat/how-tos/webhooks)).
-
-### Configure Google Chat Webhook
-![Google Chat Webhook Config](./doc/images/google-chat-config-webhook.png)
-
-### Receiving Google Chat Alerts
-![Google Chat Alert](./doc/images/google-chat-card.png)
-
 
 # Getting involved
 If you're reading this, you're awesome! 
@@ -76,31 +87,63 @@ It's easy and fun to develop new webhook plugins. All you need to do is to
 declare your new plugin and create a new class that extends the abstract 
 [`Webhook`](./functions/src/models/webhook.ts)
 
-Have a look at the existing plugin(s) under [`functions/src/webhook-plugins`](./functions/src/webhook-plugins)
-to see how an implementation can look like. All you need to do is to implement
-the method that builds a payload to your webhook.
+Have a look at the existing plugin(s) under [`functions/src/webhook-plugins/`](./functions/src/webhook-plugins)
+to see how an implementation can look like. 
 
-### Declaring a new plugin
-There are two places where you need to declare your plugin's identification.
-
-First in [`./functions/src/models/webhook.ts`](./functions/src/models/webhook.ts)
-you need to add your plugin's name to the enumeration.
+Create your new plugin alongside the existing plugins `your-new-plugin.ts`
 
 ```typescript
-export enum WebhookPlatform {
-  GoogleChat = "google-chat",
-  YourNewPlugin = "your-new-plugin",
-  Unknown = "unknown",
+export class YourNewPluginWebhook extends Webhook {
+  // Implements Webhook
 }
 ```
 
-Secondly, you need to register a builder method in [functions/src/crashlytics.ts](./functions/src/crashlytics.ts)
-like this
+### Registering the new plugin
+There are three simple steps to register your plugin
+in [`./functions/src/webhook-plugins/index.ts`](./functions/src/webhook-plugins/index.ts)
+
+#### Step 1
+Add your plugin to the enumeration
+
+```typescript
+export enum WebhookPlatform {
+  GoogleChat,
+  Slack,
+  Discord,
+  YourNewPlugin, // Add your new plugin
+  Unknown,
+}
+```
+
+#### Step 2
+Add your webhook signature to the method `derivePlatformTypeFromUrl()` so that 
+your webhooks can be recognized.
+
+```typescript
+export function derivePlatformTypeFromUrl(url: string): WebhookPlatform {
+  if (url?.startsWith("https://chat.googleapis.com")) {
+    return WebhookPlatform.GoogleChat;
+  } else if (/* other webhook */) {
+    // ...
+    // Add your webhook signature below
+  } else if (url?.startsWith("https://YourNewPluginWebhook.example.com")) {
+    return WebhookPlatform.YourNewPlugin;
+  }
+
+  return WebhookPlatform.Unknown;
+}
+
+```
+#### Step 3
+Register a builder method
 
 ```typescript
 const webhookPlugins: {[key: string]: WebhookBuilder} = {
   [WebhookPlatform.GoogleChat]: (webhook) => new GoogleChatWebhook(webhook),
-  [WebhookPlatform.YourNewPlugin]: (webhook) => new YourNewPlugin(webhook),
+  // ...
+  // Other webhook builders 
+  // ...
+  [WebhookPlatform.YourNewPlugin]: (webhook) => new YourNewPluginWebhook(webhook),
 };
 ```
 

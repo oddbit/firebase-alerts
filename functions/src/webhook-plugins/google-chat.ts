@@ -1,6 +1,6 @@
-import {AppInfo} from "../models/app-info";
-import {AppCrash, IssueType} from "../models/app-crash";
 import {Localization} from "../localization";
+import {AppCrash} from "../models/app-crash";
+import {AppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
 import {
   crashlyticsImgUrl,
@@ -26,16 +26,10 @@ export class GoogleChatWebhook extends Webhook {
   createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
     const l10n = new Localization(this.language);
     const bundleId = appInfo.bundleId ?? l10n.translate("missingBundleId");
-    const eventTitle: {[key: string]: string} = {
-      [IssueType.Anr]: l10n.translate("anrIssue"),
-      [IssueType.Fatal]: l10n.translate("fatalIssue"),
-      [IssueType.NonFatal]: l10n.translate("nonFatalIssue"),
-      [IssueType.Regression]: l10n.translate("regressionIssue"),
-      [IssueType.Unknown]: l10n.translate("unknownIssue"),
-    };
 
     const googleChatCards =
     {
+      // The webhook API expects an array of cards, even if it's only one
       cardsV2: [] as object[],
     };
 
@@ -44,7 +38,7 @@ export class GoogleChatWebhook extends Webhook {
       card: {
         header: {
           title: "Crashlytics",
-          subtitle: eventTitle[appCrash.issueType],
+          subtitle: l10n.translate(appCrash.issueType),
           imageUrl: crashlyticsImgUrl,
           imageType: "CIRCLE",
           imageAltText: "Avatar for Crashlytics",
@@ -129,7 +123,7 @@ export class GoogleChatWebhook extends Webhook {
     // Github Section
     //
 
-    if (appInfo.repo) {
+    if (appInfo.github) {
       googleChatCard.card.sections.push({
         header: "Github",
         widgets: [
@@ -159,7 +153,6 @@ export class GoogleChatWebhook extends Webhook {
       });
     }
 
-    // The webhook API expects an array of cards, even if it's only one
     return googleChatCards;
   }
 }

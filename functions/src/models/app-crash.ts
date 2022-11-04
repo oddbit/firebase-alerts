@@ -15,11 +15,11 @@ export interface IAppCrash {
 }
 
 export enum IssueType {
-  Anr,
-  Fatal,
-  NonFatal,
-  Regression,
-  Unknown,
+  Anr = "crashlytics.anr",
+  Fatal = "crashlytics.fatal",
+  NonFatal = "crashlytics.nonfatal",
+  Regression = "crashlytics.regression",
+  Unknown = "crashlytics.unknown",
 }
 
 export type SupportedCrashlyticsEvent = CrashlyticsEvent<NewAnrIssuePayload>

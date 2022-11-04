@@ -1,9 +1,26 @@
+import {IssueType} from "./models/app-crash";
+
 export type LocalizedString = {[key: string]: string};
 
 /**
  * Support for translating the webhook information to other languages
  */
 const l10n = {
+  [IssueType.Anr]: {
+    "en": "App Non Responsive",
+  },
+  [IssueType.Fatal]: {
+    "en": "Fatal Issue",
+  },
+  [IssueType.NonFatal]: {
+    "en": "Non Fatal Issue",
+  },
+  [IssueType.Regression]: {
+    "en": "Regression Issue",
+  },
+  [IssueType.Unknown]: {
+    "en": "Unknown Issue",
+  },
   "labelAppInfo": {
     "en": "App Info",
   },
@@ -12,21 +29,6 @@ const l10n = {
   },
   "labelBundleId": {
     "en": "Bundle Id",
-  },
-  "anrIssue": {
-    "en": "App Non Responsive",
-  },
-  "fatalIssue": {
-    "en": "Fatal Issue",
-  },
-  "nonFatalIssue": {
-    "en": "Non Fatal Issue",
-  },
-  "regressionIssue": {
-    "en": "Regression Issue",
-  },
-  "unknownIssue": {
-    "en": "Unknown Issue",
   },
   "missingBundleId": {
     "en": "Missing bundle id",
@@ -45,6 +47,21 @@ const l10n = {
   },
   "searchGithubIssue": {
     "en": "Search Similar Github Issues",
+  },
+  "descriptionViewInCrashlytics": {
+    "en": "View this issue in Firebase console",
+  },
+  "descriptionCreateNewIssue": {
+    "en": "Create a new bug report for this issue",
+  },
+  "descriptionSearchSimilarIssues": {
+    "en": "Search for similar reports of this issue",
+  },
+  "descriptionOpenFirebaseAppsSettings": {
+    "en": "Go to Firebase console and copy the apps bundle id",
+  },
+  "descriptionOpenFirestoreAppInfo": {
+    "en": "Open Firestore and update app info document with bundle id",
   },
 };
 
