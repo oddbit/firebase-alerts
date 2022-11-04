@@ -100,7 +100,6 @@ jobs:
             -m "Github action run $GITHUB_RUN_ID"
             --non-interactive
             --force
-            --json
 
       # Try to save potential log files if something went wrong
       - name: Upload debug log
