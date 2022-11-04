@@ -1,3 +1,5 @@
+import {Github, IGithub} from "./github";
+
 export enum AppPlatform {
   iOS = "ios",
   Android = "android",
@@ -29,14 +31,9 @@ export interface IAppInfo {
   issueCount: number;
 
   /**
-   * Github repository name with owner (e.g oddbit/firebase-alerts)
+   * Optional github information
    */
-  repo: string;
-
-  /**
-   * Optional github project ID (e.g `oddbit/1`)
-   */
-  project?: string;
+  github?: IGithub;
 }
 
 /**
@@ -53,16 +50,14 @@ export class AppInfo implements IAppInfo {
     this.bundleId = data.bundleId;
     this.lastIssue = data.lastIssue;
     this.issueCount = data.issueCount ?? 0;
-    this.repo = data.repo;
-    this.project = data.project;
+    this.github = data.github ? new Github(data.github) : undefined;
   }
 
   public readonly appId: string;
   public readonly bundleId: string;
   public readonly lastIssue?: Date;
   public readonly issueCount: number;
-  public readonly repo: string;
-  public readonly project?: string | undefined;
+  public readonly github?: IGithub | undefined;
 
   /**
  * Derive which app platform that this app info is referring to

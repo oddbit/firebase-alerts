@@ -36,6 +36,7 @@ export class GoogleChatWebhook extends Webhook {
 
     const googleChatCards =
     {
+      // The webhook API expects an array of cards, even if it's only one
       cardsV2: [] as object[],
     };
 
@@ -129,7 +130,7 @@ export class GoogleChatWebhook extends Webhook {
     // Github Section
     //
 
-    if (appInfo.repo) {
+    if (appInfo.github) {
       googleChatCard.card.sections.push({
         header: "Github",
         widgets: [
@@ -159,7 +160,6 @@ export class GoogleChatWebhook extends Webhook {
       });
     }
 
-    // The webhook API expects an array of cards, even if it's only one
     return googleChatCards;
   }
 }
