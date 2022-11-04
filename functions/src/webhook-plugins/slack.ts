@@ -1,6 +1,7 @@
-import {AppInfo} from "../models/app-info";
-import {AppCrash, IssueType} from "../models/app-crash";
+import {projectId} from "../config";
 import {Localization} from "../localization";
+import {AppCrash} from "../models/app-crash";
+import {AppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
 import {
   crashlyticsImgUrl,
@@ -10,7 +11,6 @@ import {
   makeGithubIssueUrl,
   makeGithubSearchUrl,
 } from "../urls";
-import {projectId} from "../config";
 
 /**
  * Declares a webhook implementation for Google Chat

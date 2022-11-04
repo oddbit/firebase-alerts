@@ -1,6 +1,6 @@
-import {AppInfo} from "../models/app-info";
-import {AppCrash, IssueType} from "../models/app-crash";
 import {Localization} from "../localization";
+import {AppCrash} from "../models/app-crash";
+import {AppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
 import {
   crashlyticsImgUrl,
