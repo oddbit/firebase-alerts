@@ -1,5 +1,28 @@
 # About
-Firebase extension for alert notifications.
+Firebase extension for sending Firebase alert notifications to your team communication
+platform. 
+
+Currently supported platforms and alerts according to [roadmap](https://github.com/oddbit/firebase-alerts/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+
+| Platform    | App Distribution | Crashlytics | Performance | Billing | 
+| ----------- | :--------------: | :---------: | :---------: | :-----: | 
+| Google Chat | ❌  | ✅ | ❌ | ❌ |
+| Slack       | ❌  | ❌ | ❌ | ❌ |
+| Discord     | ❌  | ❌ | ❌ | ❌ |
+
+
+# Configuring your webhooks
+Read the official documentation for each of the platforms on how to configure 
+webhooks.
+
+* [Google Chat](https://developers.google.com/hangouts/chat/how-tos/webhooks)
+
+There is a square Firebase icon under the [`/icons/`](./icons) folder that you 
+can use for your webhook avatar.
+
+![Firebase icon](./icons/firebase.png)
+
+
 
 # Installation
 You can integrate the notifications with your Firebase project by forking this
@@ -55,17 +78,6 @@ Create one document for each of your Firebase app ids in a collection named
  - `repo` - Github repository owner and name (e.g. `oddbit/firebase-alerts`)
  
 ![Webhook Firestore Doc](./doc/images/firestore-doc-app.png)
-
-# Configuring 3rd party
-
-## Google Chat
-Add a webhook to your space (see [official documentation](https://developers.google.com/hangouts/chat/how-tos/webhooks)).
-
-### Configure Google Chat Webhook
-![Google Chat Webhook Config](./doc/images/google-chat-config-webhook.png)
-
-### Receiving Google Chat Alerts
-![Google Chat Alert](./doc/images/google-chat-card.png)
 
 
 # Getting involved
