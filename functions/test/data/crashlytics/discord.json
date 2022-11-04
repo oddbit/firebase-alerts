@@ -12,7 +12,7 @@
       "fields": [
         {
           "name": "Version",
-          "value": "0.0.1",
+          "value": "`0.0.1`",
           "inline": true
         },
         {
@@ -22,7 +22,7 @@
         },
         {
           "name": "Bundle Id",
-          "value": "id.oddbit.helloworldapp"
+          "value": "`id.oddbit.helloworldapp`"
         },
         {
           "name": "Github",

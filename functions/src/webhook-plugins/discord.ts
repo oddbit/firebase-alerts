@@ -25,7 +25,9 @@ export class DiscordWebhook extends Webhook {
    */
   createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
     const l10n = new Localization(this.language);
-    const bundleId = appInfo.bundleId ?? l10n.translate("missingBundleId");
+    const bundleId = appInfo.bundleId ?
+      "`" + appInfo.bundleId + "`" :
+      l10n.translate("missingBundleId");
 
     const discordMessage = {
       content: null,
@@ -45,7 +47,7 @@ export class DiscordWebhook extends Webhook {
       fields: [
         {
           name: l10n.translate("labelVersion"),
-          value: appCrash.appVersion,
+          value: "`" + appCrash.appVersion + "`",
           inline: true,
         },
         {
