@@ -37,7 +37,6 @@ export class PerformanceAlert implements IPerformanceAlert {
    */
   public static fromPerformanceEvent(event: SupportedPerformanceAlert):
   PerformanceAlert {
-    event.specversion
     const performanceAlert = {
       appId: event.appId,
 
