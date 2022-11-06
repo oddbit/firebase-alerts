@@ -6,7 +6,7 @@ Currently supported platforms and alerts according to [roadmap](https://github.c
 
 | Platform    | App Distribution | Crashlytics | Performance | Billing | 
 | ----------- | :--------------: | :---------: | :---------: | :-----: | 
-| Google Chat | ❌  | ✅ | ❌ | ❌ |
+| Google Chat | [❌](https://github.com/oddbit/firebase-alerts/issues/2)  | ✅ | [❌](https://github.com/oddbit/firebase-alerts/issues/1) | ❌ |
 | Slack       | ❌  | ✅ | ❌ | ❌ |
 | Discord     | ❌  | ✅ | ❌ | ❌ |
 
