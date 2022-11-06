@@ -1,8 +1,10 @@
 {
   "cSpell.words": [
+    "autoupdatealert",
     "Firestore",
     "mrkdwn",
-    "Oddbit"
+    "Oddbit",
+    "updatealert"
   ],
   "[typescript]": {
     "editor.tabSize": 2,
