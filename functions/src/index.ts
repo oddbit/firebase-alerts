@@ -1,5 +1,5 @@
 import {initializeApp} from "firebase-admin/app";
-import * as crashlyticsFunctions from "./crashlytics";
+import * as crashlyticsFunctions from "./alerts/crashlytics";
 
 initializeApp();
 

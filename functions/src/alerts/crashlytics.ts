@@ -3,11 +3,11 @@ import {firestore} from "firebase-admin";
 import {logger} from "firebase-functions/v2";
 import {crashlytics} from "firebase-functions/v2/alerts";
 import {post} from "request";
-import {AppCrash} from "./models/app-crash";
-import {AppInfo, IAppInfo} from "./models/app-info";
-import {IWebhook} from "./models/webhook";
-import {makeFirebaseAppsSettingsUrl, makeFirestoreAppInfoUrl} from "./urls";
-import {derivePlatformTypeFromUrl, webhookPlugins} from "./webhook-plugins";
+import {AppCrash} from "../models/app-crash";
+import {AppInfo, IAppInfo} from "../models/app-info";
+import {IWebhook} from "../models/webhook";
+import {makeFirebaseAppsSettingsUrl, makeFirestoreAppInfoUrl} from "../urls";
+import {derivePlatformTypeFromUrl, webhookPlugins} from "../webhook-plugins";
 
 /**
  * Handle crashlytics event

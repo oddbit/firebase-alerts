@@ -1,4 +1,4 @@
-import {IssueType} from "./models/app-crash";
+import {CrashlyticsAlertType} from "./models/app-crash";
 
 export type LocalizedString = {[key: string]: string};
 
@@ -6,19 +6,19 @@ export type LocalizedString = {[key: string]: string};
  * Support for translating the webhook information to other languages
  */
 const l10n = {
-  [IssueType.Anr]: {
+  [CrashlyticsAlertType.Anr]: {
     "en": "App Non Responsive",
   },
-  [IssueType.Fatal]: {
+  [CrashlyticsAlertType.Fatal]: {
     "en": "Fatal Issue",
   },
-  [IssueType.NonFatal]: {
+  [CrashlyticsAlertType.NonFatal]: {
     "en": "Non Fatal Issue",
   },
-  [IssueType.Regression]: {
+  [CrashlyticsAlertType.Regression]: {
     "en": "Regression Issue",
   },
-  [IssueType.Unknown]: {
+  [CrashlyticsAlertType.Unknown]: {
     "en": "Unknown Issue",
   },
   "labelAppInfo": {

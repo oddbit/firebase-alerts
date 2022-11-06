@@ -7,14 +7,14 @@ import {
 } from "firebase-functions/v2/alerts/crashlytics";
 
 export interface IAppCrash {
-  issueType: IssueType;
+  issueType: CrashlyticsAlertType;
   issueId: string;
   issueTitle: string;
   appId: string;
   appVersion: string;
 }
 
-export enum IssueType {
+export enum CrashlyticsAlertType {
   Anr = "crashlytics.anr",
   Fatal = "crashlytics.fatal",
   NonFatal = "crashlytics.nonfatal",
@@ -62,23 +62,23 @@ export class AppCrash implements IAppCrash {
     const alertTypeLower = event.alertType.toLowerCase();
 
     if (alertTypeLower.includes("anrissue")) {
-      appCrash.issueType= IssueType.Anr;
+      appCrash.issueType= CrashlyticsAlertType.Anr;
     } else if (alertTypeLower.includes("nonfatalissue")) {
-      appCrash.issueType= IssueType.NonFatal;
+      appCrash.issueType= CrashlyticsAlertType.NonFatal;
     } else if (alertTypeLower.includes("fatalissue") &&
       !alertTypeLower.includes("nonfatal")) {
       // Make sure we don't match "nonfatal"
-      appCrash.issueType= IssueType.Fatal;
+      appCrash.issueType= CrashlyticsAlertType.Fatal;
     } else if (alertTypeLower.includes("regression")) {
-      appCrash.issueType= IssueType.NonFatal;
+      appCrash.issueType= CrashlyticsAlertType.NonFatal;
     } else {
-      appCrash.issueType= IssueType.Unknown;
+      appCrash.issueType= CrashlyticsAlertType.Unknown;
     }
 
     return new AppCrash(appCrash);
   }
 
-  public readonly issueType: IssueType;
+  public readonly issueType: CrashlyticsAlertType;
   public readonly issueId: string;
   public readonly issueTitle: string;
   public readonly appId: string;
