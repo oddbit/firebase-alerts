@@ -20,7 +20,7 @@ webhooks.
 * [Discord](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 There is a square Firebase icon under the [`/icons/`](./icons) folder that you 
-can use for your webhook avatar. Use this permalink to the image: `https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png`
+can use for your webhook avatar. Use this permalink to the image: [https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png](https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png)
 
 
 # Installation
@@ -76,6 +76,14 @@ Create one document for each of your Firebase app ids in a collection named
  - `bundleId` - Application bundle id (e.g. `id.oddbit.helloworldapp`)
  - `github` - Optional object for github info
      - `repo` - Repository owner and name (e.g. `oddbit/firebase-alerts`)
+
+For web apps, the `bundleId` is a random string that you will have to look for in
+URL when you are selecting the web app in the Firebase settings page.
+
+Look for the last part of the URL where `web-app-bundle-id` is your
+web app's `bundleId` for the sake of functional equivalent to mobile apps.
+
+`https://console.firebase.google.com/project/{project}/settings/general/web:{web-app-bundle-id}`
  
 ![Webhook Firestore Doc](./doc/images/firestore-doc-app.png)
 
