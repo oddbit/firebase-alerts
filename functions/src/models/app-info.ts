@@ -3,6 +3,7 @@ import {Github, IGithub} from "./github";
 export enum AppPlatform {
   iOS = "ios",
   Android = "android",
+  Web = "web",
   Unknown = "unknown",
 }
 
@@ -70,6 +71,8 @@ export class AppInfo implements IAppInfo {
       return AppPlatform.Android;
     } else if (this.appId.includes("ios")) {
       return AppPlatform.iOS;
+    } else if (this.appId.includes("web")) {
+      return AppPlatform.Web;
     }
 
     return AppPlatform.Unknown;
