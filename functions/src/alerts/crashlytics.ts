@@ -109,7 +109,7 @@ export const anr = crashlytics.onNewAnrIssuePublished(async (event) => {
   return handleCrashlyticsEvent(appCrash);
 });
 
-export const fatalcrash =
+export const fatal =
   crashlytics.onNewFatalIssuePublished((event) => {
     logger.debug("onNewFatalIssuePublished", event);
 
@@ -121,7 +121,7 @@ export const fatalcrash =
   });
 
 
-export const nonfatalcrash =
+export const nonfatal =
   crashlytics.onNewNonfatalIssuePublished((event) => {
     logger.debug("onNewNonfatalIssuePublished", event);
 

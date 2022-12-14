@@ -1,7 +1,10 @@
 {
   "cSpell.words": [
+    "alerttype",
     "appdistribution",
     "autoupdatealert",
+    "firebasealerts",
+    "firebaseextensions",
     "Firestore",
     "mrkdwn",
     "newiosdevice",

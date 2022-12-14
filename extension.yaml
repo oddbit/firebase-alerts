@@ -1,5 +1,5 @@
 name: firebase-alerts
-version: 0.0.1
+version: 0.0.2
 specVersion: v1beta  # Firebase Extensions specification version (do not edit)
 
 displayName: Firebase Alerts
@@ -9,7 +9,9 @@ license: Apache-2.0
 
 author:
   authorName: Oddbit
-  url: https://github.com/oddbit
+  url: https://oddbit.id/
+
+sourceUrl: https://github.com/oddbit/firebase-alerts
 
 billingRequired: true
 
@@ -72,7 +74,7 @@ params:
     immutable: true
 
 resources:
-  - name: anr
+  - name: crashlytics-anr
     type: firebaseextensions.v1beta.v2function
     properties:
       location: ${LOCATION}
@@ -87,7 +89,7 @@ resources:
           - attribute: alerttype
             value: crashlytics.newAnrIssue
 
-  - name: fatalcrash
+  - name: crashlytics-fatal
     type: firebaseextensions.v1beta.v2function
     properties:
       location: ${LOCATION}
@@ -102,7 +104,7 @@ resources:
           - attribute: alerttype
             value: crashlytics.newFatalIssue
 
-  - name: nonfatalcrash
+  - name: crashlytics-nonfatal
     type: firebaseextensions.v1beta.v2function
     properties:
       location: ${LOCATION}
@@ -117,7 +119,7 @@ resources:
           - attribute: alerttype
             value: crashlytics.newNonFatalIssue
 
-  - name: regression
+  - name: crashlytics-regression
     type: firebaseextensions.v1beta.v2function
     properties:
       location: ${LOCATION}
