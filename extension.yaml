@@ -76,7 +76,7 @@ params:
     immutable: true
 
 resources:
-  - name: crashlytics-anr
+  - name: anr
     type: firebaseextensions.v1beta.v2function
     properties:
       location: ${LOCATION}
@@ -91,7 +91,7 @@ resources:
           - attribute: alerttype
             value: crashlytics.newAnrIssue
 
-  - name: crashlytics-fatal
+  - name: fatal
     type: firebaseextensions.v1beta.v2function
     properties:
       location: ${LOCATION}
@@ -106,7 +106,7 @@ resources:
           - attribute: alerttype
             value: crashlytics.newFatalIssue
 
-  - name: crashlytics-nonfatal
+  - name: nonfatal
     type: firebaseextensions.v1beta.v2function
     properties:
       location: ${LOCATION}
@@ -121,7 +121,7 @@ resources:
           - attribute: alerttype
             value: crashlytics.newNonFatalIssue
 
-  - name: crashlytics-regression
+  - name: regression
     type: firebaseextensions.v1beta.v2function
     properties:
       location: ${LOCATION}
