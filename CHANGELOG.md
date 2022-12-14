@@ -1,3 +1,6 @@
+## 0.0.6
+Just bumping version
+
 ## 0.0.5
 Renaming functions
 
