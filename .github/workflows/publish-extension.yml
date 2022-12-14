@@ -36,19 +36,13 @@ jobs:
       - name: Set service account for Firebase CLI
         run: |
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
-          echo ${{ secrets.FIREBASE_SA }} | base64 -d - > service_account.json
+          echo ${{ secrets.FIREBASE_SA }} | base64 -d -i - > service_account.json
 
-      - name: Install node dependencies
-        run: yarn --cwd functions install
+      - run: yarn --cwd functions install
 
       - run: yarn --cwd functions build
 
-      - name: Publish extension
-        run: >-
-            firebase 
-            ext:dev:publish 
-            --force
-            oddbit/firebase-alerts            
+      - run: firebase ext:dev:publish --force oddbit/firebase-alerts            
 
       # Try to save potential log files if something went wrong
       - name: Upload debug log
