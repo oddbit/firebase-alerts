@@ -4,9 +4,6 @@ on:
     branches:
       - main
 
-    paths:
-      - CHANGELOG.md
-
 jobs:
   deploy:
     name: Deployment
@@ -19,6 +16,7 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
+          cache-dependency-path: functions/yarn.lock
 
       - name: Cache functions NPM packages
         uses: actions/cache@v3
