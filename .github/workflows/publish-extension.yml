@@ -47,9 +47,8 @@ jobs:
         run: >-
             firebase 
             ext:dev:publish 
-            oddbit/firebase-alerts            
-            --non-interactive
             --force
+            oddbit/firebase-alerts            
 
       # Try to save potential log files if something went wrong
       - name: Upload debug log
