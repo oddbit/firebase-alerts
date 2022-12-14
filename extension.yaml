@@ -1,5 +1,5 @@
 name: firebase-alerts
-version: 0.0.2
+version: 0.0.3
 specVersion: v1beta  # Firebase Extensions specification version (do not edit)
 
 displayName: Firebase Alerts
@@ -137,3 +137,11 @@ resources:
 roles:
   - role: datastore.viewer
     reason: Allows the extension to read app and webhook configuration
+
+apis:
+  - apiName: eventarc.googleapis.com
+    reason: Powers all events and triggers
+  - apiName: run.googleapis.com
+    reason: Powers v2 functions
+  - apiName: compute.googleapis.com
+    reason: Powers v2 functions

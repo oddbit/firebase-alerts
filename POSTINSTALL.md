@@ -1,3 +1,14 @@
+## ⚠️ If you're having troubles during installation ⚠️
+The installation of v2 functions might fail for projects that have never used v2 functions. 
+
+It will eventually be fixed on Firebase side, but for now, if you run into errors during install run these commands (or perform equivalent actions via cloud console) and try again:
+
+```
+gcloud services enable compute.googleapis.com
+
+gcloud projects add-iam-policy-binding <PROJECT ID> --member serviceAccount:<PROJECT NUMBER>-compute@developer.gserviceaccount.com --role roles/eventarc.eventReceiver
+```
+
 ## Configuring your webhooks
 Read the official documentation for each of the platforms on how to configure 
 webhooks.
