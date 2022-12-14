@@ -18,6 +18,14 @@ export interface IAppInfo {
    * This ID is necessary for being able to make links into the Firebase console
    * and it can not be automatically derived from Crashlytics data. It must be
    * manually entered by cross checking `appId` with your app in the console.
+   *
+   * For web apps this is a random string that you will have to look for in
+   * URL when you are selecting the web app in the Firebase settings page.
+   *
+   * Look for the last part of the URL where `your-web-app-bundle-id` is your
+   * web app's "bundle id" for the sake of functional equivalent to mobile apps.
+   *
+   * https://console.firebase.google.com/project/{project}/settings/general/web:{your-web-app-bundle-id}
    */
   bundleId: string;
 

@@ -33,7 +33,7 @@ export function makeFirebaseAppsSettingsUrl(): string {
  * @return {string} URL to Firebase console
  */
 export function makeFirestoreAppInfoUrl(appInfo: AppInfo): string {
-  return `https://console.firebase.google.com/project/${projectId}/firestore/data/~2Ffirebase-alerts-apps~2F${appInfo.appId}`;
+  return `https://console.firebase.google.com/project/${projectId}/firestore/data/~2F${process.env.EXT_INSTANCE_ID}-apps~2F${appInfo.appId}`;
 }
 
 /**
