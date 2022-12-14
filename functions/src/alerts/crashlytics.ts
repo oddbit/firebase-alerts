@@ -21,7 +21,7 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
 
   // Update and ensure that there is a Firestore document for this app id
   await firestore()
-      .collection("firebase-alerts-apps")
+      .collection("apps")
       .doc(appCrash.appId)
       .set({
         appId: appCrash.appId,
@@ -31,7 +31,7 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
 
 
   const appInfoSnap = await firestore()
-      .collection("firebase-alerts-apps")
+      .collection("apps")
       .doc(appCrash.appId)
       .get();
 
@@ -51,7 +51,7 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
   }
 
   const webhooksSnap = await firestore()
-      .collection("firebase-alerts-webhooks")
+      .collection("webhooks")
       .get();
 
   const promises = webhooksSnap.docs
