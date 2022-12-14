@@ -1,12 +1,14 @@
 import {initializeApp} from "firebase-admin/app";
 import * as crashlyticsFunctions from "./alerts/crashlytics";
-import * as performanceFunctions from "./alerts/performance";
-import * as billingFunctions from "./alerts/billing";
-import * as appDistributionFunctions from "./alerts/app-distribution";
+// import * as performanceFunctions from "./alerts/performance";
+// import * as billingFunctions from "./alerts/billing";
+// import * as appDistributionFunctions from "./alerts/app-distribution";
 
 initializeApp();
 
 export const crashlytics = crashlyticsFunctions;
-export const performance = performanceFunctions;
-export const billing = billingFunctions;
-export const appdistribution = appDistributionFunctions;
+// TODO: Uncomment when functions are supported. Keeping them commented out now
+// since the plugin is being published and the functions aren't doing anything.
+// export const performance = performanceFunctions;
+// export const billing = billingFunctions;
+// export const appdistribution = appDistributionFunctions;
