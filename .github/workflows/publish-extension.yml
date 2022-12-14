@@ -38,6 +38,8 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
           echo ${{ secrets.FIREBASE_SA }} | base64 -d -i - > service_account.json
 
+      - run: firebase login:list
+
       - run: yarn --cwd functions install
 
       - run: yarn --cwd functions build
