@@ -1,6 +1,6 @@
 name: firebase-alerts
 version: 0.0.3
-specVersion: v1beta  # Firebase Extensions specification version (do not edit)
+specVersion: v1beta
 
 displayName: Firebase Alerts
 description: Firebase extension for sending Firebase Alerts to social platforms
@@ -9,9 +9,11 @@ license: Apache-2.0
 
 author:
   authorName: Oddbit
+  email: opensource@oddbit.id
   url: https://oddbit.id/
 
 sourceUrl: https://github.com/oddbit/firebase-alerts
+releaseNotesUrl: https://github.com/oddbit/firebase-alerts/blob/main/CHANGELOG.md
 
 billingRequired: true
 
