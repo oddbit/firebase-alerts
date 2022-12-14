@@ -119,7 +119,7 @@ resources:
         triggerRegion: global
         eventFilters:
           - attribute: alerttype
-            value: crashlytics.newNonFatalIssue
+            value: crashlytics.newNonfatalIssue
 
   - name: regression
     type: firebaseextensions.v1beta.v2function
