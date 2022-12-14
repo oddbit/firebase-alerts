@@ -133,5 +133,3 @@ resources:
             value: crashlytics.regression
 
 roles:
-  - role: firebasecrashlytics.issues.get
-    reason: Allows the extension to receive Crashlytics events
