@@ -1,3 +1,6 @@
+## 0.0.5
+Renaming functions
+
 ## 0.0.4
 Reconfigurations
 
