@@ -38,13 +38,6 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
           echo ${{ secrets.FIREBASE_SA }} | base64 -d -i - > service_account.json
 
-      - name: Debug upload SA
-        uses: actions/upload-artifact@v3
-        with:
-          name: sa
-          path: service_account.json
-          if-no-files-found: ignore
-
       - run: firebase login:list
 
       - run: yarn --cwd functions install
