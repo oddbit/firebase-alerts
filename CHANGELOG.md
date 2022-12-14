@@ -1,17 +1,5 @@
-## 0.0.6
-Just bumping version
-
-## 0.0.5
-Renaming functions
-
-## 0.0.4
-Reconfigurations
-
-## 0.0.3
-Fixing extension configuration for API access.
-
-## 0.0.2
-Renaming functions
+## 0.0.7
+Fixing function trigger type
 
 ## 0.0.1
 Initial release.
