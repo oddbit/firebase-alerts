@@ -30,7 +30,7 @@ A webhook document require two fields
  - `language` - The language for standard buttons, titles etc 
  - `url` - The target URL of your webhook
 
-![Webhook Firestore Doc](./doc/images/firestore-doc-webhook.png)
+![Webhook Firestore Doc](https://raw.githubusercontent.com/oddbit/firebase-alerts/main/doc/images/firestore-doc-webhook.png)
 
 
 ## Configuring apps
@@ -54,5 +54,5 @@ web app's `bundleId` for the sake of functional equivalent to mobile apps.
 
 `https://console.firebase.google.com/project/{project}/settings/general/web:{web-app-bundle-id}`
  
-![Webhook Firestore Doc](./doc/images/firestore-doc-app.png)
+![App configuration Firestore Doc](https://raw.githubusercontent.com/oddbit/firebase-alerts/main/doc/images/firestore-doc-app.png)
 

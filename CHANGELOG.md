@@ -1,3 +1,6 @@
+## 0.0.4
+Reconfigurations
+
 ## 0.0.3
 Fixing extension configuration for API access.
 

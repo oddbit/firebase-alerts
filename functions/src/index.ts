@@ -1,10 +1,8 @@
-import {initializeApp} from "firebase-admin/app";
-import * as crashlyticsFunctions from "./alerts/crashlytics";
 // import * as performanceFunctions from "./alerts/performance";
 // import * as billingFunctions from "./alerts/billing";
 // import * as appDistributionFunctions from "./alerts/app-distribution";
 
-initializeApp();
+import * as crashlyticsFunctions from "./alerts/crashlytics";
 
 export const crashlytics = crashlyticsFunctions;
 // TODO: Uncomment when functions are supported. Keeping them commented out now
