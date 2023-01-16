@@ -1,4 +1,4 @@
-import {projectId} from "../config";
+import {EnvConfig} from "../utils/env-config";
 import {Localization} from "../localization";
 import {AppCrash} from "../models/app-crash";
 import {AppInfo} from "../models/app-info";
@@ -123,7 +123,7 @@ export class SlackWebhook extends Webhook {
               type: "plain_text",
               text: l10n.translate("openFirebaseAppsSettings"),
             },
-            value: "firebase_settings_" + projectId,
+            value: "firebase_settings_" + EnvConfig.projectId,
             url: makeFirebaseAppsSettingsUrl(),
             action_id: "firebase-open-settings",
           },
