@@ -4,7 +4,7 @@ import {Localization} from "../localization";
 
 export interface IWebhook {
   url: string;
-  language: string;
+  language?: string;
 }
 
 /**
@@ -18,7 +18,7 @@ export abstract class Webhook implements IWebhook {
    */
   constructor(webhook: IWebhook) {
     this.url = webhook.url;
-    this.language = webhook.language ?? Localization.defaultLanguage;
+    this.language = Localization.defaultLanguage;
   }
 
   public readonly url: string;
