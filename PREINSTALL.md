@@ -16,7 +16,11 @@ be triggered for each event. The plugin also supports multiple platforms
 See [README](https://github.com/oddbit/firebase-alerts#readme) for complete list 
 of feature and platform support
 
-#### Additional setup
+### Configuring webhooks
+The extension require at least one webhook to be defined during the installation.
+At the moment you can only declare one webhook per platform.
+
+### Additional setup
 
 Before installing this extension, make sure that you've [set up a Cloud Firestore database](https://firebase.google.com/docs/firestore/quickstart) in your Firebase project.
 
