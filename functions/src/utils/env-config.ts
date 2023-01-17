@@ -23,9 +23,7 @@ export class EnvConfig {
    * that are declared by Google.
    */
   static get projectId(): string {
-    const FIREBASE_CONFIG = JSON.parse(process.env.FIREBASE_CONFIG || "{}");
-
-    const projectId = FIREBASE_CONFIG.projectId ??
+    const projectId = process.env.PROJECT_ID ??
       process.env.GOOGLE_CLOUD_PROJECT ??
       process.env.GCLOUD_PROJECT ??
       process.env.GCP_PROJECT;
