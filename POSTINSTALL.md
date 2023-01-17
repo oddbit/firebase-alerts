@@ -44,3 +44,7 @@ web app's `bundleId` for the sake of functional equivalent to mobile apps.
  
 ![App configuration Firestore Doc](https://raw.githubusercontent.com/oddbit/firebase-alerts/main/doc/images/firestore-doc-app.png)
 
+### ⚠️ Cost of document reads
+Please note that there will be a small cost of reading your app documents for each
+alert that is being triggered. Each event trigger will read all app information documents
+once per alert. The number of webhooks is not causing additional document reads.
