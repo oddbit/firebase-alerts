@@ -38,6 +38,13 @@ export class EnvConfig {
   }
 
   /**
+   * Get language for webhooks
+   */
+  static get language(): string {
+    return EnvConfig.getEnv("LANGUAGE");
+  }
+
+  /**
    * Get cloud functions location
    */
   static get location(): string {

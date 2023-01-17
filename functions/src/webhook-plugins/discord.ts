@@ -1,4 +1,4 @@
-import {Localization} from "../localization";
+import {Localization} from "../utils/localization";
 import {AppCrash} from "../models/app-crash";
 import {AppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
@@ -10,6 +10,7 @@ import {
   makeGithubIssueUrl,
   makeGithubSearchUrl,
 } from "../urls";
+import {EnvConfig} from "../utils/env-config";
 
 /**
  * Declares a webhook implementation for Discord
@@ -24,7 +25,7 @@ export class DiscordWebhook extends Webhook {
    * @return {object} A Discord card message payload
    */
   createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
-    const l10n = new Localization(this.language);
+    const l10n = new Localization(EnvConfig.language);
     const bundleId = appInfo.bundleId ?
       "`" + appInfo.bundleId + "`" :
       l10n.translate("missingBundleId");

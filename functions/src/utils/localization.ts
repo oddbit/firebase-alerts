@@ -1,4 +1,4 @@
-import {CrashlyticsAlertType} from "./models/app-crash";
+import {CrashlyticsAlertType} from "../models/app-crash";
 
 export type LocalizedString = {[key: string]: string};
 
@@ -96,6 +96,8 @@ export class Localization {
     if (!(key in this.strings)) {
       throw new Error("Key not found: " + key);
     }
+
+    // Fallback on default language if provided language doesn't exist
     return this.strings[key][this.language] ??
       this.strings[key][Localization.defaultLanguage];
   }

@@ -1,6 +1,6 @@
 import {AppInfo} from "./app-info";
 import {AppCrash} from "./app-crash";
-import {Localization} from "../localization";
+import {Localization} from "../utils/localization";
 
 export interface IWebhook {
   url: string;

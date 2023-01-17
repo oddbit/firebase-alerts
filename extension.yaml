@@ -75,6 +75,17 @@ params:
     required: true
     immutable: true
 
+  - param: LANGUAGE
+    label: Language
+    description: The language for webhook messages
+    type: select
+    options:
+      - label: English
+        value: en
+    default: en
+    required: true
+    immutable: false
+
 resources:
   - name: anr
     type: firebaseextensions.v1beta.v2function
