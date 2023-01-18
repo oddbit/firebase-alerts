@@ -23,10 +23,7 @@ export class EnvConfig {
    * that are declared by Google.
    */
   static get projectId(): string {
-    const projectId = process.env.PROJECT_ID ??
-      process.env.GOOGLE_CLOUD_PROJECT ??
-      process.env.GCLOUD_PROJECT ??
-      process.env.GCP_PROJECT;
+    const projectId = process.env.PROJECT_ID;
 
     if (!projectId) {
       throw new Error("Could not find project ID in any variable");
