@@ -8,6 +8,7 @@
     "firebaseextensions",
     "Firestore",
     "gcloud",
+    "googleapis",
     "helloworldapp",
     "mrkdwn",
     "newiosdevice",

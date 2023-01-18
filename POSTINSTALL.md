@@ -21,18 +21,6 @@ There is a square Firebase icon under the [`/icons/`](./icons) folder that you
 can use for your webhook avatar. Use this permalink to the image: [https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png](https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png)
 
 
-## Configuring webhooks
-The extension require webhooks to be defined in a Firestore collection named
-`{extension-id}-webhooks`. You can declare any number of webhooks and it doesn't 
-matter if you are having several webhooks for the same platform.
-
-A webhook document require two fields
- - `language` - The language for standard buttons, titles etc 
- - `url` - The target URL of your webhook
-
-![Webhook Firestore Doc](https://raw.githubusercontent.com/oddbit/firebase-alerts/main/doc/images/firestore-doc-webhook.png)
-
-
 ## Configuring apps
 Configure your apps with useful information in order for the extension to be 
 able to provide useful actions such as quickly creating Github issues and to
@@ -56,3 +44,7 @@ web app's `bundleId` for the sake of functional equivalent to mobile apps.
  
 ![App configuration Firestore Doc](https://raw.githubusercontent.com/oddbit/firebase-alerts/main/doc/images/firestore-doc-app.png)
 
+### ⚠️ Cost of document reads
+Please note that there will be a small cost of reading your app documents for each
+alert that is being triggered. Each event trigger will read all app information documents
+once per alert. The number of webhooks is not causing additional document reads.

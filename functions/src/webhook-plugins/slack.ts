@@ -1,5 +1,5 @@
-import {projectId} from "../config";
-import {Localization} from "../localization";
+import {EnvConfig} from "../utils/env-config";
+import {Localization} from "../utils/localization";
 import {AppCrash} from "../models/app-crash";
 import {AppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
@@ -25,7 +25,7 @@ export class SlackWebhook extends Webhook {
    * @return {object} A Slack card message payload
    */
   createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
-    const l10n = new Localization(this.language);
+    const l10n = new Localization(EnvConfig.language);
     const bundleId = appInfo.bundleId ?? l10n.translate("missingBundleId");
 
     const slackMessage = {
@@ -123,7 +123,7 @@ export class SlackWebhook extends Webhook {
               type: "plain_text",
               text: l10n.translate("openFirebaseAppsSettings"),
             },
-            value: "firebase_settings_" + projectId,
+            value: "firebase_settings_" + EnvConfig.projectId,
             url: makeFirebaseAppsSettingsUrl(),
             action_id: "firebase-open-settings",
           },
