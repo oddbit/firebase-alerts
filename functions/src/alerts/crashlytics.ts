@@ -5,9 +5,16 @@ import {crashlytics} from "firebase-functions/v2/alerts";
 import {post} from "request";
 import {AppCrash} from "../models/app-crash";
 import {AppInfo, IAppInfo} from "../models/app-info";
-import {IWebhook} from "../models/webhook";
+import {Webhook} from "../models/webhook";
 import {makeFirebaseAppsSettingsUrl, makeFirestoreAppInfoUrl} from "../urls";
-import {derivePlatformTypeFromUrl, webhookPlugins} from "../webhook-plugins";
+import {DiscordWebhook} from "../webhook-plugins/discord";
+import {GoogleChatWebhook} from "../webhook-plugins/google-chat";
+import {SlackWebhook} from "../webhook-plugins/slack";
+
+const functionOpts = {
+  region: process.env.LOCATION,
+  secrets: ["WEBHOOK_SLACK", "WEBHOOK_DISCORD", "WEBHOOK_GOOGLE_CHAT"],
+};
 
 /**
  * Handle crashlytics event
@@ -16,7 +23,7 @@ import {derivePlatformTypeFromUrl, webhookPlugins} from "../webhook-plugins";
  * @return {Promise}
  */
 async function handleCrashlyticsEvent(appCrash: AppCrash):
-  Promise<Promise<object | null>> {
+  Promise<object | void> {
   logger.debug("[handleCrashlyticsEvent]", appCrash);
 
   // Update and ensure that there is a Firestore document for this app id
@@ -50,67 +57,77 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
         });
   }
 
-  const webhooksSnap = await firestore()
-      .collection("webhooks")
-      .get();
+  const webhooks: Webhook[] = [];
 
-  const promises = webhooksSnap.docs
-      .map((doc) => doc.data() as IWebhook)
-      .map((data) => {
-        const platform = derivePlatformTypeFromUrl(data.url);
-        // Ensure that there is a plugin registered for the current webhook
-        if (!(platform in webhookPlugins)) {
-          logger.error("[handleCrashlyticsEvent] Unsupported webhook: ", data);
-          // Failing softly so we can proceed with other webhooks.
-          return Promise.resolve();
-        }
+  if (process.env.WEBHOOK_SLACK) {
+    logger.debug("[handleCrashlyticsEvent] Found slack webhook");
+    webhooks.push(new SlackWebhook({
+      url: process.env.WEBHOOK_SLACK,
+      language: process.env.LANGUAGE,
+    }));
+  }
 
-        // Call the builder function to create an instance of the
-        // current platform webhook.
-        logger.debug(`[handleCrashlyticsEvent] ${platform} webhook`, data);
-        const webhook = webhookPlugins[platform](data);
+  if (process.env.WEBHOOK_DISCORD) {
+    logger.debug("[handleCrashlyticsEvent] Found Discord webhook");
+    webhooks.push(new DiscordWebhook({
+      url: process.env.WEBHOOK_DISCORD,
+      language: process.env.LANGUAGE,
+    }));
+  }
 
-        const webhookPayload = {
-          body: JSON.stringify(
-              webhook.createCrashlyticsMessage(appInfo, appCrash),
-          ),
-        };
+  if (process.env.WEBHOOK_GOOGLE_CHAT) {
+    logger.debug("[handleCrashlyticsEvent] Found Google Chat webhook");
+    webhooks.push(new GoogleChatWebhook({
+      url: process.env.WEBHOOK_GOOGLE_CHAT,
+      language: process.env.LANGUAGE,
+    }));
+  }
 
-        try {
-          logger.info("[handleCrashlyticsEvent] Call webhook", webhookPayload);
-          return post(webhook.url, webhookPayload, (err, res) => {
-            if (err) throw err;
-            logger.info("[handleCrashlyticsEvent] Webhook call OK", res);
-          });
-        } catch (error) {
-          logger.error("[handleCrashlyticsEvent] Failed posting webhook.", {
-            error,
-            webhook,
-            appCrash,
-            webhookPayload,
-          });
+  if (webhooks.length === 0) {
+    logger.error("No webhooks defined. Please reconfigure the extension!");
+    return;
+  }
 
-          // Failing softly so we can proceed with other webhooks.
-          return Promise.resolve();
-        }
+  const promises = [];
+  for (const webhook of webhooks) {
+    logger.debug("[handleCrashlyticsEvent] Webhook", webhook);
+    const webhookPayload = {
+      body: JSON.stringify(webhook.createCrashlyticsMessage(appInfo, appCrash)),
+    };
+
+    try {
+      logger.info("[handleCrashlyticsEvent] Calling webhook", webhookPayload);
+      promises.push(post(webhook.url, webhookPayload, (err, res) => {
+        if (err) throw err;
+        logger.info("[handleCrashlyticsEvent] Webhook call OK", res);
+      }));
+    } catch (error) {
+      logger.error("[handleCrashlyticsEvent] Failed posting webhook.", {
+        error,
+        webhook,
+        appCrash,
+        webhookPayload,
       });
+    }
+  }
 
   return Promise.all(promises);
 }
 
 
-export const anr = crashlytics.onNewAnrIssuePublished(async (event) => {
-  logger.debug("onNewAnrIssuePublished", event);
+export const anr =
+  crashlytics.onNewAnrIssuePublished(functionOpts, async (event) => {
+    logger.debug("onNewAnrIssuePublished", event);
 
-  const appCrash = AppCrash.fromCrashlytics(event);
+    const appCrash = AppCrash.fromCrashlytics(event);
 
-  appCrash.tags.push("critical");
+    appCrash.tags.push("critical");
 
-  return handleCrashlyticsEvent(appCrash);
-});
+    return handleCrashlyticsEvent(appCrash);
+  });
 
 export const fatal =
-  crashlytics.onNewFatalIssuePublished((event) => {
+  crashlytics.onNewFatalIssuePublished(functionOpts, (event) => {
     logger.debug("onNewFatalIssuePublished", event);
 
     const appCrash = AppCrash.fromCrashlytics(event);
@@ -122,7 +139,7 @@ export const fatal =
 
 
 export const nonfatal =
-  crashlytics.onNewNonfatalIssuePublished((event) => {
+  crashlytics.onNewNonfatalIssuePublished(functionOpts, (event) => {
     logger.debug("onNewNonfatalIssuePublished", event);
 
     const appCrash = AppCrash.fromCrashlytics(event);
@@ -130,12 +147,13 @@ export const nonfatal =
     return handleCrashlyticsEvent(appCrash);
   });
 
-export const regression = crashlytics.onRegressionAlertPublished((event) => {
-  logger.debug("onRegressionAlertPublished", event);
+export const regression =
+  crashlytics.onRegressionAlertPublished(functionOpts, (event) => {
+    logger.debug("onRegressionAlertPublished", event);
 
-  const appCrash = AppCrash.fromCrashlytics(event);
+    const appCrash = AppCrash.fromCrashlytics(event);
 
-  appCrash.tags.push("regression");
+    appCrash.tags.push("regression");
 
-  return handleCrashlyticsEvent(appCrash);
-});
+    return handleCrashlyticsEvent(appCrash);
+  });
