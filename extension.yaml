@@ -119,7 +119,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs16
+        runtime: nodejs18
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -134,7 +134,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs16
+        runtime: nodejs18
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -149,7 +149,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs16
+        runtime: nodejs18
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -164,7 +164,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs16
+        runtime: nodejs18
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
