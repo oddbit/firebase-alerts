@@ -51,9 +51,8 @@ export class EnvConfig {
    */
   static get webhooks(): string[] {
     return [
-      process.env.WEBHOOK_SLACK,
-      process.env.WEBHOOK_DISCORD,
-      process.env.WEBHOOK_GOOGLE_CHAT,
+      process.env.WEBHOOK_MANDATORY,
+      process.env.WEBHOOK_OPTIONAL,
     ].filter((x) => !!x) as string[];
   }
 

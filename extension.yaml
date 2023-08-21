@@ -86,31 +86,16 @@ params:
     required: true
     immutable: false
 
-  - param: WEBHOOK_SLACK
-    label: Slack Webhook
-    description: Webhook endpoint for Slack notifications
+  - param: WEBHOOK_MANDATORY
+    label: Mandatory webhook
+    description: Mandatory webhook for Slack, Discord, or Google Chat
     type: secret
-    validationRegex: ^https:\/\/hooks\.slack\.com\/services\/\w+\/\w+/\w+$
-    validationErrorMessage: Webhook URL must match Slack webhook format
-    example: https://hooks.slack.com/services/AAA111/BBB222/CCCddd333
-    required: false
+    required: true
 
-  - param: WEBHOOK_DISCORD
-    label: Discord Webhook
-    description: Webhook endpoint for Discord notifications
+  - param: WEBHOOK_OPTIONAL
+    label: Optional webhook
+    description: Optional, additional webhook for Slack, Discord, or Google Chat
     type: secret
-    validationRegex: ^https:\/\/discord\.com\/api\/webhooks\/\d+\/[\w-_]+$
-    validationErrorMessage: Webhook URL must match Discord webhook format
-    example: https://discord.com/api/webhooks/01234567/AAbbcc-123
-    required: false
-
-  - param: WEBHOOK_GOOGLE_CHAT
-    label: Google Chat Webhook
-    description: Webhook endpoint for Google Chat notifications
-    type: secret
-    validationRegex: ^https:\/\/chat\.googleapis\.com\/v1\/spaces\/\w+/messages\?key=.*$
-    validationErrorMessage: Webhook URL must match Google Chat webhook format 
-    example: https://chat.googleapis.com/v1/spaces/AABBCC/messages?key=xyzabc
     required: false
 
 resources:
