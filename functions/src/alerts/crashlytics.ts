@@ -18,6 +18,27 @@ const functionOpts = {
 };
 
 /**
+ * Factory method for returning a Webhook plugin based on the URL
+ *
+ * @param {string} url Webhook URL
+ * @return {Webhook} plugin
+ */
+function webhookPluginFromUrl(url: string): Webhook {
+  if (url?.startsWith("https://chat.googleapis.com")) {
+    logger.debug("[handleCrashlyticsEvent] Found Google Chat webhook");
+    return new GoogleChatWebhook({url, language: EnvConfig.language});
+  } else if (url?.startsWith("https://discord.com")) {
+    logger.debug("[handleCrashlyticsEvent] Found Discord webhook");
+    return new DiscordWebhook({url, language: EnvConfig.language});
+  } else if (url?.startsWith("https://hooks.slack.com")) {
+    logger.debug("[handleCrashlyticsEvent] Found slack webhook");
+    return new SlackWebhook({url, language: EnvConfig.language});
+  } else {
+    throw new Error("Unknown webhook type: " + url);
+  }
+}
+
+/**
  * Handle crashlytics event
  *
  * @param {AppCrash} appCrash
@@ -58,20 +79,7 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
         });
   }
 
-  const webhooks: Webhook[] = EnvConfig.webhooks.map((url) => {
-    if (url?.startsWith("https://chat.googleapis.com")) {
-      logger.debug("[handleCrashlyticsEvent] Found Google Chat webhook");
-      return new GoogleChatWebhook({url, language: EnvConfig.language});
-    } else if (url?.startsWith("https://discord.com")) {
-      logger.debug("[handleCrashlyticsEvent] Found Discord webhook");
-      return new DiscordWebhook({url, language: EnvConfig.language});
-    } else if (url?.startsWith("https://hooks.slack.com")) {
-      logger.debug("[handleCrashlyticsEvent] Found slack webhook");
-      return new SlackWebhook({url, language: EnvConfig.language});
-    } else {
-      throw new Error("Unknown webhook type: " + url);
-    }
-  });
+  const webhooks: Webhook[] = EnvConfig.webhooks.map(webhookPluginFromUrl);
 
   if (webhooks.length === 0) {
     throw new Error("No webhooks defined. Please reconfigure the extension!");
