@@ -1,11 +1,11 @@
 name: firebase-alerts
-version: 0.0.8
+version: 0.0.13
 specVersion: v1beta
 
 displayName: Firebase Alerts
 description: Firebase extension for sending Firebase Alerts to social platforms
 
-license: Apache-2.0 
+license: Apache-2.0
 
 author:
   authorName: Oddbit
@@ -83,6 +83,14 @@ params:
       - label: English
         value: en
     default: en
+    required: true
+    immutable: false
+
+  - param: APP_CONFIG_COLLECTION
+    label: Apps configuration collection
+    description: The Firestore collection to keep apps configuration data.
+    type: string
+    default: firebase-alerts-apps-config
     required: true
     immutable: false
 

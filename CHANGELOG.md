@@ -1,7 +1,9 @@
+## 0.0.13
+- Updating node version to 18
+- Moving webhooks into secrets instead of Firestore configuration.
+
 ## 0.0.7
 Fixing function trigger type
-## 0.0.8
-Moving webhooks into secrets instead of Firestore configuration.
 
 ## 0.0.1
 Initial release.
