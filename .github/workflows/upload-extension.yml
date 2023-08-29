@@ -37,7 +37,11 @@ jobs:
 
       - run: yarn --cwd functions build
 
-      - run: firebase ext:dev:upload --force oddbit/firebase-alerts            
+      - run: >- 
+          firebase ext:dev:upload
+          --local
+          --force
+          oddbit/firebase-alerts
 
       # Try to save potential log files if something went wrong
       - name: Upload debug log
