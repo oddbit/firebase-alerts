@@ -40,15 +40,18 @@ export function makeFirestoreAppInfoUrl(appInfo: AppInfo): string {
  * Make an Github URL to create an issue from this app crash
  *
  * @param {AppInfo} appInfo
- * @param {AppCrash} appCrash
+ * @param {string} issueTitle
+ * @param {string[]} tags
  * @return {string} URL to create a github issue
  */
 export function makeGithubIssueUrl(
     appInfo: AppInfo,
-    appCrash: AppCrash,): string {
+    issueTitle: string,
+    tags: string[],
+): string {
   const attributes = [
-    `title=${encodeURI(appCrash.issueTitle)}`,
-    `labels=${appCrash.tags.map((tag) => encodeURI(tag)).join(",")}`,
+    `title=${encodeURI(issueTitle)}`,
+    `labels=${tags.map((tag) => encodeURI(tag)).join(",")}`,
   ];
 
   return `https://github.com/${appInfo.github?.repo}/issues/new?${attributes.join("&")}`;
@@ -58,12 +61,12 @@ export function makeGithubIssueUrl(
  * Make an Github URL to search for issues from this app crash
  *
  * @param {AppInfo} appInfo
- * @param {AppCrash} appCrash
+ * @param {string} issueTitle
  * @return {string} URL to search for github issues
  */
 export function makeGithubSearchUrl(
     appInfo: AppInfo,
-    appCrash: AppCrash,): string {
-  return `https://github.com/${appInfo.github?.repo}/issues?q=${encodeURI(appCrash.issueTitle)}`;
+    issueTitle: string,): string {
+  return `https://github.com/${appInfo.github?.repo}/issues?q=${encodeURI(issueTitle)}`;
 }
 

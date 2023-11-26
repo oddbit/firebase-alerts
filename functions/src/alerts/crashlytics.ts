@@ -1,16 +1,14 @@
 
-import {firestore} from "firebase-admin";
 import {logger} from "firebase-functions/v2";
 import {crashlytics} from "firebase-functions/v2/alerts";
 import {post} from "request";
 import {AppCrash} from "../models/app-crash";
-import {AppInfo, IAppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
-import {makeFirebaseAppsSettingsUrl, makeFirestoreAppInfoUrl} from "../urls";
 import {EnvConfig} from "../utils/env-config";
 import {DiscordWebhook} from "../webhook-plugins/discord";
-import {GoogleChatWebhook} from "../webhook-plugins/google-chat";
 import {SlackWebhook} from "../webhook-plugins/slack";
+import {updateAppLogInfo} from "../utils/update-app-log-info";
+import {GoogleChatWebhook} from "../webhook-plugins/google-chat/google-chat";
 
 const functionOpts = {
   region: process.env.LOCATION,
@@ -48,36 +46,7 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
   Promise<object | void> {
   logger.debug("[handleCrashlyticsEvent]", appCrash);
 
-  // Update and ensure that there is a Firestore document for this app id
-  await firestore()
-      .collection("apps")
-      .doc(appCrash.appId)
-      .set({
-        appId: appCrash.appId,
-        lastIssue: firestore.FieldValue.serverTimestamp(),
-        issueCount: firestore.FieldValue.increment(1),
-      }, {merge: true});
-
-
-  const appInfoSnap = await firestore()
-      .collection("apps")
-      .doc(appCrash.appId)
-      .get();
-
-  logger.debug("[handleCrashlyticsEvent] App info", appInfoSnap.data());
-
-  const appInfo = new AppInfo(appInfoSnap.data() as IAppInfo);
-  if (!appInfo.bundleId) {
-    // Will need to add this information explicitly by copying the bundle id
-    // from Firebase Console project overview. The console log below will
-    // provide links to add the configuration.
-    logger.warn(
-        "[handleCrashlyticsEvent] No bundle id for app. Fix it manually", {
-          appInfo,
-          settings: makeFirebaseAppsSettingsUrl(),
-          firestore: makeFirestoreAppInfoUrl(appInfo),
-        });
-  }
+  const appInfo = await updateAppLogInfo(appCrash, "crashlytics");
 
   const webhooks: Webhook[] = EnvConfig.webhooks.map(webhookPluginFromUrl);
 

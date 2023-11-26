@@ -1,6 +1,10 @@
 import {AppInfo} from "./app-info";
 import {AppCrash} from "./app-crash";
 import {Localization} from "../utils/localization";
+import {
+  PerformanceEvent,
+  ThresholdAlertPayload,
+} from "firebase-functions/v2/alerts/performance";
 
 export interface IWebhook {
   url: string;
@@ -34,5 +38,10 @@ export abstract class Webhook implements IWebhook {
   public abstract createCrashlyticsMessage(
     appInfo: AppInfo,
     appCrash: AppCrash,
+  ): object;
+
+  public abstract createPerformanceMessage(
+    appInfo: AppInfo,
+    performanceEvent: PerformanceEvent<ThresholdAlertPayload>,
   ): object;
 }
