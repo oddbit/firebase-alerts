@@ -5,6 +5,7 @@ import {Webhook} from "../../models/webhook";
 import {
   crashlyticsImgUrl,
   makeCrashlyticsIssueUrl,
+  performanceImgUrl,
 } from "../../urls";
 import {EnvConfig} from "../../utils/env-config";
 import {
@@ -84,7 +85,7 @@ export class GoogleChatWebhook extends Webhook {
         appInfo,
         "Performance",
         l10n.translate(`${metricType} of ${eventType}: ${eventName}`),
-        crashlyticsImgUrl,
+        performanceImgUrl,
         "Avatar for Crashlytics"
     );
     // eslint-disable-next-line max-len
