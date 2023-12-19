@@ -106,6 +106,12 @@ params:
     type: secret
     required: false
 
+  - param: API_KEY_GEMENI
+    label: Google Gemini API key
+    description: You can create an API key in Google AI Studio.
+    type: secret
+    required: false
+
 resources:
   - name: anr
     type: firebaseextensions.v1beta.v2function
