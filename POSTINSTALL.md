@@ -1,14 +1,3 @@
-## ⚠️ If you're having troubles during installation ⚠️
-The installation of v2 functions might fail for projects that have never used v2 functions. 
-
-It will eventually be fixed on Firebase side, but for now, if you run into errors during install run these commands (or perform equivalent actions via cloud console) and try again:
-
-```
-gcloud services enable compute.googleapis.com
-
-gcloud projects add-iam-policy-binding <PROJECT ID> --member serviceAccount:<PROJECT NUMBER>-compute@developer.gserviceaccount.com --role roles/eventarc.eventReceiver
-```
-
 ## Configuring your webhooks
 Read the official documentation for each of the platforms on how to configure 
 webhooks.
@@ -17,8 +6,8 @@ webhooks.
 * [Slack](https://slack.com/help/articles/115005265063-Incoming-webhooks-for-Slack)
 * [Discord](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
-There is a square Firebase icon under the [`/icons/`](./icons) folder that you 
-can use for your webhook avatar. Use this permalink to the image: [https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png](https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png)
+There is a square Firebase icon under the [`/icons/`](https://github.com/oddbit/firebase-alerts/raw/main/icons) 
+folder that you can use for your webhook avatar. Use this permalink to the image: [https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png](https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png)
 
 
 ## Configuring apps
@@ -34,7 +23,7 @@ Create one document for each of your Firebase app ids in a collection named
  - `github` - Optional object for github info
      - `repo` - Repository owner and name (e.g. `oddbit/firebase-alerts`)
 
-For web apps, the `bundleId` is a random string that you will have to look for in
+For web apps, the `bundleId` is a string that you will have to look for in
 URL when you are selecting the web app in the Firebase settings page.
 
 Look for the last part of the URL where `web-app-bundle-id` is your
