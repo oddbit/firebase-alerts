@@ -52,6 +52,7 @@ export class AppCrash implements IAppCrash {
    * @return {AppCrash} An instance of `AppCrash` class
    */
   public static fromCrashlytics(event: SupportedCrashlyticsEvent): AppCrash {
+    
     const appCrash = {
       issueId: event.data.payload.issue.id,
       issueTitle: event.data.payload.issue.title,
@@ -83,5 +84,6 @@ export class AppCrash implements IAppCrash {
   public readonly issueTitle: string;
   public readonly appId: string;
   public readonly appVersion: string;
-  public readonly tags = ["bug"];
+  public readonly tags = ["bug"];  
+  public explanation?: string;
 }
