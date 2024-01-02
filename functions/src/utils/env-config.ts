@@ -56,6 +56,13 @@ export class EnvConfig {
     ].filter((x) => !!x) as string[];
   }
 
+  /**
+   * Get Google Gemeni API key
+   */
+  static get apiKeyGemeni(): string | undefined {
+    return process.env.API_KEY_GEMENI;
+  }
+
 
   /**
    * Get an environment variable's value
