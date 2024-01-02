@@ -11,10 +11,11 @@ import {EnvConfig} from "../utils/env-config";
 import {DiscordWebhook} from "../webhook-plugins/discord";
 import {GoogleChatWebhook} from "../webhook-plugins/google-chat";
 import {SlackWebhook} from "../webhook-plugins/slack";
+import { GemeniService } from "../services/gemeni.service";
 
 const functionOpts = {
   region: process.env.LOCATION,
-  secrets: ["WEBHOOK_MANDATORY", "WEBHOOK_OPTIONAL"],
+  secrets: ["WEBHOOK_MANDATORY", "WEBHOOK_OPTIONAL", "API_KEY_GEMENI"],
 };
 
 /**
@@ -114,8 +115,14 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
 export const anr =
   crashlytics.onNewAnrIssuePublished(functionOpts, async (event) => {
     logger.debug("onNewAnrIssuePublished", event);
-
+  
     const appCrash = AppCrash.fromCrashlytics(event);
+    if (EnvConfig.apiKeyGemeni) {
+      logger.debug("Call Gemeni API for explanation");
+      const gemeniService = new GemeniService(EnvConfig.apiKeyGemeni);
+      appCrash.explanation = await gemeniService.explainCrash(event);
+      logger.debug("Gemeni explanation", appCrash.explanation);
+    }
 
     appCrash.tags.push("critical");
 
@@ -123,11 +130,16 @@ export const anr =
   });
 
 export const fatal =
-  crashlytics.onNewFatalIssuePublished(functionOpts, (event) => {
+  crashlytics.onNewFatalIssuePublished(functionOpts, async (event) => {
     logger.debug("onNewFatalIssuePublished", event);
 
     const appCrash = AppCrash.fromCrashlytics(event);
-
+    if (EnvConfig.apiKeyGemeni) {
+      logger.debug("Call Gemeni API for explanation");
+      const gemeniService = new GemeniService(EnvConfig.apiKeyGemeni);
+      appCrash.explanation = await gemeniService.explainCrash(event);
+      logger.debug("Gemeni explanation", appCrash.explanation);
+    }
     appCrash.tags.push("critical");
 
     return handleCrashlyticsEvent(appCrash);
@@ -135,19 +147,31 @@ export const fatal =
 
 
 export const nonfatal =
-  crashlytics.onNewNonfatalIssuePublished(functionOpts, (event) => {
+  crashlytics.onNewNonfatalIssuePublished(functionOpts, async (event) => {
     logger.debug("onNewNonfatalIssuePublished", event);
 
     const appCrash = AppCrash.fromCrashlytics(event);
+    if (EnvConfig.apiKeyGemeni) {
+      logger.debug("Call Gemeni API for explanation");
+      const gemeniService = new GemeniService(EnvConfig.apiKeyGemeni);
+      appCrash.explanation = await gemeniService.explainCrash(event);
+      logger.debug("Gemeni explanation", appCrash.explanation);
+    }
 
     return handleCrashlyticsEvent(appCrash);
   });
 
 export const regression =
-  crashlytics.onRegressionAlertPublished(functionOpts, (event) => {
+  crashlytics.onRegressionAlertPublished(functionOpts, async (event) => {
     logger.debug("onRegressionAlertPublished", event);
 
     const appCrash = AppCrash.fromCrashlytics(event);
+    if (EnvConfig.apiKeyGemeni) {
+      logger.debug("Call Gemeni API for explanation");
+      const gemeniService = new GemeniService(EnvConfig.apiKeyGemeni);
+      appCrash.explanation = await gemeniService.explainCrash(event);
+      logger.debug("Gemeni explanation", appCrash.explanation);
+    }
 
     appCrash.tags.push("regression");
 
