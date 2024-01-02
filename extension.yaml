@@ -95,22 +95,18 @@ params:
     immutable: false
 
   - param: WEBHOOK_MANDATORY
-    label: Mandatory webhook
-    description: Mandatory webhook for Slack, Discord, or Google Chat
+    label: Webhook
+    description: Webhook for Slack, Discord, or Google Chat
     type: secret
     required: true
-
-  - param: WEBHOOK_OPTIONAL
-    label: Optional webhook
-    description: Optional, additional webhook for Slack, Discord, or Google Chat
-    type: secret
-    required: false
+    immutable: false
 
   - param: API_KEY_GEMENI
     label: Google Gemini API key
     description: You can create an API key in Google AI Studio.
     type: secret
     required: false
+    immutable: false
 
 resources:
   - name: anr

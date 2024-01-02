@@ -15,7 +15,7 @@ import { GemeniService } from "../services/gemeni.service";
 
 const functionOpts = {
   region: process.env.LOCATION,
-  secrets: ["WEBHOOK_MANDATORY", "WEBHOOK_OPTIONAL", "API_KEY_GEMENI"],
+  secrets: ["WEBHOOK_MANDATORY", "API_KEY_GEMENI"],
 };
 
 /**
