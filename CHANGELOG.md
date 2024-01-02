@@ -1,3 +1,6 @@
+## 0.0.14
+- Adding integration with Google Gemeni API
+
 ## 0.0.13
 - Updating node version to 18
 - Moving webhooks into secrets instead of Firestore configuration.
