@@ -1,10 +1,11 @@
 import {
   GoogleGenerativeAI,
-  HarmCategory,
-  HarmBlockThreshold,
 } from "@google/generative-ai";
 import { SupportedCrashlyticsEvent } from "../models/app-crash";
 
+/**
+ * Implements a service for interacting with Gemeni LLM
+ */
 export class GemeniService {
   constructor(apiKey: string) {
     this.genAI = new GoogleGenerativeAI(apiKey);
@@ -18,25 +19,17 @@ export class GemeniService {
     topP: 1,
     maxOutputTokens: 2048,
   };
-  private static readonly SAFETY_SETTINGS = [
-    {
-      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-    },
-  ];
 
+  // Block harmful content, hate speech etc
+  // Should not be needed or applicable to this use case
+  private static readonly SAFETY_SETTINGS = [];
+
+  /**
+   * Make Gemeni LLM explain a crashlytics event.
+   * 
+   * @param {SupportedCrashlyticsEvent} appCrash App crash information
+   * @returns {Promise<string>} Promise with the explanation
+   */
   async explainCrash(appCrash: SupportedCrashlyticsEvent): Promise<string> {
     const model = this.genAI.getGenerativeModel({ model: GemeniService.MODEL_NAME });
 
@@ -59,10 +52,10 @@ export class GemeniService {
     Use the following JSON information to explain the issue:
     `;
 
-    const crash = JSON.stringify(appCrash)
+    const crashJson = JSON.stringify(appCrash)
 
     const parts = [
-      {text: [promptContext, promptExplanation, crash].join("\n\n")},
+      {text: [promptContext, promptExplanation, crashJson].join("\n\n")},
     ];
 
     const result = await model.generateContent({
