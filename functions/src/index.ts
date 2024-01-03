@@ -2,6 +2,11 @@
 // import * as billingFunctions from "./alerts/billing";
 // import * as appDistributionFunctions from "./alerts/app-distribution";
 
+import * as admin from "firebase-admin";
+
+admin.initializeApp();
+
+
 export * from "./alerts/crashlytics";
 
 // TODO: Uncomment when functions are supported. Keeping them commented out now
