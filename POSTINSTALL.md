@@ -1,13 +1,3 @@
-## Configuring your webhooks
-Read the official documentation for each of the platforms on how to configure 
-webhooks.
-
-* [Google Chat](https://developers.google.com/hangouts/chat/how-tos/webhooks)
-* [Slack](https://slack.com/help/articles/115005265063-Incoming-webhooks-for-Slack)
-* [Discord](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
-
-There is a square Firebase icon under the [`/icons/`](https://github.com/oddbit/firebase-alerts/raw/main/icons) 
-folder that you can use for your webhook avatar. Use this permalink to the image: [https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png](https://github.com/oddbit/firebase-alerts/raw/main/icons/firebase.png)
 
 
 ## Configuring apps
