@@ -86,12 +86,33 @@ params:
     required: true
     immutable: false
 
-  - param: APP_CONFIG_COLLECTION
-    label: Apps configuration collection
-    description: The Firestore collection to keep apps configuration data.
+  - param: APP_ID
+    label: Firebase App ID
+    description: The Firebase app ID from console (e.g `1:269808624035:android:296863cf1f5b6817c87a16`)
     type: string
-    default: firebase-alerts-apps-config
     required: true
+    immutable: false
+
+  - param: APP_BUNDLE_ID
+    label: Bundle ID 
+    description: |
+      The app bundle ID as identified by your build configuration (e.g `id.oddbit.hello_world`)
+
+      For web apps this is a random string that you will have to look for in
+      URL when you are selecting the web app in the Firebase settings page.
+
+      Look for the last part of the URL where `your-web-app-bundle-id` is your
+      web app's "bundle id". Go to the console to find something like this: 
+      https://console.firebase.google.com/project/${PROJECT_ID}/settings/general/web:{your-web-app-bundle-id}
+    type: string
+    required: true
+    immutable: false
+
+  - param: REPOSITORY_URL
+    label: Repository URL
+    description: URL to your git repository
+    type: string
+    required: false
     immutable: false
 
   - param: WEBHOOK_MANDATORY

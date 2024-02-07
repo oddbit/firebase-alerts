@@ -1,14 +1,11 @@
 import {Localization} from "../utils/localization";
 import {AppCrash} from "../models/app-crash";
-import {AppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
 import {
   crashlyticsImgUrl,
   makeCrashlyticsIssueUrl,
-  makeFirebaseAppsSettingsUrl,
-  makeFirestoreAppInfoUrl,
-  makeGithubIssueUrl,
-  makeGithubSearchUrl,
+  makeRepositoryIssueUrl,
+  makeRepositorySearchUrl,
 } from "../urls";
 import {EnvConfig} from "../utils/env-config";
 
@@ -20,13 +17,11 @@ export class GoogleChatWebhook extends Webhook {
    * Creates a JSON payload for a Google Chat card.
    * @see https://developers.google.com/chat/api/reference/rest/v1/cards#card
    *
-   * @param {AppInfo} appInfo
    * @param {AppCrash} appCrash
    * @return {object} A Google Chat card message payload
    */
-  createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
+  createCrashlyticsMessage(appCrash: AppCrash): object {
     const l10n = new Localization(EnvConfig.language);
-    const bundleId = appInfo.bundleId ?? l10n.translate("missingBundleId");
 
     const googleChatCards =
     {
@@ -51,7 +46,7 @@ export class GoogleChatWebhook extends Webhook {
               {
                 decoratedText: {
                   topLabel: l10n.translate("labelBundleId"),
-                  text: `${bundleId} (${appInfo.platform})`,
+                  text: `${EnvConfig.bundleId} (${EnvConfig.platform})`,
                 },
               },
               {
@@ -78,72 +73,46 @@ export class GoogleChatWebhook extends Webhook {
     };
     googleChatCard.card.sections.push(firebaseSection);
 
-    if (appInfo.bundleId) {
-      // Need the bundle ID in order to link to Firebase Console
-      firebaseSection.widgets.push({
-        buttonList: {
-          buttons: [
-            {
-              text: l10n.translate("openCrashlyticsIssue"),
-              onClick: {
-                openLink: {
-                  url: makeCrashlyticsIssueUrl(appInfo, appCrash),
-                },
+    firebaseSection.widgets.push({
+      buttonList: {
+        buttons: [
+          {
+            text: l10n.translate("openCrashlyticsIssue"),
+            onClick: {
+              openLink: {
+                url: makeCrashlyticsIssueUrl(appCrash),
               },
             },
-          ],
-        },
-      });
-    } else {
-      firebaseSection.widgets.push({
-        buttonList: {
-          buttons: [
-            {
-              text: l10n.translate("openFirebaseAppsSettings"),
-              onClick: {
-                openLink: {
-                  url: makeFirebaseAppsSettingsUrl(),
-                },
-              },
-            },
-            {
-              text: l10n.translate("openFirestoreAppInfo"),
-              onClick: {
-                openLink: {
-                  url: makeFirestoreAppInfoUrl(appInfo),
-                },
-              },
-            },
-          ],
-        },
-      });
-    }
+          },
+        ],
+      },
+    });
 
     // =========================================================================
     // =========================================================================
     // Github Section
     //
 
-    if (appInfo.github) {
+    if (EnvConfig.repositoryUrl) {
       googleChatCard.card.sections.push({
-        header: "Github",
+        header: "Repository",
         widgets: [
           {
             buttonList: {
               buttons: [
                 {
-                  text: l10n.translate("createGithubIssue"),
+                  text: l10n.translate("createIssue"),
                   onClick: {
                     openLink: {
-                      url: makeGithubIssueUrl(appInfo, appCrash),
+                      url: makeRepositoryIssueUrl(appCrash),
                     },
                   },
                 },
                 {
-                  text: l10n.translate("searchGithubIssue"),
+                  text: l10n.translate("searchIssue"),
                   onClick: {
                     openLink: {
-                      url: makeGithubSearchUrl(appInfo, appCrash),
+                      url: makeRepositorySearchUrl(appCrash),
                     },
                   },
                 },
