@@ -1,14 +1,11 @@
 import {Localization} from "../utils/localization";
 import {AppCrash} from "../models/app-crash";
-import {AppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
 import {
   crashlyticsImgUrl,
   makeCrashlyticsIssueUrl,
-  makeFirebaseAppsSettingsUrl,
-  makeFirestoreAppInfoUrl,
-  makeGithubIssueUrl,
-  makeGithubSearchUrl,
+  makeRepositoryIssueUrl,
+  makeRepositorySearchUrl,
 } from "../urls";
 import {EnvConfig} from "../utils/env-config";
 
@@ -20,15 +17,12 @@ export class DiscordWebhook extends Webhook {
    * Creates a JSON payload for a Discord card.
    * @see https://developers.google.com/chat/api/reference/rest/v1/cards#card
    *
-   * @param {AppInfo} appInfo
    * @param {AppCrash} appCrash
    * @return {object} A Discord card message payload
    */
-  createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
+  createCrashlyticsMessage(appCrash: AppCrash): object {
     const l10n = new Localization(EnvConfig.language);
-    const bundleId = appInfo.bundleId ?
-      "`" + appInfo.bundleId + "`" :
-      l10n.translate("missingBundleId");
+    const bundleId = EnvConfig.bundleId;
 
     const discordMessage = {
       content: null,
@@ -37,9 +31,7 @@ export class DiscordWebhook extends Webhook {
 
     const crashlyticsInfo = {
       title: appCrash.issueTitle,
-      url: appInfo.bundleId ?
-        makeCrashlyticsIssueUrl(appInfo, appCrash) :
-        undefined,
+      url: makeCrashlyticsIssueUrl(appCrash),
       color: 16763432,
       author: {
         name: "Crashlytics",
@@ -53,7 +45,7 @@ export class DiscordWebhook extends Webhook {
         },
         {
           name: l10n.translate("labelPlatform"),
-          value: appInfo.platform,
+          value: EnvConfig.platform,
           inline: true,
         },
         {
@@ -65,42 +57,23 @@ export class DiscordWebhook extends Webhook {
 
     discordMessage.embeds.push(crashlyticsInfo);
 
-    // =========================================================================
-    // =========================================================================
-    // Firebase section
-    //
-    if (!appInfo.bundleId) {
-      // No bundle ID present. Prompt the user to try and fix it.
-      crashlyticsInfo.fields.push({
-        name: "Firebase",
-        value: [
-          l10n.translate("descriptionOpenFirebaseAppsSettings"),
-          `[${l10n.translate("openFirebaseAppsSettings")}]`+
-          `(${makeFirebaseAppsSettingsUrl()})`,
-          "",
-          l10n.translate("descriptionOpenFirestoreAppInfo"),
-          `[${l10n.translate("openFirestoreAppInfo")}]` +
-          `(${makeFirestoreAppInfoUrl(appInfo)})`,
-        ].join("\n"),
-      });
-    }
 
     // =========================================================================
     // =========================================================================
     // Github Section
     //
 
-    if (appInfo.github) {
+    if (EnvConfig.repositoryUrl) {
       crashlyticsInfo.fields.push({
-        name: "Github",
+        name: "Repository",
         value: [
           l10n.translate("descriptionCreateNewIssue"),
-          `[${l10n.translate("createGithubIssue")}]` +
-          `(${makeGithubIssueUrl(appInfo, appCrash)})`,
+          `[${l10n.translate("createIssue")}]` +
+          `(${makeRepositoryIssueUrl(appCrash)})`,
           "",
           l10n.translate("descriptionSearchSimilarIssues"),
-          `[${l10n.translate("searchGithubIssue")}]` +
-          `(${makeGithubSearchUrl(appInfo, appCrash)})`,
+          `[${l10n.translate("searchIssue")}]` +
+          `(${makeRepositorySearchUrl(appCrash)})`,
         ].join("\n"),
       });
     }

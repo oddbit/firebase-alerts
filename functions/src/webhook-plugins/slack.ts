@@ -1,15 +1,12 @@
 import {EnvConfig} from "../utils/env-config";
 import {Localization} from "../utils/localization";
 import {AppCrash} from "../models/app-crash";
-import {AppInfo} from "../models/app-info";
 import {Webhook} from "../models/webhook";
 import {
   crashlyticsImgUrl,
   makeCrashlyticsIssueUrl,
-  makeFirebaseAppsSettingsUrl,
-  makeFirestoreAppInfoUrl,
-  makeGithubIssueUrl,
-  makeGithubSearchUrl,
+  makeRepositoryIssueUrl,
+  makeRepositorySearchUrl,
 } from "../urls";
 
 /**
@@ -20,13 +17,11 @@ export class SlackWebhook extends Webhook {
    * Creates a JSON payload for a Slack card.
    * @see https://developers.google.com/chat/api/reference/rest/v1/cards#card
    *
-   * @param {AppInfo} appInfo
    * @param {AppCrash} appCrash
    * @return {object} A Slack card message payload
    */
-  createCrashlyticsMessage(appInfo: AppInfo, appCrash: AppCrash): object {
+  createCrashlyticsMessage(appCrash: AppCrash): object {
     const l10n = new Localization(EnvConfig.language);
-    const bundleId = appInfo.bundleId ?? l10n.translate("missingBundleId");
 
     const slackMessage = {
       blocks: [
@@ -46,13 +41,13 @@ export class SlackWebhook extends Webhook {
               `*${l10n.translate(appCrash.issueType)}*`,
               appCrash.issueTitle,
               "*Bundle id*",
-              "`" + bundleId + "`",
+              "`" + EnvConfig.bundleId + "`",
             ].join("\n"),
           },
           fields: [
             {
               type: "mrkdwn",
-              text: "*Platform*\n`"+ appInfo.platform +"`",
+              text: "*Platform*\n`"+ EnvConfig.platform +"`",
             },
             {
               type: "mrkdwn",
@@ -88,72 +83,32 @@ export class SlackWebhook extends Webhook {
 
     ]);
 
-    if (appInfo.bundleId) {
-      slackMessage.blocks.push(...[
-        {
-          type: "section",
+    slackMessage.blocks.push(...[
+      {
+        type: "section",
+        text: {
+          type: "plain_text",
+          text: l10n.translate("descriptionViewInCrashlytics"),
+        },
+        accessory: {
+          type: "button",
           text: {
             type: "plain_text",
-            text: l10n.translate("descriptionViewInCrashlytics"),
+            text: l10n.translate("openCrashlyticsIssue"),
           },
-          accessory: {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: l10n.translate("openCrashlyticsIssue"),
-            },
-            value: "crashlytics_issue_" + appCrash.issueId,
-            url: makeCrashlyticsIssueUrl(appInfo, appCrash),
-            action_id: "crashlytics-action-view",
-          },
+          value: "crashlytics_issue_" + appCrash.issueId,
+          url: makeCrashlyticsIssueUrl(appCrash),
+          action_id: "crashlytics-action-view",
         },
-      ]);
-    } else {
-      // No bundle ID present. Prompt the user to try and fix it.
-      slackMessage.blocks.push(...[
-        {
-          type: "section",
-          text: {
-            type: "plain_text",
-            text: l10n.translate("descriptionOpenFirebaseAppsSettings"),
-          },
-          accessory: {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: l10n.translate("openFirebaseAppsSettings"),
-            },
-            value: "firebase_settings_" + EnvConfig.projectId,
-            url: makeFirebaseAppsSettingsUrl(),
-            action_id: "firebase-open-settings",
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "plain_text",
-            text: l10n.translate("descriptionOpenFirestoreAppInfo"),
-          },
-          accessory: {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: l10n.translate("openFirestoreAppInfo"),
-            },
-            value: "open_firestore_" + appCrash.issueId,
-            url: makeFirestoreAppInfoUrl(appInfo),
-            action_id: "view-document-firestore",
-          },
-        },
-      ]);
-    }
+      },
+    ]);
 
     // =========================================================================
     // =========================================================================
     // Github Section
     //
 
-    if (appInfo.github) {
+    if (EnvConfig.repositoryUrl) {
       slackMessage.blocks.push(...[
         {
           type: "divider",
@@ -162,7 +117,7 @@ export class SlackWebhook extends Webhook {
           type: "header",
           text: {
             type: "plain_text",
-            text: "Github",
+            text: "Repository",
           },
         },
         {
@@ -175,10 +130,10 @@ export class SlackWebhook extends Webhook {
             type: "button",
             text: {
               type: "plain_text",
-              text: l10n.translate("createGithubIssue"),
+              text: l10n.translate("createIssue"),
             },
             value: "create_new_github_issue",
-            url: makeGithubIssueUrl(appInfo, appCrash),
+            url: makeRepositoryIssueUrl(appCrash),
             action_id: "button-action-create-github-issue",
           },
         },
@@ -192,10 +147,10 @@ export class SlackWebhook extends Webhook {
             type: "button",
             text: {
               type: "plain_text",
-              text: l10n.translate("searchGithubIssue"),
+              text: l10n.translate("searchIssue"),
             },
             value: "search_github_issue",
-            url: makeGithubSearchUrl(appInfo, appCrash),
+            url: makeRepositorySearchUrl(appCrash),
             action_id: "button-action-search-github-issue",
           },
         },
