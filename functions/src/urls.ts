@@ -1,4 +1,3 @@
-import {AppInfo} from "./models/app-info";
 import {AppCrash} from "./models/app-crash";
 import {EnvConfig} from "./utils/env-config";
 
@@ -7,14 +6,11 @@ export const crashlyticsImgUrl = "https://github.com/oddbit/firebase-alerts/raw/
 /**
  * Generate a URL to Firebase Console for the issue
  *
- * @param {AppInfo} appInfo
  * @param {AppCrash} appCrash
  * @return {string} URL to Firebase console
  */
-export function makeCrashlyticsIssueUrl(
-    appInfo: AppInfo,
-    appCrash: AppCrash,): string {
-  return `https://console.firebase.google.com/project/${EnvConfig.projectId}/crashlytics/app/${appInfo.platform}:${appInfo.bundleId}/issues/${appCrash.issueId}`;
+export function makeCrashlyticsIssueUrl(appCrash: AppCrash): string {
+  return `https://console.firebase.google.com/project/${EnvConfig.projectId}/crashlytics/app/${EnvConfig.platform}:${EnvConfig.bundleId}/issues/${appCrash.issueId}`;
 }
 
 /**
@@ -27,43 +23,37 @@ export function makeFirebaseAppsSettingsUrl(): string {
 }
 
 /**
- * Generate a URL to Firestore app info document
+ * Make a repository URL to create an issue from this app crash
  *
- * @param {AppInfo} appInfo
- * @return {string} URL to Firebase console
- */
-export function makeFirestoreAppInfoUrl(appInfo: AppInfo): string {
-  return `https://console.firebase.google.com/project/${EnvConfig.projectId}/firestore/data/~2F${process.env.EXT_INSTANCE_ID}-apps~2F${appInfo.appId}`;
-}
-
-/**
- * Make an Github URL to create an issue from this app crash
- *
- * @param {AppInfo} appInfo
  * @param {AppCrash} appCrash
  * @return {string} URL to create a github issue
  */
-export function makeGithubIssueUrl(
-    appInfo: AppInfo,
-    appCrash: AppCrash,): string {
-  const attributes = [
-    `title=${encodeURI(appCrash.issueTitle)}`,
-    `labels=${appCrash.tags.map((tag) => encodeURI(tag)).join(",")}`,
-  ];
+export function makeRepositoryIssueUrl(appCrash: AppCrash): string {
+  const repositoryUrl = EnvConfig.repositoryUrl;
+  if (repositoryUrl.startsWith("https://github.com")) {    
+    const attributes = [
+      `title=${encodeURI(appCrash.issueTitle)}`,
+      `labels=${appCrash.tags.map((tag) => encodeURI(tag)).join(",")}`,
+    ];
 
-  return `https://github.com/${appInfo.github?.repo}/issues/new?${attributes.join("&")}`;
+    return `${repositoryUrl}/issues/new?${attributes.join("&")}`;
+  }
+
+  throw new Error("Unknown repository type: " + repositoryUrl);
 }
 
 /**
- * Make an Github URL to search for issues from this app crash
+ * Make a repository URL to search for issues from this app crash
  *
- * @param {AppInfo} appInfo
  * @param {AppCrash} appCrash
  * @return {string} URL to search for github issues
  */
-export function makeGithubSearchUrl(
-    appInfo: AppInfo,
-    appCrash: AppCrash,): string {
-  return `https://github.com/${appInfo.github?.repo}/issues?q=${encodeURI(appCrash.issueTitle)}`;
+export function makeRepositorySearchUrl(appCrash: AppCrash): string {
+  const repositoryUrl = EnvConfig.repositoryUrl;
+  if (repositoryUrl.startsWith("https://github.com")) {    
+    return `${repositoryUrl}/issues?q=${encodeURI(appCrash.issueTitle)}`;
+  }
+
+  throw new Error("Unknown repository type: " + repositoryUrl);
 }
 

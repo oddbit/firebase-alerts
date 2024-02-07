@@ -1,3 +1,5 @@
+import { AppPlatform } from "../definitions/app-platform.enum";
+
 /**
  * Environment configuration settings and variables
  * This class abstracts the source of getting the values and provides helpful
@@ -30,6 +32,45 @@ export class EnvConfig {
     }
 
     return projectId;
+  }
+
+  /**
+   * Get repository URL
+   */
+  static get repositoryUrl(): string {
+    const repo = EnvConfig.getEnv("REPOSITORY_URL");
+    const repoWithHttps = repo.startsWith("https://") ? repo : `https://${repo}`;
+    return repoWithHttps.endsWith("/") ? repoWithHttps.slice(0, -1) : repoWithHttps;
+  }
+
+  /**
+   * Get bundle ID
+   */
+  static get bundleId(): string {
+    return EnvConfig.getEnv("APP_BUNDLE_ID");
+  }
+
+  /**
+   * Get app ID
+   */
+  static get appId(): string {
+    return EnvConfig.getEnv("APP_ID");
+  }
+
+  /**
+   * Get platform
+   */
+  static get platform(): AppPlatform {
+    const appId = EnvConfig.getEnv("APP_ID");
+     if (appId.includes("android")) {
+      return AppPlatform.Android;
+    } else if (appId.includes("ios")) {
+      return AppPlatform.iOS;
+    } else if (appId.includes("web")) {
+      return AppPlatform.Web;
+    }
+
+    return AppPlatform.Unknown;
   }
 
   /**

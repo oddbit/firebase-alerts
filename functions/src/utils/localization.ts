@@ -33,23 +33,14 @@ const l10n = {
   "labelBundleId": {
     "en": "Bundle Id",
   },
-  "missingBundleId": {
-    "en": "Missing bundle id",
-  },
   "openCrashlyticsIssue": {
     "en": "Open Crashlytics",
   },
-  "openFirebaseAppsSettings": {
-    "en": "Open Firebase Apps List",
+  "createIssue": {
+    "en": "Create Issue",
   },
-  "openFirestoreAppInfo": {
-    "en": "Update Firestore Document",
-  },
-  "createGithubIssue": {
-    "en": "Create Github Issue",
-  },
-  "searchGithubIssue": {
-    "en": "Search Similar Github Issues",
+  "searchIssue": {
+    "en": "Search Similar Issues",
   },
   "descriptionViewInCrashlytics": {
     "en": "View this issue in Firebase console",
@@ -59,12 +50,6 @@ const l10n = {
   },
   "descriptionSearchSimilarIssues": {
     "en": "Search for similar reports of this issue",
-  },
-  "descriptionOpenFirebaseAppsSettings": {
-    "en": "Go to Firebase console and copy the apps bundle id",
-  },
-  "descriptionOpenFirestoreAppInfo": {
-    "en": "Open Firestore and update app info document with bundle id",
   },
 };
 
