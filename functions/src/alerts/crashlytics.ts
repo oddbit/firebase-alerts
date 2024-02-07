@@ -11,7 +11,7 @@ import {EnvConfig} from "../utils/env-config";
 import {DiscordWebhook} from "../webhook-plugins/discord";
 import {GoogleChatWebhook} from "../webhook-plugins/google-chat";
 import {SlackWebhook} from "../webhook-plugins/slack";
-import { GemeniService } from "../services/gemeni.service";
+import {GemeniService} from "../services/gemeni.service";
 
 const functionOpts = {
   region: process.env.LOCATION,
