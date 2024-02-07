@@ -9,7 +9,7 @@ Currently supported platforms and alerts according to [roadmap](https://github.c
 | Google Chat | [❌](https://github.com/oddbit/firebase-alerts/issues/2)  | ✅ | [❌](https://github.com/oddbit/firebase-alerts/issues/1) | ❌ |
 | Slack       | ❌  | ✅ | ❌ | ❌ |
 | Discord     | ❌  | ✅ | ❌ | ❌ |
-
+| MS Teams    | ❌  | ❌ | ❌ | ❌ |
 
 # Getting involved
 If you're reading this, you're awesome! 
