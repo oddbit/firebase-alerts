@@ -188,10 +188,6 @@ resources:
           - attribute: alerttype
             value: crashlytics.regression
 
-roles:
-  - role: datastore.viewer
-    reason: Allows the extension to read app and webhook configuration
-
 apis:
   - apiName: eventarc.googleapis.com
     reason: Powers all events and triggers
