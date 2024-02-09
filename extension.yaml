@@ -115,9 +115,9 @@ params:
     required: false
     immutable: false
 
-  - param: WEBHOOK_MANDATORY
+  - param: WEBHOOK_URL
     label: Webhook
-    description: Webhook for Slack, Discord, or Google Chat
+    description: Webhook URL for Slack, Discord, or Google Chat
     type: secret
     required: true
     immutable: false
