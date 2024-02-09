@@ -34,7 +34,7 @@ export class DiscordWebhook extends Webhook {
       url: makeCrashlyticsIssueUrl(appCrash),
       color: 16763432,
       author: {
-        name: "Crashlytics",
+        name: l10n.translate("labelCrashlytics"),
         icon_url: crashlyticsImgUrl,
       },
       fields: [
@@ -60,12 +60,12 @@ export class DiscordWebhook extends Webhook {
 
     // =========================================================================
     // =========================================================================
-    // Github Section
+    // Issue tracker Section
     //
 
     if (EnvConfig.repositoryUrl) {
       crashlyticsInfo.fields.push({
-        name: "Repository",
+        name: l10n.translate("labelIssueTracker"),
         value: [
           l10n.translate("descriptionCreateNewIssue"),
           `[${l10n.translate("createIssue")}]` +

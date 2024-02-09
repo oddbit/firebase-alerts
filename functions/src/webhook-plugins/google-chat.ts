@@ -33,11 +33,11 @@ export class GoogleChatWebhook extends Webhook {
       cardId: Date.now() + "-" + Math.round((Math.random() * 10000)),
       card: {
         header: {
-          title: "Crashlytics",
+          title: l10n.translate("labelCrashlytics"),
           subtitle: l10n.translate(appCrash.issueType),
           imageUrl: crashlyticsImgUrl,
           imageType: "CIRCLE",
-          imageAltText: "Avatar for Crashlytics",
+          imageAltText: l10n.translate("imgAltCrashlytics"),
         },
         sections: [
           {
@@ -68,7 +68,7 @@ export class GoogleChatWebhook extends Webhook {
     // Firebase section
     //
     const firebaseSection = {
-      header: "Firebase",
+      header: l10n.translate("labelFirebase"),
       widgets: [] as object[],
     };
     googleChatCard.card.sections.push(firebaseSection);
@@ -90,12 +90,12 @@ export class GoogleChatWebhook extends Webhook {
 
     // =========================================================================
     // =========================================================================
-    // Github Section
+    // Issue tracker Section
     //
 
     if (EnvConfig.repositoryUrl) {
       googleChatCard.card.sections.push({
-        header: "Repository",
+        header: l10n.translate("labelIssueTracker"),
         widgets: [
           {
             buttonList: {
