@@ -55,14 +55,8 @@ async function handleCrashlyticsEvent(appCrash: AppCrash):
     return;
   }
 
-  const webhooks: Webhook[] = EnvConfig.webhooks.map(webhookPluginFromUrl);
-
-  if (webhooks.length === 0) {
-    throw new Error("No webhooks defined. Please reconfigure the extension!");
-  }
-
   const promises = [];
-  for (const webhook of webhooks) {
+  for (const webhook of EnvConfig.webhooks.map(webhookPluginFromUrl)) {
     logger.debug("[handleCrashlyticsEvent] Webhook", webhook);
     const crashlyticsMessage = webhook.createCrashlyticsMessage(appCrash);
     const webhookPayload = {
