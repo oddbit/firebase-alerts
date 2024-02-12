@@ -1,4 +1,4 @@
-import { AppPlatform } from "../definitions/app-platform.enum";
+import {AppPlatform} from "../definitions/app-platform.enum";
 
 /**
  * Environment configuration settings and variables
