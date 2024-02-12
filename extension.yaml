@@ -122,7 +122,7 @@ params:
     required: true
     immutable: false
 
-  - param: API_KEY_GEMENI
+  - param: API_KEY_GEMINI
     label: Google Gemini API key
     description: You can create an API key in Google AI Studio.
     type: secret

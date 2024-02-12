@@ -4,9 +4,9 @@ import {
 import { SupportedCrashlyticsEvent } from "../models/app-crash";
 
 /**
- * Implements a service for interacting with Gemeni LLM
+ * Implements a service for interacting with Gemini LLM
  */
-export class GemeniService {
+export class GeminiService {
   constructor(apiKey: string) {
     this.genAI = new GoogleGenerativeAI(apiKey);
   }
@@ -25,13 +25,13 @@ export class GemeniService {
   private static readonly SAFETY_SETTINGS = [];
 
   /**
-   * Make Gemeni LLM explain a crashlytics event.
+   * Make Gemini LLM explain a crashlytics event.
    * 
    * @param {SupportedCrashlyticsEvent} appCrash App crash information
    * @returns {Promise<string>} Promise with the explanation
    */
   async explainCrash(appCrash: SupportedCrashlyticsEvent): Promise<string> {
-    const model = this.genAI.getGenerativeModel({ model: GemeniService.MODEL_NAME });
+    const model = this.genAI.getGenerativeModel({ model: GeminiService.MODEL_NAME });
 
     const promptContext = `
     @type defines the type of crashlytics issue.
@@ -60,8 +60,8 @@ export class GemeniService {
 
     const result = await model.generateContent({
       contents: [{ role: "user", parts }],
-      generationConfig: GemeniService.GENERATION_CONFIG,
-      safetySettings: GemeniService.SAFETY_SETTINGS,
+      generationConfig: GeminiService.GENERATION_CONFIG,
+      safetySettings: GeminiService.SAFETY_SETTINGS,
     });
 
     return result.response.text();

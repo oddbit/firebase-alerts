@@ -97,10 +97,10 @@ export class EnvConfig {
   }
 
   /**
-   * Get Google Gemeni API key
+   * Get Google Gemini API key
    */
-  static get apiKeyGemeni(): string | undefined {
-    return process.env.API_KEY_GEMENI;
+  static get apiKeyGemini(): string | undefined {
+    return process.env.API_KEY_GEMINI;
   }
 
 
