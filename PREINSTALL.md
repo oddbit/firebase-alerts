@@ -37,11 +37,6 @@ like: `web:NzE5YzVlZDktZjJjOS00Y2Y2LTkzNjQtZTM0ZmJhNjU0MmY3`
 
 ![Web App Bundle ID](https://github.com/oddbit/firebase-alerts/raw/main/doc/images/web-app-bundle-id.png)
 
-## Integrating Google Gemeni API
-You can harness the capabilities of Google Gemini's Large Language Model (LLM) by configuring an API key. This will enable the extension to leverage LLM's power to analyze, clarify, and explain each alert in a more insightful and helpful manner.
-
-Read the official documentation on how to retrieve an API key: https://ai.google.dev/tutorials/setup
-
 # Billing
 To install an extension, your project must be on the [Blaze (pay as you go) plan](https://firebase.google.com/pricing)
  
