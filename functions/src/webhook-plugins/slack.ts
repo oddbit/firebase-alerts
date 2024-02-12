@@ -29,7 +29,7 @@ export class SlackWebhook extends Webhook {
           type: "header",
           text: {
             type: "plain_text",
-            text: "Crashlytics",
+            text: l10n.translate("labelCrashlytics"),
           },
         },
         {
@@ -40,24 +40,28 @@ export class SlackWebhook extends Webhook {
             text: [
               `*${l10n.translate(appCrash.issueType)}*`,
               appCrash.issueTitle,
-              "*Bundle id*",
+              `*${l10n.translate("labelBundleId")}*`,
               "`" + EnvConfig.bundleId + "`",
             ].join("\n"),
           },
           fields: [
             {
               type: "mrkdwn",
-              text: "*Platform*\n`"+ EnvConfig.platform +"`",
+              text: `
+                *${l10n.translate("labelPlatform")}*
+                \`${EnvConfig.platform}\``,
             },
             {
               type: "mrkdwn",
-              text: "*Version*\n`"+ appCrash.appVersion +"`",
+              text: `
+                *${l10n.translate("labelVersion")}*
+                \`${appCrash.appVersion}\``,
             },
           ],
           accessory: {
             type: "image",
             image_url: crashlyticsImgUrl,
-            alt_text: "Crashlytics icon",
+            alt_text: l10n.translate("imgAltCrashlytics"),
           },
         },
       ] as object[],
@@ -77,7 +81,7 @@ export class SlackWebhook extends Webhook {
         type: "header",
         text: {
           type: "plain_text",
-          text: "Firebase",
+          text: l10n.translate("labelFirebase"),
         },
       },
 
@@ -105,7 +109,7 @@ export class SlackWebhook extends Webhook {
 
     // =========================================================================
     // =========================================================================
-    // Github Section
+    // Issue tracker Section
     //
 
     if (EnvConfig.repositoryUrl) {
@@ -117,7 +121,7 @@ export class SlackWebhook extends Webhook {
           type: "header",
           text: {
             type: "plain_text",
-            text: "Repository",
+            text: l10n.translate("labelIssueTracker"),
           },
         },
         {
@@ -132,9 +136,9 @@ export class SlackWebhook extends Webhook {
               type: "plain_text",
               text: l10n.translate("createIssue"),
             },
-            value: "create_new_github_issue",
+            value: "create_new_issue",
             url: makeRepositoryIssueUrl(appCrash),
-            action_id: "button-action-create-github-issue",
+            action_id: "button-action-create-issue",
           },
         },
         {
@@ -149,9 +153,9 @@ export class SlackWebhook extends Webhook {
               type: "plain_text",
               text: l10n.translate("searchIssue"),
             },
-            value: "search_github_issue",
+            value: "search_issue",
             url: makeRepositorySearchUrl(appCrash),
-            action_id: "button-action-search-github-issue",
+            action_id: "button-action-search-issue",
           },
         },
       ],

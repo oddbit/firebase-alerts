@@ -36,6 +36,18 @@ const l10n = {
   "openCrashlyticsIssue": {
     "en": "Open Crashlytics",
   },
+  "labelCrashlytics": {
+    "en": "Crashlytics",
+  },
+  "imgAltCrashlytics": {
+    "en": "Crashlytics logo",
+  },
+  "labelFirebase": {
+    "en": "Firebase",
+  },
+  "labelIssueTracker": {
+    "en": "Issue Tracker",
+  },
   "createIssue": {
     "en": "Create Issue",
   },

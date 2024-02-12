@@ -1,5 +1,5 @@
 name: firebase-alerts
-version: 0.0.13
+version: 0.0.14-alpha.4
 specVersion: v1beta
 
 displayName: Firebase Alerts
@@ -115,17 +115,19 @@ params:
     required: false
     immutable: false
 
-  - param: WEBHOOK_MANDATORY
-    label: Mandatory webhook
-    description: Mandatory webhook for Slack, Discord, or Google Chat
+  - param: WEBHOOK_URL
+    label: Webhook
+    description: Webhook URL for Slack, Discord, or Google Chat
     type: secret
     required: true
+    immutable: false
 
-  - param: WEBHOOK_OPTIONAL
-    label: Optional webhook
-    description: Optional, additional webhook for Slack, Discord, or Google Chat
+  - param: API_KEY_GEMINI
+    label: Google Gemini API key
+    description: You can create an API key in Google AI Studio.
     type: secret
     required: false
+    immutable: false
 
 resources:
   - name: anr

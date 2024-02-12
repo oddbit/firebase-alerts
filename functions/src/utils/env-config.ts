@@ -92,9 +92,15 @@ export class EnvConfig {
    */
   static get webhooks(): string[] {
     return [
-      process.env.WEBHOOK_MANDATORY,
-      process.env.WEBHOOK_OPTIONAL,
+      process.env.WEBHOOK_URL,
     ].filter((x) => !!x) as string[];
+  }
+
+  /**
+   * Get Google Gemini API key
+   */
+  static get apiKeyGemini(): string | undefined {
+    return process.env.API_KEY_GEMINI;
   }
 
 
