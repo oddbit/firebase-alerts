@@ -1,19 +1,24 @@
 import {expect} from 'chai';
 import {GoogleChatWebhook} from '../../src/webhook-plugins/google-chat';
 import {AppCrash} from '../../src/models/app-crash';
-import {ApiService} from '../../src/services/chat.service';
 
 const fatalCrash = require('../data/fatal-crash.json');
 
 describe('GoogleChatWebhook', () => {
   before(() => {
     process.env.PROJECT_ID = 'fireworks-production';
-    process.env.WEBHOOK_URL = 'https://chat.googleapis.com/v1/spaces/AAAAIOVO-N0/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=Uc0uvxx-jA3zW-9CqBygmE4a0sG9_F_HiiylvvFa3zQ';
     process.env.LANGUAGE = 'en';
     process.env.LOCATION='us-central1';
-    process.env.APP_ID='1:269808624035:android:296863cf1f5b6817c87a16';
-    process.env.APP_BUNDLE_ID='id.oddbit.flutter.facebook_app_events_example';
     process.env.REPOSITORY_URL='https://github.com/oddbit/firebase-alerts';
+
+    // TODO: Change this to the Chat Webhook
+    process.env.WEBHOOK_URL = 'TODO_REPLACE_ME';
+
+    // TODO: Change this to the App ID
+    process.env.APP_ID='1:269808624035:android:296863cf1f5b6817c87a16';
+
+    // TODO: Change this to the App Bundle
+    process.env.APP_BUNDLE_ID='id.oddbit.flutter.facebook_app_events_example';
   });
 
   describe('createCrashlyticsMessage', () => {
