@@ -1,6 +1,7 @@
 ## 0.0.14
 
 - Stabilizing the extension for release
+- Fixing HTTP calls to chat APIs
 
 ## 0.0.13
 
