@@ -2,12 +2,14 @@ import {Localization} from "../utils/localization";
 import {AppCrash} from "../models/app-crash";
 import {Webhook} from "../models/webhook";
 import {
+  appDistributionImgUrl,
   crashlyticsImgUrl,
   makeCrashlyticsIssueUrl,
   makeRepositoryIssueUrl,
   makeRepositorySearchUrl,
 } from "../urls";
 import {EnvConfig} from "../utils/env-config";
+import { InAppFeedback } from "../models/app-distribution";
 
 /**
  * Declares a webhook implementation for Discord
@@ -77,6 +79,55 @@ export class DiscordWebhook extends Webhook {
         ].join("\n"),
       });
     }
+
+    return discordMessage;
+  }
+
+    /**
+   * Creates a JSON payload for a message about new app feedback
+   *
+   * @param {InAppFeedback} appFeedback
+   * @return {object} A Slack card message payload
+   */
+  createAppFeedbackMessage(appFeedback: InAppFeedback): object {
+    const l10n = new Localization(EnvConfig.language);
+
+    const discordMessage = {
+      content: null,
+      embeds: [] as object[],
+    };
+
+    const messageInfo = {
+      title: l10n.translate("labelInAppFeedback"),
+      url: appFeedback.feedbackConsoleUri,
+      color: 16763432,
+      author: {
+        name: l10n.translate("labelAppDistribution"),
+        icon_url: appDistributionImgUrl,
+      },
+      fields: [
+        {
+          name: l10n.translate("labelTester"),
+          value: `*${appFeedback.testerName}* <${appFeedback.testerEmail}>`,
+          inline: true,
+        },
+        {
+          name: l10n.translate("labelVersion"),
+          value: appFeedback.appVersion,
+        },
+        {
+          name: l10n.translate("labelPlatform"),
+          value: EnvConfig.platform,
+          inline: true,
+        },
+        {
+          name: l10n.translate("labelBundleId"),
+          value: EnvConfig.bundleId,
+        },
+      ] as object[],
+    };
+
+    discordMessage.embeds.push(messageInfo);
 
     return discordMessage;
   }

@@ -33,14 +33,35 @@ const l10n = {
   "labelBundleId": {
     "en": "Bundle Id",
   },
+  "labelTester": {
+    "en": "Tester",
+  },
   "openCrashlyticsIssue": {
     "en": "Open Crashlytics",
+  },
+  "openAppFeedback": {
+    "en": "Open App Feedback",
+  },
+  "openScreenshot": {
+    "en": "View Screenshot",
+  },
+  "labelAppDistribution": {
+    "en": "App Distribution",
+  },
+  "imgAltAppDistribution": {
+    "en": "App Distribution logo",
   },
   "labelCrashlytics": {
     "en": "Crashlytics",
   },
   "imgAltCrashlytics": {
     "en": "Crashlytics logo",
+  },
+  "labelInAppFeedback": {
+    "en": "In App Feedback",
+  },
+  "labelUserFeedback": {
+    "en": "User Feedback",
   },
   "labelFirebase": {
     "en": "Firebase",
@@ -56,6 +77,9 @@ const l10n = {
   },
   "descriptionViewInCrashlytics": {
     "en": "View this issue in Firebase console",
+  },
+  "descriptionViewInFirebaseConsole": {
+    "en": "View this in Firebase console",
   },
   "descriptionCreateNewIssue": {
     "en": "Create a new bug report for this issue",

@@ -6,11 +6,13 @@ import { EnvConfig } from '../utils/env-config';
 import { DiscordWebhook } from "../webhook-plugins/discord";
 import { GoogleChatWebhook } from "../webhook-plugins/google-chat";
 import { SlackWebhook } from "../webhook-plugins/slack";
+import { InAppFeedback } from "../models/app-distribution";
 
 export class ApiService {
 
   constructor(webhookUrl: string) {
     this.webhook = ApiService.webhookPluginFromUrl(webhookUrl);
+    logger.debug("[ApiService] constructor", this.webhook);
   }
 
   private readonly webhook: Webhook;
@@ -23,29 +25,49 @@ export class ApiService {
    */
   public async sendCrashlyticsMessage(appCrash: AppCrash): Promise<void> {
     logger.debug("[sendCrashlyticsMessage]", appCrash);
+    const payload = this.webhook.createCrashlyticsMessage(appCrash);
+    return this.sendMessage(appCrash.appId, payload);
+  }
 
-    if (appCrash.appId !== EnvConfig.appId) {
+  /**
+   * Handle crashlytics event
+   *
+   * @param {AppCrash} appCrash
+   * @return {Promise}
+   */
+  public async sendInAppFeedback(appFeedback: InAppFeedback): Promise<void> {
+    logger.debug("[sendInAppFeedback]", appFeedback);
+    const payload = this.webhook.createAppFeedbackMessage(appFeedback);
+    return this.sendMessage(appFeedback.appId, payload);
+  }
+
+  /**
+   * Sends the message to the webhook API endpoint
+   * 
+   * @param {string} appId App ID
+   * @param {object} payload JSON payload
+   * @returns {Promise<void>}
+   */
+  private async sendMessage(appId: string, payload: object): Promise<void> {
+    logger.debug("[sendMessage]", payload);
+
+    if (appId !== EnvConfig.appId) {
       logger.debug(
-        "[sendCrashlyticsMessage] Skipping crash for different app", {
-        appId: appCrash.appId,
+        "[sendMessage] Skipping message because not the expected app.", {
+        eventAppId: appId,
         expectedAppId: EnvConfig.appId,
       });
       return;
     }
 
-
-    logger.debug("[sendCrashlyticsMessage] Webhook", this.webhook);
-    const crashlyticsMessage = this.webhook.createCrashlyticsMessage(appCrash);
-
     try {
-      const res = await axios.post(this.webhook.url, crashlyticsMessage);
+      const res = await axios.post(this.webhook.url, payload);
       logger.info('[sendCrashlyticsMessage] Webhook call OK', res.status);
     } catch (error) {
       logger.error("[sendCrashlyticsMessage] Failed posting webhook.", {
         error,
         webhook: this.webhook,
-        appCrash,
-        crashlyticsMessage,
+        payload,
       });
       throw error;
     }

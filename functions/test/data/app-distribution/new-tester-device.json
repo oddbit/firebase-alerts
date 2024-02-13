@@ -1,0 +1,17 @@
+{
+  "specversion": "1.0",
+  "alertType": "appdistribution.newTesterDevice",
+  "appId": "1:269808624035:android:296863cf1f5b6817c87a16",
+  "data": {
+    "@type": "type.googleapis.com/google.events.firebase.firebasealerts.v1.AppDistroNewTesterIosDevicePayload",
+    "payload": {
+      "feedbackReport": "projects/269808624035/apps/1:269808624035:android:296863cf1f5b6817c87a16/releases/1234/feedbackReports/654321",
+      "feedbackConsoleUri": "https://console.firebase.google.com/project/269808624035/appdistribution/app/1:269808624035:android:296863cf1f5b6817c87a16/releases/1234/feedbackReports/654321",
+      "testerEmail": "jane.smith@example.com",
+      "testerName": "Jane Smith",
+      "appVersion": "1.2.3",
+      "text": "Huge fan of your works. Can I have an autograph?",
+      "screenshotUri": "https://screenshot.storage.googleapis.com/feedback_123456789.jpg"
+    }
+  }
+}

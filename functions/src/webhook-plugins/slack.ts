@@ -1,21 +1,139 @@
-import {EnvConfig} from "../utils/env-config";
-import {Localization} from "../utils/localization";
-import {AppCrash} from "../models/app-crash";
-import {Webhook} from "../models/webhook";
+import { AppCrash } from "../models/app-crash";
+import { InAppFeedback } from "../models/app-distribution";
+import { Webhook } from "../models/webhook";
 import {
+  appDistributionImgUrl,
   crashlyticsImgUrl,
   makeCrashlyticsIssueUrl,
   makeRepositoryIssueUrl,
   makeRepositorySearchUrl,
 } from "../urls";
+import { EnvConfig } from "../utils/env-config";
+import { Localization } from "../utils/localization";
 
 /**
  * Declares a webhook implementation for Slack
+ * @see https://api.slack.com/messaging/webhooks
  */
 export class SlackWebhook extends Webhook {
+
+  /**
+   * Creates a JSON payload for a Slack message about new app feedback
+   *
+   * @param {InAppFeedback} appFeedback
+   * @return {object} A Slack card message payload
+   */
+  createAppFeedbackMessage(appFeedback: InAppFeedback): object {
+    const l10n = new Localization(EnvConfig.language);
+
+    const slackMessage = {
+      blocks: [
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: l10n.translate("labelAppDistribution"),
+          },
+        },
+        {
+          type: "section",
+          block_id: "app-distribution-info-block",
+          text: {
+            type: "mrkdwn",
+            text: [
+              `*${l10n.translate('labelTester')}*`,
+              `*${appFeedback.testerName}* <${appFeedback.testerEmail}>`,
+            ].join("\n"),
+          },
+          fields: [
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("labelPlatform")}*
+                \`${EnvConfig.platform}\``,
+            },
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("labelVersion")}*
+                \`${appFeedback.appVersion}\``,
+            },
+          ],
+          accessory: {
+            type: "image",
+            image_url: appDistributionImgUrl,
+            alt_text: l10n.translate("imgAltAppDistribution"),
+          },
+        },
+      ] as object[],
+    };
+
+
+    // =========================================================================
+    // =========================================================================
+    // Firebase section
+    //
+
+    slackMessage.blocks.push(...[
+      {
+        type: "divider",
+      },
+      {
+        type: "header",
+        text: {
+          type: "plain_text",
+          text: l10n.translate("labelInAppFeedback"),
+        },
+      },
+
+    ]);
+
+    slackMessage.blocks.push(...[
+      {
+        type: "section",
+        text: {
+          type: "plain_text",
+          text: l10n.translate("descriptionViewInFirebaseConsole"),
+        },
+        accessory: {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: l10n.translate("openAppFeedback"),
+          },
+          value: "app_feedback_report",
+          url: appFeedback.feedbackConsoleUri,
+          action_id: "app-feedback-action-view",
+        },
+      },
+    ]);
+    // =========================================================================
+    // The actual feedback
+    slackMessage.blocks.push(...[
+      {
+        type: "section",
+        text: {
+          type: "plain_text",
+          text: appFeedback.text,
+        },
+        accessory: {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: l10n.translate("openScreenshot"),
+          },
+          value: "app_feedback_screenshot",
+          url: appFeedback.screenshotUri,
+          action_id: "app-feedback-action-view-screenshot",
+        },
+      },
+    ]);
+
+    return slackMessage;
+  }
+
   /**
    * Creates a JSON payload for a Slack card.
-   * @see https://developers.google.com/chat/api/reference/rest/v1/cards#card
    *
    * @param {AppCrash} appCrash
    * @return {object} A Slack card message payload

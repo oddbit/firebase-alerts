@@ -2,6 +2,7 @@ import {AppCrash} from "./models/app-crash";
 import {EnvConfig} from "./utils/env-config";
 
 export const crashlyticsImgUrl = "https://github.com/oddbit/firebase-alerts/raw/main/icons/crashlytics.png";
+export const appDistributionImgUrl = "https://github.com/oddbit/firebase-alerts/raw/main/icons/app-distribution.png";
 
 /**
  * Generate a URL to Firebase Console for the issue
