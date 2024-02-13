@@ -88,12 +88,10 @@ export class EnvConfig {
   }
 
   /**
-   * Get all webhooks as an array
+   * Get webhook URL
    */
-  static get webhooks(): string[] {
-    return [
-      process.env.WEBHOOK_URL,
-    ].filter((x) => !!x) as string[];
+  static get webhook(): string {
+    return EnvConfig.getEnv("WEBHOOK_URL");;
   }
 
   /**

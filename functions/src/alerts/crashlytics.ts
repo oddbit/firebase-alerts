@@ -3,6 +3,7 @@ import {logger} from "firebase-functions/v2";
 import {crashlytics} from "firebase-functions/v2/alerts";
 import {AppCrash} from "../models/app-crash";
 import {ApiService} from "../services/chat.service";
+import { EnvConfig } from "../utils/env-config";
 
 const functionOpts = {
   region: process.env.LOCATION,
@@ -18,7 +19,8 @@ export const anr =
     const appCrash = AppCrash.fromCrashlytics(event);
 
     appCrash.tags.push("critical");
-    const apiService = new ApiService();
+    
+    const apiService = new ApiService(EnvConfig.webhook);
     return apiService.sendCrashlyticsMessage(appCrash);
   });
 
@@ -30,7 +32,7 @@ export const fatal =
     
     appCrash.tags.push("critical");
 
-    const apiService = new ApiService();
+    const apiService = new ApiService(EnvConfig.webhook);
     return apiService.sendCrashlyticsMessage(appCrash);
   });
 
@@ -41,7 +43,7 @@ export const nonfatal =
 
     const appCrash = AppCrash.fromCrashlytics(event);
 
-    const apiService = new ApiService();
+    const apiService = new ApiService(EnvConfig.webhook);
     return apiService.sendCrashlyticsMessage(appCrash);
   });
 
@@ -53,6 +55,6 @@ export const regression =
     
     appCrash.tags.push("regression");
 
-    const apiService = new ApiService();
+    const apiService = new ApiService(EnvConfig.webhook);
     return apiService.sendCrashlyticsMessage(appCrash);
   });
