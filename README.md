@@ -30,6 +30,7 @@ following command from your Firebase project root.
 
 ```bash
 firebase ext:install ../path/to/oddbit/firebase-alerts
+firebase deploy --only extensions
 ```
 
 Read the [PREINSTALL](./PREINSTALL.md) and [POSTINSTALL](./POSTINSTALL.md) instructions 
