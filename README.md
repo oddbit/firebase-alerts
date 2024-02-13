@@ -15,9 +15,9 @@ Empower your team with timely Firebase notifications sent directly to your prefe
 
 | Platform    | App Distribution | Crashlytics | Performance | Billing | 
 | ----------- | :--------------: | :---------: | :---------: | :-----: | 
-| Google Chat | [❌](https://github.com/oddbit/firebase-alerts/issues/2)  | ✅ | [❌](https://github.com/oddbit/firebase-alerts/issues/1) | ❌ |
-| Slack       | ❌  | ✅ | ❌ | ❌ |
-| Discord     | ❌  | ✅ | ❌ | ❌ |
+| Google Chat | ✅  | ✅ | [❌](https://github.com/oddbit/firebase-alerts/issues/1) | ❌ |
+| Slack       | ✅  | ✅ | ❌ | ❌ |
+| Discord     | ✅  | ✅ | ❌ | ❌ |
 | MS Teams    | ❌  | ❌ | ❌ | ❌ |
 
 # Installation

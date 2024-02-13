@@ -9,7 +9,7 @@ import {
   makeRepositorySearchUrl,
 } from "../urls";
 import {EnvConfig} from "../utils/env-config";
-import { InAppFeedback } from "../models/app-distribution";
+import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
 
 /**
  * Declares a webhook implementation for Discord
@@ -17,7 +17,6 @@ import { InAppFeedback } from "../models/app-distribution";
 export class DiscordWebhook extends Webhook {
   /**
    * Creates a JSON payload for a Discord card.
-   * @see https://developers.google.com/chat/api/reference/rest/v1/cards#card
    *
    * @param {AppCrash} appCrash
    * @return {object} A Discord card message payload
@@ -83,7 +82,62 @@ export class DiscordWebhook extends Webhook {
     return discordMessage;
   }
 
-    /**
+  /**
+   * Creates a JSON payload for a message about new tester device
+   *
+   * @param {NewTesterDevice} newTesterDevice
+   * @return {object} Message payload
+   */
+  public createNewTesterDeviceMessage(
+    newTesterDevice: NewTesterDevice,
+  ): object {
+    const l10n = new Localization(EnvConfig.language);
+
+    const discordMessage = {
+      content: null,
+      embeds: [] as object[],
+    };
+
+    const messageInfo = {
+      title: l10n.translate("labelNewTesterDevice"),
+      color: 16763432,
+      author: {
+        name: l10n.translate("labelAppDistribution"),
+        icon_url: appDistributionImgUrl,
+      },
+      fields: [
+        {
+          name: l10n.translate("labelTester"),
+          value: `*${newTesterDevice.testerName}* <${newTesterDevice.testerEmail}>`,
+          inline: true,
+        },
+        {
+          name: l10n.translate("labelDeviceModel"),
+          value: newTesterDevice.deviceModel,
+        },
+        {
+          name: l10n.translate("labelDeviceIdentifier"),
+          value: newTesterDevice.deviceIdentifier,
+        },
+        {
+          name: l10n.translate("labelPlatform"),
+          value: EnvConfig.platform,
+          inline: true,
+        },
+        {
+          name: l10n.translate("labelBundleId"),
+          value: EnvConfig.bundleId,
+        },
+      ] as object[],
+    };
+
+    discordMessage.embeds.push(messageInfo);
+
+    return discordMessage;
+  }
+
+
+  /**
    * Creates a JSON payload for a message about new app feedback
    *
    * @param {InAppFeedback} appFeedback

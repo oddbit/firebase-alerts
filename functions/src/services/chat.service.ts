@@ -6,7 +6,7 @@ import { EnvConfig } from '../utils/env-config';
 import { DiscordWebhook } from "../webhook-plugins/discord";
 import { GoogleChatWebhook } from "../webhook-plugins/google-chat";
 import { SlackWebhook } from "../webhook-plugins/slack";
-import { InAppFeedback } from "../models/app-distribution";
+import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
 
 export class ApiService {
 
@@ -30,9 +30,9 @@ export class ApiService {
   }
 
   /**
-   * Handle crashlytics event
+   * Send a message for in app feedback
    *
-   * @param {AppCrash} appCrash
+   * @param {InAppFeedback} appFeedback
    * @return {Promise}
    */
   public async sendInAppFeedback(appFeedback: InAppFeedback): Promise<void> {
@@ -40,6 +40,21 @@ export class ApiService {
     const payload = this.webhook.createAppFeedbackMessage(appFeedback);
     return this.sendMessage(appFeedback.appId, payload);
   }
+
+  /**
+   * Send a message for new tester device
+   *
+   * @param {NewTesterDevice} newTesterDevice
+   * @return {Promise}
+   */
+  public async sendNewTesterDeviceMessage(newTesterDevice: NewTesterDevice): 
+    Promise<void> {
+      logger.debug("[sendNewTesterDeviceMessage]", newTesterDevice);
+      const payload = this.webhook.createNewTesterDeviceMessage(
+        newTesterDevice,
+      );
+      return this.sendMessage(newTesterDevice.appId, payload);
+    }
 
   /**
    * Sends the message to the webhook API endpoint

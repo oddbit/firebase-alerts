@@ -60,11 +60,20 @@ const l10n = {
   "labelInAppFeedback": {
     "en": "In App Feedback",
   },
+  "labelNewTesterDevice": {
+    "en": "New Tester Device",
+  },
   "labelUserFeedback": {
     "en": "User Feedback",
   },
   "labelFirebase": {
     "en": "Firebase",
+  },
+  "labelDeviceModel": {
+    "en": "Device Model",
+  },
+  "labelDeviceIdentifier": {
+    "en": "Device Identifier",
   },
   "labelIssueTracker": {
     "en": "Issue Tracker",

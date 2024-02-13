@@ -9,8 +9,8 @@ export class NewTesterDevice {
         public readonly appId: string,
         public readonly testerName: string,
         public readonly testerEmail: string,
-        public readonly testerDeviceModelName: string,
-        public readonly testerDeviceIdentifier: string
+        public readonly deviceModel: string,
+        public readonly deviceIdentifier: string
     ) {}
 
     public static fromFirebaseAlert(event: AppDistributionEvent<NewTesterDevicePayload>): NewTesterDevice {

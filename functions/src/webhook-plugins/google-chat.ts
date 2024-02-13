@@ -1,5 +1,5 @@
 import { AppCrash } from "../models/app-crash";
-import { InAppFeedback } from "../models/app-distribution";
+import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
 import { Webhook } from "../models/webhook";
 import {
   appDistributionImgUrl,
@@ -129,6 +129,72 @@ export class GoogleChatWebhook extends Webhook {
   }
 
   /**
+   * Creates a JSON payload for a message about new tester device
+   *
+   * @param {NewTesterDevice} newTesterDevice
+   * @return {object} Message payload
+   */
+  public createNewTesterDeviceMessage(
+    newTesterDevice: NewTesterDevice,
+  ): object {
+    const l10n = new Localization(EnvConfig.language);
+
+    const googleChatCards =
+    {
+      // The webhook API expects an array of cards, even if it's only one
+      cardsV2: [] as object[],
+    };
+
+    const googleChatCard = {
+      cardId: Date.now() + "-" + Math.round((Math.random() * 10000)),
+      card: {
+        header: {
+          title: l10n.translate("labelAppDistribution"),
+          subtitle: l10n.translate("labelNewTesterDevice"),
+          imageUrl: appDistributionImgUrl,
+          imageType: "CIRCLE",
+          imageAltText: l10n.translate("imgAltAppDistribution"),
+        },
+        sections: [
+          {
+            widgets: [
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("labelTester"),
+                  text: `${newTesterDevice.testerName} (${newTesterDevice.testerEmail})`,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("labelBundleId"),
+                  text: `${EnvConfig.bundleId} (${EnvConfig.platform})`,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("labelDeviceModel"),
+                  text: newTesterDevice.deviceModel,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("labelDeviceIdentifier"),
+                  text: newTesterDevice.deviceIdentifier,
+                },
+              },
+            ],
+          },
+        ] as object[],
+      },
+    };
+
+    googleChatCards.cardsV2.push(googleChatCard);
+
+    return googleChatCards;
+  }
+
+
+  /**
    * Creates a JSON payload for a message about new app feedback
    *
    * @param {InAppFeedback} appFeedback
@@ -206,14 +272,6 @@ export class GoogleChatWebhook extends Webhook {
               }
             ],
           },
-          // {
-          //   header: l10n.translate("labelUserFeedback"),
-          //   widgets: [
-          //     {
-          //       text: appFeedback.text,
-          //     },
-          //   ],
-          // },
         ] as object[],
       },
     };

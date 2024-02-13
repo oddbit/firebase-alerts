@@ -1,5 +1,5 @@
 import { AppCrash } from "../models/app-crash";
-import { InAppFeedback } from "../models/app-distribution";
+import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
 import { Webhook } from "../models/webhook";
 import {
   appDistributionImgUrl,
@@ -18,6 +18,57 @@ import { Localization } from "../utils/localization";
 export class SlackWebhook extends Webhook {
 
   /**
+   * Creates a JSON payload for a message about new tester device
+   *
+   * @param {NewTesterDevice} newTesterDevice
+   * @return {object} Message payload
+   */
+  createNewTesterDeviceMessage(
+    newTesterDevice: NewTesterDevice,
+  ): object {
+    const l10n = new Localization(EnvConfig.language);
+
+    const slackMessage = {
+      blocks: [
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: [
+              l10n.translate("labelAppDistribution"),
+              l10n.translate("labelNewTesterDevice")
+            ].join(" - "),
+          },
+        },
+        {
+          type: "section",
+          block_id: "app-distribution-info-block",
+          text: {
+            type: "mrkdwn",
+            text: [
+              `*${l10n.translate('labelTester')}*`,
+              `*${newTesterDevice.testerName}* <${newTesterDevice.testerEmail}>`,
+              `*${l10n.translate('labelBundleId')}*`,
+              `\`${EnvConfig.bundleId}\``,
+              `*${l10n.translate('labelDeviceIdentifier')}*`,
+              `\`${newTesterDevice.deviceIdentifier}\``,
+              `*${l10n.translate('labelDeviceModel')}*`,
+              `${newTesterDevice.deviceModel}`,
+            ].join("\n"),
+          },
+          accessory: {
+            type: "image",
+            image_url: appDistributionImgUrl,
+            alt_text: l10n.translate("imgAltAppDistribution"),
+          },
+        },
+      ] as object[],
+    };
+
+    return slackMessage;
+  }
+
+  /**
    * Creates a JSON payload for a Slack message about new app feedback
    *
    * @param {InAppFeedback} appFeedback
@@ -32,7 +83,10 @@ export class SlackWebhook extends Webhook {
           type: "header",
           text: {
             type: "plain_text",
-            text: l10n.translate("labelAppDistribution"),
+            text: [
+              l10n.translate("labelAppDistribution"),
+              l10n.translate("labelInAppFeedback")
+            ].join(" - "),
           },
         },
         {
@@ -43,6 +97,8 @@ export class SlackWebhook extends Webhook {
             text: [
               `*${l10n.translate('labelTester')}*`,
               `*${appFeedback.testerName}* <${appFeedback.testerEmail}>`,
+              `*${l10n.translate('labelBundleId')}*`,
+              `${EnvConfig.bundleId}`,
             ].join("\n"),
           },
           fields: [

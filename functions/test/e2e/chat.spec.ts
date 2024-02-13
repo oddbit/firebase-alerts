@@ -2,14 +2,14 @@ import { expect } from 'chai';
 import { logger } from "firebase-functions/v2";
 import * as sinon from 'sinon';
 import { AppCrash } from '../../src/models/app-crash';
+import { InAppFeedback, NewTesterDevice } from '../../src/models/app-distribution';
 import { ApiService } from '../../src/services/chat.service';
-import { InAppFeedback } from '../../src/models/app-distribution';
 
 
 describe('End to end tests', () => {
   const webhooks: {[key: string]: string} = {
-    ['Google Chat']: 'https://chat.googleapis.com/v1/spaces/AAAAIOVO-N0/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=R3AFA4iVMtsm0TJnltkyrOYiKy1xodpBVTC14GkQ8kE',
-    ['Slack']: 'https://hooks.slack.com/services/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',
+    ['Google Chat']: 'WEBHOOK_URL_GOOGLE_CHAT',
+    ['Slack']: 'WEBHOOK_URL_SLACK',
   };
   
   before(() => {
@@ -33,22 +33,32 @@ describe('End to end tests', () => {
       
       it(`should generate a valid ${webhook} Crashlytics message`, async () => {
         const fatalCrash = require('../data/fatal-crash.json');
-        const mockAppCrash = AppCrash.fromCrashlytics(fatalCrash);
+        const data = AppCrash.fromCrashlytics(fatalCrash);
         const apiService = new ApiService(webhooks[webhook]);
         try {
-          await apiService.sendCrashlyticsMessage(mockAppCrash);
+          await apiService.sendCrashlyticsMessage(data);
         } catch (error) {
           expect.fail('Expected not to throw an error but it did.');
         }
       });
-    
       
       it(`should generate a valid ${webhook} App Distribution Feedback message`, async () => {
         const inAppFeedback = require('../data/app-distribution/in-app-feedback.json');
-        const mockAppCrash = InAppFeedback.fromFirebaseAlert(inAppFeedback);
+        const data = InAppFeedback.fromFirebaseAlert(inAppFeedback);
         const apiService = new ApiService(webhooks[webhook]);
         try {
-          await apiService.sendInAppFeedback(mockAppCrash);
+          await apiService.sendInAppFeedback(data);
+        } catch (error) {
+          expect.fail('Expected not to throw an error but it did.');
+        }
+      });
+
+      it(`should generate a valid ${webhook} App Distribution New Device message`, async () => {
+        const inAppFeedback = require('../data/app-distribution/new-tester-device.json');
+        const data = NewTesterDevice.fromFirebaseAlert(inAppFeedback);
+        const apiService = new ApiService(webhooks[webhook]);
+        try {
+          await apiService.sendNewTesterDeviceMessage(data);
         } catch (error) {
           expect.fail('Expected not to throw an error but it did.');
         }
