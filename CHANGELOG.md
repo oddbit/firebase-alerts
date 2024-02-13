@@ -3,6 +3,7 @@
 - Stabilizing the extension for release
 - App Distribution 
   - In App Feedback
+  - New Tester Device
 
 ## 0.0.13
 
