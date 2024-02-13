@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import {GoogleChatWebhook} from '../../src/webhook-plugins/google-chat';
-import {AppCrash} from '../../src/models/app-crash';
+import {GoogleChatWebhook} from '../../../src/webhook-plugins/google-chat';
+import {AppCrash} from '../../../src/models/app-crash';
 
 const fatalCrash = require('../data/fatal-crash.json');
 
@@ -10,9 +10,7 @@ describe('GoogleChatWebhook', () => {
     process.env.LANGUAGE = 'en';
     process.env.LOCATION='us-central1';
     process.env.REPOSITORY_URL='https://github.com/oddbit/firebase-alerts';
-
-    // TODO: Change this to the Chat Webhook
-    process.env.WEBHOOK_URL = 'TODO_REPLACE_ME';
+    process.env.WEBHOOK_URL = 'DUMMY_WEBHOOK_URL';
 
     // TODO: Change this to the App ID
     process.env.APP_ID='1:269808624035:android:296863cf1f5b6817c87a16';
@@ -48,9 +46,6 @@ describe('GoogleChatWebhook', () => {
 
       // Note(Dennis): Uncomment the any of the following for debugging
       // console.log(JSON.stringify(cardMessage, null, 2));
-      // const apiService = new ApiService();
-      // await apiService.sendCrashlyticsMessage(mockAppCrash);
-
     });
   });
 });
