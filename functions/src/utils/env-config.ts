@@ -1,4 +1,4 @@
-import { AppPlatform } from "../definitions/app-platform.enum";
+import {AppPlatform} from "../definitions/app-platform.enum";
 
 /**
  * Environment configuration settings and variables
@@ -88,15 +88,11 @@ export class EnvConfig {
   }
 
   /**
-   * Get all webhooks as an array
+   * Get webhook URL
    */
-  static get webhooks(): string[] {
-    return [
-      process.env.WEBHOOK_MANDATORY,
-      process.env.WEBHOOK_OPTIONAL,
-    ].filter((x) => !!x) as string[];
+  static get webhook(): string {
+    return EnvConfig.getEnv("WEBHOOK_URL");;
   }
-
 
   /**
    * Get an environment variable's value

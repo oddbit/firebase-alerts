@@ -1,0 +1,14 @@
+{
+  "specversion": "1.0",
+  "alertType": "appdistribution.newTesterDevice",
+  "appId": "1:269808624035:android:296863cf1f5b6817c87a16",
+  "data": {
+    "@type": "type.googleapis.com/google.events.firebase.firebasealerts.v1.AppDistroNewTesterIosDevicePayload",
+    "payload": {
+      "testerName": "John Doe",
+      "testerEmail": "john.doe@example.com",
+      "testerDeviceModelName": "iPhone 12 Pro",
+      "testerDeviceIdentifier": "FBC89AA0-44AB-4EF3-B082-DFEFDA5228C4"
+    }
+  }
+}

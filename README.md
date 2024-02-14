@@ -1,18 +1,48 @@
 # About
-Firebase extension for sending Firebase alert notifications to your team communication
-platform. 
+Empower your team with timely Firebase notifications sent directly to your preferred communication platform.
 
-Currently supported platforms and alerts according to [roadmap](https://github.com/oddbit/firebase-alerts/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+## Key Features
 
-| Platform    | App Distribution | Crashlytics | Performance | Billing | 
-| ----------- | :--------------: | :---------: | :---------: | :-----: | 
-| Google Chat | [❌](https://github.com/oddbit/firebase-alerts/issues/2)  | ✅ | [❌](https://github.com/oddbit/firebase-alerts/issues/1) | ❌ |
-| Slack       | ❌  | ✅ | ❌ | ❌ |
-| Discord     | ❌  | ✅ | ❌ | ❌ |
-| MS Teams    | ❌  | ❌ | ❌ | ❌ |
+* **Alerts:** Receive immediate notifications, enabling rapid debugging and issue resolution.
+* **Flexible Webhook Support:** Easily integrates with popular platforms like:
+    * Slack 
+    * Discord
+    * Google Chat 
+* **Extensible:** Readily build custom webhook plugins to connect with other notification channels. 
+* **Roadmap:**  Actively evolving to support an expanding array of  Firebase alerts and platforms (Performance, Billing, etc.). See our roadmap here: https://github.com/oddbit/firebase-alerts/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement
+
+
+
+| Platform    | App Distribution | Crashlytics | Performance |
+| ----------- | :--------------: | :---------: | :---------: |
+| Google Chat | ✅  | ✅ | ✅ | 
+| Slack       | ✅  | ✅ | ✅ | 
+| Discord     | ✅  | ✅ | ✅ | 
+| MS Teams    | ❌  | ❌ | ❌ | 
+
+# Installation
+
+Install the Firebase Alerts extension using the Firebase CLI or the Firebase console. 
+
+## Install using CLI
+You can install this extension from source by forking the repository and run the 
+following command from your Firebase project root.
+
+```bash
+firebase ext:install ../path/to/oddbit/firebase-alerts
+firebase deploy --only extensions
+```
+
+Read the [PREINSTALL](./PREINSTALL.md) and [POSTINSTALL](./POSTINSTALL.md) instructions 
+for further information and requirements.
+
 
 # Getting involved
 If you're reading this, you're awesome! 
+
+We welcome your contributions! If you'd like to suggest new features or platforms: 
+[Open an issue](https://github.com/oddbit/firebase-alerts/issues/new) on our GitHub repository 
+after searching to find if your idea or feedback has already been posted.
 
 ## Building webhook plugins
 It's easy and fun to develop new webhook plugins. All you need to do is to 
@@ -31,3 +61,4 @@ export class YourNewPluginWebhook extends Webhook {
 ```
 
 Registering the new plugin in the method [`webhookPluginFromUrl()`](https://github.com/oddbit/firebase-alerts/blob/main/functions/src/alerts/crashlytics.ts). 
+

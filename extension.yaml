@@ -1,5 +1,5 @@
 name: firebase-alerts
-version: 0.0.13
+version: 0.0.14-alpha.7
 specVersion: v1beta
 
 displayName: Firebase Alerts
@@ -115,17 +115,12 @@ params:
     required: false
     immutable: false
 
-  - param: WEBHOOK_MANDATORY
-    label: Mandatory webhook
-    description: Mandatory webhook for Slack, Discord, or Google Chat
+  - param: WEBHOOK_URL
+    label: Webhook
+    description: Webhook URL for Slack, Discord, or Google Chat
     type: secret
     required: true
-
-  - param: WEBHOOK_OPTIONAL
-    label: Optional webhook
-    description: Optional, additional webhook for Slack, Discord, or Google Chat
-    type: secret
-    required: false
+    immutable: false
 
 resources:
   - name: anr
@@ -187,6 +182,51 @@ resources:
         eventFilters:
           - attribute: alerttype
             value: crashlytics.regression
+
+  - name: feedback
+    type: firebaseextensions.v1beta.v2function
+    properties:
+      location: ${LOCATION}
+      buildConfig:
+        runtime: nodejs18
+      serviceConfig:
+        availableMemory: 512M
+      eventTrigger:
+        eventType: google.firebase.firebasealerts.alerts.v1.published
+        triggerRegion: global
+        eventFilters:
+          - attribute: alerttype
+            value: appDistribution.newTesterIosDevice
+
+  - name: newIosDevice
+    type: firebaseextensions.v1beta.v2function
+    properties:
+      location: ${LOCATION}
+      buildConfig:
+        runtime: nodejs18
+      serviceConfig:
+        availableMemory: 512M
+      eventTrigger:
+        eventType: google.firebase.firebasealerts.alerts.v1.published
+        triggerRegion: global
+        eventFilters:
+          - attribute: alerttype
+            value: appDistribution.inAppFeedback
+
+  - name: threshold
+    type: firebaseextensions.v1beta.v2function
+    properties:
+      location: ${LOCATION}
+      buildConfig:
+        runtime: nodejs18
+      serviceConfig:
+        availableMemory: 512M
+      eventTrigger:
+        eventType: google.firebase.firebasealerts.alerts.v1.published
+        triggerRegion: global
+        eventFilters:
+          - attribute: alerttype
+            value: performance.threshold
 
 apis:
   - apiName: eventarc.googleapis.com

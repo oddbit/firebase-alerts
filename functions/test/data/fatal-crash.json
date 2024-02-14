@@ -15,9 +15,9 @@
         "payload": {
             "issue": {
                 "id": "20341b53d5c20227858fc5ed7934f196",
-                "title": "FlutterFirebaseCrashlyticsPlugin.java line 85",
+                "title": "Testing.java line 123",
                 "appVersion": "0.0.1",
-                "subtitle": "io.flutter.plugins.firebase.crashlytics.FlutterFirebaseCrashlyticsPlugin.lambda$crash$1"
+                "subtitle": "Automated testing with dummy crash"
             },
             "@type": "type.googleapis.com/google.events.firebase.firebasealerts.v1.CrashlyticsNewFatalIssuePayload"
         },

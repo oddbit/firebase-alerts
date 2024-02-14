@@ -21,29 +21,98 @@ const l10n = {
   [CrashlyticsAlertType.Unknown]: {
     "en": "Unknown Issue",
   },
-  "labelAppInfo": {
-    "en": "App Info",
+  "alertCondition": {
+    "en": "Alert Condition",
   },
-  "labelVersion": {
-    "en": "Version",
+  "percentile": {
+    "en": "Percentile",
   },
-  "labelPlatform": {
+  "metricType": {
+    "en": "Metric Type",
+  },
+  "violation": {
+    "en": "Violation",
+  },
+  "numSamples": {
+    "en": "Number of samples",
+  },
+  "appVersion": {
+    "en": "App Version",
+  },
+  "platform": {
     "en": "Platform",
   },
-  "labelBundleId": {
+  "bundleId": {
     "en": "Bundle Id",
   },
-  "openCrashlyticsIssue": {
+  "tester": {
+    "en": "Tester",
+  },
+  "ctaViewIssueCrashlytics": {
     "en": "Open Crashlytics",
   },
-  "createIssue": {
+  "ctaOpenAppFeedback": {
+    "en": "Open App Feedback",
+  },
+  "ctaViewScreenshot": {
+    "en": "View Screenshot",
+  },
+  "ctaInvestigate": {
+    "en": "Investigate",
+  },
+  "performance": {
+    "en": "Performance",
+  },
+  "imgAltPerformance": {
+    "en": "Firebase Performance logo",
+  },
+  "appDistribution": {
+    "en": "App Distribution",
+  },
+  "imgAltAppDistribution": {
+    "en": "App Distribution logo",
+  },
+  "crashlytics": {
+    "en": "Crashlytics",
+  },
+  "imgAltCrashlytics": {
+    "en": "Crashlytics logo",
+  },
+  "labelInAppFeedback": {
+    "en": "In App Feedback",
+  },
+  "labelNewTesterDevice": {
+    "en": "New Tester Device",
+  },
+  "labelUserFeedback": {
+    "en": "User Feedback",
+  },
+  "labelFirebase": {
+    "en": "Firebase",
+  },
+  "labelDeviceModel": {
+    "en": "Device Model",
+  },
+  "labelDeviceIdentifier": {
+    "en": "Device Identifier",
+  },
+  "labelIssueTracker": {
+    "en": "Issue Tracker",
+  },
+  "ctaCreateIssue": {
     "en": "Create Issue",
   },
-  "searchIssue": {
+  "ctaSearchIssue": {
     "en": "Search Similar Issues",
+  },
+  "descriptionInvestigateFirebase": {
+    "en": "Investigate this issue in Firebase console",
   },
   "descriptionViewInCrashlytics": {
     "en": "View this issue in Firebase console",
+  },
+  "descriptionViewInFirebaseConsole": {
+    "en": "View this in Firebase console",
   },
   "descriptionCreateNewIssue": {
     "en": "Create a new bug report for this issue",
