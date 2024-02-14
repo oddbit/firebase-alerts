@@ -1,5 +1,6 @@
 import { AppCrash } from "../models/app-crash";
 import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
+import { PerformanceAlert } from "../models/performance-alert";
 import { Webhook } from "../models/webhook";
 import {
   appDistributionImgUrl,
@@ -7,6 +8,7 @@ import {
   makeCrashlyticsIssueUrl,
   makeRepositoryIssueUrl,
   makeRepositorySearchUrl,
+  performaceImgUrl,
 } from "../urls";
 import { EnvConfig } from "../utils/env-config";
 import { Localization } from "../utils/localization";
@@ -35,7 +37,7 @@ export class GoogleChatWebhook extends Webhook {
       cardId: Date.now() + "-" + Math.round((Math.random() * 10000)),
       card: {
         header: {
-          title: l10n.translate("labelCrashlytics"),
+          title: l10n.translate("crashlytics"),
           subtitle: l10n.translate(appCrash.issueType),
           imageUrl: crashlyticsImgUrl,
           imageType: "CIRCLE",
@@ -47,13 +49,13 @@ export class GoogleChatWebhook extends Webhook {
             widgets: [
               {
                 decoratedText: {
-                  topLabel: l10n.translate("labelBundleId"),
+                  topLabel: l10n.translate("bundleId"),
                   text: `${EnvConfig.bundleId} (${EnvConfig.platform})`,
                 },
               },
               {
                 decoratedText: {
-                  topLabel: l10n.translate("labelVersion"),
+                  topLabel: l10n.translate("appVersion"),
                   text: appCrash.appVersion,
                 },
               },
@@ -79,7 +81,7 @@ export class GoogleChatWebhook extends Webhook {
       buttonList: {
         buttons: [
           {
-            text: l10n.translate("openCrashlyticsIssue"),
+            text: l10n.translate("ctaViewIssueCrashlytics"),
             onClick: {
               openLink: {
                 url: makeCrashlyticsIssueUrl(appCrash),
@@ -103,7 +105,7 @@ export class GoogleChatWebhook extends Webhook {
             buttonList: {
               buttons: [
                 {
-                  text: l10n.translate("createIssue"),
+                  text: l10n.translate("ctaCreateIssue"),
                   onClick: {
                     openLink: {
                       url: makeRepositoryIssueUrl(appCrash),
@@ -111,7 +113,7 @@ export class GoogleChatWebhook extends Webhook {
                   },
                 },
                 {
-                  text: l10n.translate("searchIssue"),
+                  text: l10n.translate("ctaSearchIssue"),
                   onClick: {
                     openLink: {
                       url: makeRepositorySearchUrl(appCrash),
@@ -149,7 +151,7 @@ export class GoogleChatWebhook extends Webhook {
       cardId: Date.now() + "-" + Math.round((Math.random() * 10000)),
       card: {
         header: {
-          title: l10n.translate("labelAppDistribution"),
+          title: l10n.translate("appDistribution"),
           subtitle: l10n.translate("labelNewTesterDevice"),
           imageUrl: appDistributionImgUrl,
           imageType: "CIRCLE",
@@ -160,13 +162,13 @@ export class GoogleChatWebhook extends Webhook {
             widgets: [
               {
                 decoratedText: {
-                  topLabel: l10n.translate("labelTester"),
+                  topLabel: l10n.translate("tester"),
                   text: `${newTesterDevice.testerName} (${newTesterDevice.testerEmail})`,
                 },
               },
               {
                 decoratedText: {
-                  topLabel: l10n.translate("labelBundleId"),
+                  topLabel: l10n.translate("bundleId"),
                   text: `${EnvConfig.bundleId} (${EnvConfig.platform})`,
                 },
               },
@@ -213,7 +215,7 @@ export class GoogleChatWebhook extends Webhook {
       cardId: Date.now() + "-" + Math.round((Math.random() * 10000)),
       card: {
         header: {
-          title: l10n.translate("labelAppDistribution"),
+          title: l10n.translate("appDistribution"),
           subtitle: l10n.translate("labelInAppFeedback"),
           imageUrl: appDistributionImgUrl,
           imageType: "CIRCLE",
@@ -224,19 +226,19 @@ export class GoogleChatWebhook extends Webhook {
             widgets: [
               {
                 decoratedText: {
-                  topLabel: l10n.translate("labelTester"),
+                  topLabel: l10n.translate("tester"),
                   text: `${appFeedback.testerName} (${appFeedback.testerEmail})`,
                 },
               },
               {
                 decoratedText: {
-                  topLabel: l10n.translate("labelBundleId"),
+                  topLabel: l10n.translate("bundleId"),
                   text: `${EnvConfig.bundleId} (${EnvConfig.platform})`,
                 },
               },
               {
                 decoratedText: {
-                  topLabel: l10n.translate("labelVersion"),
+                  topLabel: l10n.translate("appVersion"),
                   text: appFeedback.appVersion,
                 },
               },
@@ -244,7 +246,7 @@ export class GoogleChatWebhook extends Webhook {
                 buttonList: {
                   buttons: [
                     {
-                      text: l10n.translate("openAppFeedback"),
+                      text: l10n.translate("ctaOpenAppFeedback"),
                       onClick: {
                         openLink: {
                           url: appFeedback.feedbackConsoleUri,
@@ -252,7 +254,7 @@ export class GoogleChatWebhook extends Webhook {
                       },
                     },
                     {
-                      text: l10n.translate("openScreenshot"),
+                      text: l10n.translate("ctaViewScreenshot"),
                       onClick: {
                         openLink: {
                           url: appFeedback.screenshotUri,
@@ -270,6 +272,103 @@ export class GoogleChatWebhook extends Webhook {
                   text: appFeedback.text,
                 }
               }
+            ],
+          },
+        ] as object[],
+      },
+    };
+
+    googleChatCards.cardsV2.push(googleChatCard);
+
+    return googleChatCards;
+  }
+
+  /**
+   * Creates a JSON payload for a message about a performance alert
+   *
+   * @param performanceAlert {PerformanceAlert} Performance alert
+   * @return {object} Message payload
+   */
+  createPerformanceAlertMessage(
+    performanceAlert: PerformanceAlert,
+  ): object {
+    const l10n = new Localization(EnvConfig.language);
+
+    const googleChatCards =
+    {
+      // The webhook API expects an array of cards, even if it's only one
+      cardsV2: [] as object[],
+    };
+
+    const googleChatCard = {
+      cardId: Date.now() + "-" + Math.round((Math.random() * 10000)),
+      card: {
+        header: {
+          title: l10n.translate("performance"),
+          subtitle: `${performanceAlert.metricType}: ${performanceAlert.eventType}`,
+          imageUrl: performaceImgUrl,
+          imageType: "CIRCLE",
+          imageAltText: l10n.translate("imgAltPerformance"),
+        },
+        sections: [
+          {
+            widgets: [
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("bundleId"),
+                  text: `${EnvConfig.bundleId} (${EnvConfig.platform})`,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("appVersion"),
+                  text: performanceAlert.appVersion,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("alertCondition"),
+                  text: `${performanceAlert.thresholdValue} ${performanceAlert.thresholdUnit}`,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("violation"),
+                  text: `${performanceAlert.violationValue} ${performanceAlert.violationUnit}`,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("percentile"),
+                  text: performanceAlert.conditionPercentile,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("metricType"),
+                  text: performanceAlert.metricType,
+                },
+              },
+              {
+                decoratedText: {
+                  topLabel: l10n.translate("numSamples"),
+                  text: performanceAlert.numSamples,
+                },
+              },
+              {
+                buttonList: {
+                  buttons: [
+                    {
+                      text: l10n.translate("ctaInvestigate"),
+                      onClick: {
+                        openLink: {
+                          url: performanceAlert.investigateUri,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
             ],
           },
         ] as object[],

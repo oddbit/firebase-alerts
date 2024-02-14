@@ -3,6 +3,7 @@ import {EnvConfig} from "./utils/env-config";
 
 export const crashlyticsImgUrl = "https://github.com/oddbit/firebase-alerts/raw/main/icons/crashlytics.png";
 export const appDistributionImgUrl = "https://github.com/oddbit/firebase-alerts/raw/main/icons/app-distribution.png";
+export const performaceImgUrl = "https://github.com/oddbit/firebase-alerts/raw/main/icons/performance.png";
 
 /**
  * Generate a URL to Firebase Console for the issue

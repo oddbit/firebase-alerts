@@ -1,15 +1,17 @@
-import {Localization} from "../utils/localization";
-import {AppCrash} from "../models/app-crash";
-import {Webhook} from "../models/webhook";
+import { AppCrash } from "../models/app-crash";
+import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
+import { PerformanceAlert } from "../models/performance-alert";
+import { Webhook } from "../models/webhook";
 import {
   appDistributionImgUrl,
   crashlyticsImgUrl,
   makeCrashlyticsIssueUrl,
   makeRepositoryIssueUrl,
   makeRepositorySearchUrl,
+  performaceImgUrl,
 } from "../urls";
-import {EnvConfig} from "../utils/env-config";
-import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
+import { EnvConfig } from "../utils/env-config";
+import { Localization } from "../utils/localization";
 
 /**
  * Declares a webhook implementation for Discord
@@ -35,29 +37,28 @@ export class DiscordWebhook extends Webhook {
       url: makeCrashlyticsIssueUrl(appCrash),
       color: 16763432,
       author: {
-        name: l10n.translate("labelCrashlytics"),
+        name: l10n.translate("crashlytics"),
         icon_url: crashlyticsImgUrl,
       },
       fields: [
         {
-          name: l10n.translate("labelVersion"),
+          name: l10n.translate("appVersion"),
           value: "`" + appCrash.appVersion + "`",
           inline: true,
         },
         {
-          name: l10n.translate("labelPlatform"),
+          name: l10n.translate("platform"),
           value: EnvConfig.platform,
           inline: true,
         },
         {
-          name: l10n.translate("labelBundleId"),
+          name: l10n.translate("bundleId"),
           value: bundleId,
         },
       ] as object[],
     };
 
     discordMessage.embeds.push(crashlyticsInfo);
-
 
     // =========================================================================
     // =========================================================================
@@ -69,12 +70,12 @@ export class DiscordWebhook extends Webhook {
         name: l10n.translate("labelIssueTracker"),
         value: [
           l10n.translate("descriptionCreateNewIssue"),
-          `[${l10n.translate("createIssue")}]` +
-          `(${makeRepositoryIssueUrl(appCrash)})`,
+          `[${l10n.translate("ctaCreateIssue")}]` +
+            `(${makeRepositoryIssueUrl(appCrash)})`,
           "",
           l10n.translate("descriptionSearchSimilarIssues"),
-          `[${l10n.translate("searchIssue")}]` +
-          `(${makeRepositorySearchUrl(appCrash)})`,
+          `[${l10n.translate("ctaSearchIssue")}]` +
+            `(${makeRepositorySearchUrl(appCrash)})`,
         ].join("\n"),
       });
     }
@@ -89,7 +90,7 @@ export class DiscordWebhook extends Webhook {
    * @return {object} Message payload
    */
   public createNewTesterDeviceMessage(
-    newTesterDevice: NewTesterDevice,
+    newTesterDevice: NewTesterDevice
   ): object {
     const l10n = new Localization(EnvConfig.language);
 
@@ -102,12 +103,12 @@ export class DiscordWebhook extends Webhook {
       title: l10n.translate("labelNewTesterDevice"),
       color: 16763432,
       author: {
-        name: l10n.translate("labelAppDistribution"),
+        name: l10n.translate("appDistribution"),
         icon_url: appDistributionImgUrl,
       },
       fields: [
         {
-          name: l10n.translate("labelTester"),
+          name: l10n.translate("tester"),
           value: `*${newTesterDevice.testerName}* <${newTesterDevice.testerEmail}>`,
           inline: true,
         },
@@ -120,12 +121,12 @@ export class DiscordWebhook extends Webhook {
           value: newTesterDevice.deviceIdentifier,
         },
         {
-          name: l10n.translate("labelPlatform"),
+          name: l10n.translate("platform"),
           value: EnvConfig.platform,
           inline: true,
         },
         {
-          name: l10n.translate("labelBundleId"),
+          name: l10n.translate("bundleId"),
           value: EnvConfig.bundleId,
         },
       ] as object[],
@@ -135,7 +136,6 @@ export class DiscordWebhook extends Webhook {
 
     return discordMessage;
   }
-
 
   /**
    * Creates a JSON payload for a message about new app feedback
@@ -156,27 +156,92 @@ export class DiscordWebhook extends Webhook {
       url: appFeedback.feedbackConsoleUri,
       color: 16763432,
       author: {
-        name: l10n.translate("labelAppDistribution"),
+        name: l10n.translate("appDistribution"),
         icon_url: appDistributionImgUrl,
       },
       fields: [
         {
-          name: l10n.translate("labelTester"),
+          name: l10n.translate("tester"),
           value: `*${appFeedback.testerName}* <${appFeedback.testerEmail}>`,
           inline: true,
         },
         {
-          name: l10n.translate("labelVersion"),
+          name: l10n.translate("appVersion"),
           value: appFeedback.appVersion,
         },
         {
-          name: l10n.translate("labelPlatform"),
+          name: l10n.translate("platform"),
           value: EnvConfig.platform,
           inline: true,
         },
         {
-          name: l10n.translate("labelBundleId"),
+          name: l10n.translate("bundleId"),
           value: EnvConfig.bundleId,
+        },
+      ] as object[],
+    };
+
+    discordMessage.embeds.push(messageInfo);
+
+    return discordMessage;
+  }
+
+  /**
+   * Creates a JSON payload for a message about a performance alert
+   *
+   * @param performanceAlert {PerformanceAlert} Performance alert
+   * @return {object} Message payload
+   */
+  createPerformanceAlertMessage(performanceAlert: PerformanceAlert): object {
+    const l10n = new Localization(EnvConfig.language);
+
+    const discordMessage = {
+      content: null,
+      embeds: [] as object[],
+    };
+
+    const messageInfo = {
+      title: performanceAlert.eventName,
+      url: performanceAlert.investigateUri,
+      color: 16763432,
+      author: {
+        name: l10n.translate("performance"),
+        icon_url: performaceImgUrl,
+      },
+      fields: [
+        {
+          name: l10n.translate("appVersion"),
+          value: performanceAlert.appVersion,
+          inline: true,
+        },
+        {
+          name: l10n.translate("platform"),
+          value: EnvConfig.platform,
+          inline: true,
+        },
+        {
+          name: l10n.translate("bundleId"),
+          value: EnvConfig.bundleId,
+        },
+        {
+          name: l10n.translate("alertCondition"),
+          value: `${performanceAlert.thresholdValue} ${performanceAlert.thresholdUnit}`,
+        },
+        {
+          name: l10n.translate("violation"),
+          value: `${performanceAlert.violationValue} ${performanceAlert.violationUnit}`,
+        },
+        {
+          name: l10n.translate("percentile"),
+          value: performanceAlert.conditionPercentile,
+        },
+        {
+          name: l10n.translate("metricType"),
+          value: performanceAlert.metricType,
+        },
+        {
+          name: l10n.translate("numSamples"),
+          value: performanceAlert.numSamples,
         },
       ] as object[],
     };

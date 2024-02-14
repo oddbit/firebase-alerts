@@ -1,5 +1,6 @@
 import { AppCrash } from "../models/app-crash";
 import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
+import { PerformanceAlert } from "../models/performance-alert";
 import { Webhook } from "../models/webhook";
 import {
   appDistributionImgUrl,
@@ -7,6 +8,7 @@ import {
   makeCrashlyticsIssueUrl,
   makeRepositoryIssueUrl,
   makeRepositorySearchUrl,
+  performaceImgUrl,
 } from "../urls";
 import { EnvConfig } from "../utils/env-config";
 import { Localization } from "../utils/localization";
@@ -16,16 +18,13 @@ import { Localization } from "../utils/localization";
  * @see https://api.slack.com/messaging/webhooks
  */
 export class SlackWebhook extends Webhook {
-
   /**
    * Creates a JSON payload for a message about new tester device
    *
    * @param {NewTesterDevice} newTesterDevice
    * @return {object} Message payload
    */
-  createNewTesterDeviceMessage(
-    newTesterDevice: NewTesterDevice,
-  ): object {
+  createNewTesterDeviceMessage(newTesterDevice: NewTesterDevice): object {
     const l10n = new Localization(EnvConfig.language);
 
     const slackMessage = {
@@ -35,8 +34,8 @@ export class SlackWebhook extends Webhook {
           text: {
             type: "plain_text",
             text: [
-              l10n.translate("labelAppDistribution"),
-              l10n.translate("labelNewTesterDevice")
+              l10n.translate("appDistribution"),
+              l10n.translate("labelNewTesterDevice"),
             ].join(" - "),
           },
         },
@@ -46,13 +45,13 @@ export class SlackWebhook extends Webhook {
           text: {
             type: "mrkdwn",
             text: [
-              `*${l10n.translate('labelTester')}*`,
+              `*${l10n.translate("tester")}*`,
               `*${newTesterDevice.testerName}* <${newTesterDevice.testerEmail}>`,
-              `*${l10n.translate('labelBundleId')}*`,
+              `*${l10n.translate("bundleId")}*`,
               `\`${EnvConfig.bundleId}\``,
-              `*${l10n.translate('labelDeviceIdentifier')}*`,
+              `*${l10n.translate("labelDeviceIdentifier")}*`,
               `\`${newTesterDevice.deviceIdentifier}\``,
-              `*${l10n.translate('labelDeviceModel')}*`,
+              `*${l10n.translate("labelDeviceModel")}*`,
               `${newTesterDevice.deviceModel}`,
             ].join("\n"),
           },
@@ -84,8 +83,8 @@ export class SlackWebhook extends Webhook {
           text: {
             type: "plain_text",
             text: [
-              l10n.translate("labelAppDistribution"),
-              l10n.translate("labelInAppFeedback")
+              l10n.translate("appDistribution"),
+              l10n.translate("labelInAppFeedback"),
             ].join(" - "),
           },
         },
@@ -95,9 +94,9 @@ export class SlackWebhook extends Webhook {
           text: {
             type: "mrkdwn",
             text: [
-              `*${l10n.translate('labelTester')}*`,
+              `*${l10n.translate("tester")}*`,
               `*${appFeedback.testerName}* <${appFeedback.testerEmail}>`,
-              `*${l10n.translate('labelBundleId')}*`,
+              `*${l10n.translate("bundleId")}*`,
               `${EnvConfig.bundleId}`,
             ].join("\n"),
           },
@@ -105,13 +104,13 @@ export class SlackWebhook extends Webhook {
             {
               type: "mrkdwn",
               text: `
-                *${l10n.translate("labelPlatform")}*
+                *${l10n.translate("platform")}*
                 \`${EnvConfig.platform}\``,
             },
             {
               type: "mrkdwn",
               text: `
-                *${l10n.translate("labelVersion")}*
+                *${l10n.translate("appVersion")}*
                 \`${appFeedback.appVersion}\``,
             },
           ],
@@ -124,66 +123,70 @@ export class SlackWebhook extends Webhook {
       ] as object[],
     };
 
-
     // =========================================================================
     // =========================================================================
     // Firebase section
     //
 
-    slackMessage.blocks.push(...[
-      {
-        type: "divider",
-      },
-      {
-        type: "header",
-        text: {
-          type: "plain_text",
-          text: l10n.translate("labelInAppFeedback"),
+    slackMessage.blocks.push(
+      ...[
+        {
+          type: "divider",
         },
-      },
-
-    ]);
-
-    slackMessage.blocks.push(...[
-      {
-        type: "section",
-        text: {
-          type: "plain_text",
-          text: l10n.translate("descriptionViewInFirebaseConsole"),
-        },
-        accessory: {
-          type: "button",
+        {
+          type: "header",
           text: {
             type: "plain_text",
-            text: l10n.translate("openAppFeedback"),
+            text: l10n.translate("labelInAppFeedback"),
           },
-          value: "app_feedback_report",
-          url: appFeedback.feedbackConsoleUri,
-          action_id: "app-feedback-action-view",
         },
-      },
-    ]);
+      ]
+    );
+
+    slackMessage.blocks.push(
+      ...[
+        {
+          type: "section",
+          text: {
+            type: "plain_text",
+            text: l10n.translate("descriptionViewInFirebaseConsole"),
+          },
+          accessory: {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: l10n.translate("ctaOpenAppFeedback"),
+            },
+            value: "app_feedback_report",
+            url: appFeedback.feedbackConsoleUri,
+            action_id: "app-feedback-action-view",
+          },
+        },
+      ]
+    );
     // =========================================================================
     // The actual feedback
-    slackMessage.blocks.push(...[
-      {
-        type: "section",
-        text: {
-          type: "plain_text",
-          text: appFeedback.text,
-        },
-        accessory: {
-          type: "button",
+    slackMessage.blocks.push(
+      ...[
+        {
+          type: "section",
           text: {
             type: "plain_text",
-            text: l10n.translate("openScreenshot"),
+            text: appFeedback.text,
           },
-          value: "app_feedback_screenshot",
-          url: appFeedback.screenshotUri,
-          action_id: "app-feedback-action-view-screenshot",
+          accessory: {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: l10n.translate("ctaViewScreenshot"),
+            },
+            value: "app_feedback_screenshot",
+            url: appFeedback.screenshotUri,
+            action_id: "app-feedback-action-view-screenshot",
+          },
         },
-      },
-    ]);
+      ]
+    );
 
     return slackMessage;
   }
@@ -203,7 +206,7 @@ export class SlackWebhook extends Webhook {
           type: "header",
           text: {
             type: "plain_text",
-            text: l10n.translate("labelCrashlytics"),
+            text: l10n.translate("crashlytics"),
           },
         },
         {
@@ -214,7 +217,7 @@ export class SlackWebhook extends Webhook {
             text: [
               `*${l10n.translate(appCrash.issueType)}*`,
               appCrash.issueTitle,
-              `*${l10n.translate("labelBundleId")}*`,
+              `*${l10n.translate("bundleId")}*`,
               "`" + EnvConfig.bundleId + "`",
             ].join("\n"),
           },
@@ -222,13 +225,13 @@ export class SlackWebhook extends Webhook {
             {
               type: "mrkdwn",
               text: `
-                *${l10n.translate("labelPlatform")}*
+                *${l10n.translate("platform")}*
                 \`${EnvConfig.platform}\``,
             },
             {
               type: "mrkdwn",
               text: `
-                *${l10n.translate("labelVersion")}*
+                *${l10n.translate("appVersion")}*
                 \`${appCrash.appVersion}\``,
             },
           ],
@@ -241,53 +244,13 @@ export class SlackWebhook extends Webhook {
       ] as object[],
     };
 
-
     // =========================================================================
     // =========================================================================
     // Firebase section
     //
 
-    slackMessage.blocks.push(...[
-      {
-        type: "divider",
-      },
-      {
-        type: "header",
-        text: {
-          type: "plain_text",
-          text: l10n.translate("labelFirebase"),
-        },
-      },
-
-    ]);
-
-    slackMessage.blocks.push(...[
-      {
-        type: "section",
-        text: {
-          type: "plain_text",
-          text: l10n.translate("descriptionViewInCrashlytics"),
-        },
-        accessory: {
-          type: "button",
-          text: {
-            type: "plain_text",
-            text: l10n.translate("openCrashlyticsIssue"),
-          },
-          value: "crashlytics_issue_" + appCrash.issueId,
-          url: makeCrashlyticsIssueUrl(appCrash),
-          action_id: "crashlytics-action-view",
-        },
-      },
-    ]);
-
-    // =========================================================================
-    // =========================================================================
-    // Issue tracker Section
-    //
-
-    if (EnvConfig.repositoryUrl) {
-      slackMessage.blocks.push(...[
+    slackMessage.blocks.push(
+      ...[
         {
           type: "divider",
         },
@@ -295,46 +258,222 @@ export class SlackWebhook extends Webhook {
           type: "header",
           text: {
             type: "plain_text",
-            text: l10n.translate("labelIssueTracker"),
+            text: l10n.translate("labelFirebase"),
           },
         },
+      ]
+    );
+
+    slackMessage.blocks.push(
+      ...[
         {
           type: "section",
           text: {
             type: "plain_text",
-            text: l10n.translate("descriptionCreateNewIssue"),
+            text: l10n.translate("descriptionViewInCrashlytics"),
           },
           accessory: {
             type: "button",
             text: {
               type: "plain_text",
-              text: l10n.translate("createIssue"),
+              text: l10n.translate("ctaViewIssueCrashlytics"),
             },
-            value: "create_new_issue",
-            url: makeRepositoryIssueUrl(appCrash),
-            action_id: "button-action-create-issue",
+            value: "crashlytics_issue_" + appCrash.issueId,
+            url: makeCrashlyticsIssueUrl(appCrash),
+            action_id: "crashlytics-action-view",
           },
         },
-        {
-          type: "section",
-          text: {
-            type: "plain_text",
-            text: l10n.translate("descriptionSearchSimilarIssues"),
+      ]
+    );
+
+    // =========================================================================
+    // =========================================================================
+    // Issue tracker Section
+    //
+
+    if (EnvConfig.repositoryUrl) {
+      slackMessage.blocks.push(
+        ...[
+          {
+            type: "divider",
           },
-          accessory: {
-            type: "button",
+          {
+            type: "header",
             text: {
               type: "plain_text",
-              text: l10n.translate("searchIssue"),
+              text: l10n.translate("labelIssueTracker"),
             },
-            value: "search_issue",
-            url: makeRepositorySearchUrl(appCrash),
-            action_id: "button-action-search-issue",
           },
-        },
-      ],
+          {
+            type: "section",
+            text: {
+              type: "plain_text",
+              text: l10n.translate("descriptionCreateNewIssue"),
+            },
+            accessory: {
+              type: "button",
+              text: {
+                type: "plain_text",
+                text: l10n.translate("ctaCreateIssue"),
+              },
+              value: "create_new_issue",
+              url: makeRepositoryIssueUrl(appCrash),
+              action_id: "button-action-create-issue",
+            },
+          },
+          {
+            type: "section",
+            text: {
+              type: "plain_text",
+              text: l10n.translate("descriptionSearchSimilarIssues"),
+            },
+            accessory: {
+              type: "button",
+              text: {
+                type: "plain_text",
+                text: l10n.translate("ctaSearchIssue"),
+              },
+              value: "search_issue",
+              url: makeRepositorySearchUrl(appCrash),
+              action_id: "button-action-search-issue",
+            },
+          },
+        ]
       );
     }
+
+    return slackMessage;
+  }
+
+  /**
+   * Creates a JSON payload for a message about a performance alert
+   *
+   * @param performanceAlert {PerformanceAlert} Performance alert
+   * @return {object} Message payload
+   */
+  createPerformanceAlertMessage(performanceAlert: PerformanceAlert): object {
+    const l10n = new Localization(EnvConfig.language);
+
+    const slackMessage = {
+      blocks: [
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: [
+              l10n.translate("performance"),
+              performanceAlert.eventName,
+            ].join(" - "),
+          },
+        },
+        {
+          type: "section",
+          block_id: "performance-alert-info-block",
+          text: {
+            type: "mrkdwn",
+            text: [
+              `*${l10n.translate("bundleId")}*`,
+              `${EnvConfig.bundleId}`,
+            ].join("\n"),
+          },
+          fields: [
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("platform")}*
+                \`${EnvConfig.platform}\``,
+            },
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("appVersion")}*
+                \`${performanceAlert.appVersion}\``,
+            },
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("alertCondition")}*
+                ${performanceAlert.thresholdValue} ${
+                performanceAlert.thresholdUnit
+              }`,
+            },
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("violation")}*
+                ${performanceAlert.violationValue} ${
+                performanceAlert.violationUnit
+              }`,
+            },
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("percentile")}*
+                ${performanceAlert.conditionPercentile}`,
+            },
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("metricType")}*
+                ${performanceAlert.metricType}`,
+            },
+            {
+              type: "mrkdwn",
+              text: `
+                *${l10n.translate("numSamples")}*
+                ${performanceAlert.numSamples}`,
+            },
+          ],
+          accessory: {
+            type: "image",
+            image_url: performaceImgUrl,
+            alt_text: l10n.translate("imgAltPerformance"),
+          },
+        },
+      ] as object[],
+    };
+
+    // =========================================================================
+    // =========================================================================
+    // Firebase section
+    //
+
+    slackMessage.blocks.push(
+      ...[
+        {
+          type: "divider",
+        },
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: ``,
+          },
+        },
+      ]
+    );
+
+    slackMessage.blocks.push(
+      ...[
+        {
+          type: "section",
+          text: {
+            type: "plain_text",
+            text: `${performanceAlert.metricType}: ${performanceAlert.eventType}`,
+          },
+          accessory: {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: l10n.translate("ctaInvestigate"),
+            },
+            value: "performance_alert_investigate",
+            url: performanceAlert.investigateUri,
+            action_id: "performance-alert-action-investigate",
+          },
+        },
+      ]
+    );
 
     return slackMessage;
   }

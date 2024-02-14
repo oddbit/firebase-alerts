@@ -9,3 +9,4 @@ admin.initializeApp();
 
 export * from "./alerts/crashlytics";
 export * from "./alerts/app-distribution";
+export * from "./alerts/performance";

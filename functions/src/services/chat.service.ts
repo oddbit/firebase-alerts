@@ -1,15 +1,15 @@
 import axios from "axios";
 import { logger } from "firebase-functions/v2";
-import { AppCrash } from '../models/app-crash';
+import { AppCrash } from "../models/app-crash";
+import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
+import { PerformanceAlert } from "../models/performance-alert";
 import { Webhook } from "../models/webhook";
-import { EnvConfig } from '../utils/env-config';
+import { EnvConfig } from "../utils/env-config";
 import { DiscordWebhook } from "../webhook-plugins/discord";
 import { GoogleChatWebhook } from "../webhook-plugins/google-chat";
 import { SlackWebhook } from "../webhook-plugins/slack";
-import { InAppFeedback, NewTesterDevice } from "../models/app-distribution";
 
 export class ApiService {
-
   constructor(webhookUrl: string) {
     this.webhook = ApiService.webhookPluginFromUrl(webhookUrl);
     logger.debug("[ApiService] constructor", this.webhook);
@@ -47,18 +47,32 @@ export class ApiService {
    * @param {NewTesterDevice} newTesterDevice
    * @return {Promise}
    */
-  public async sendNewTesterDeviceMessage(newTesterDevice: NewTesterDevice): 
-    Promise<void> {
-      logger.debug("[sendNewTesterDeviceMessage]", newTesterDevice);
-      const payload = this.webhook.createNewTesterDeviceMessage(
-        newTesterDevice,
-      );
-      return this.sendMessage(newTesterDevice.appId, payload);
-    }
+  public async sendNewTesterDeviceMessage(
+    newTesterDevice: NewTesterDevice
+  ): Promise<void> {
+    logger.debug("[sendNewTesterDeviceMessage]", newTesterDevice);
+    const payload = this.webhook.createNewTesterDeviceMessage(newTesterDevice);
+    return this.sendMessage(newTesterDevice.appId, payload);
+  }
+
+  /**
+   * Send a message for a performance alert
+   *
+   * @param {PerformanceAlert} performanceAlert
+   * @return {Promise}
+   */
+  public async sendPerformanceAlertMessage(
+    performanceAlert: PerformanceAlert
+  ): Promise<void> {
+    logger.debug("[sendPerformanceAlertMessage]", performanceAlert);
+    const payload =
+      this.webhook.createPerformanceAlertMessage(performanceAlert);
+    return this.sendMessage(performanceAlert.appId, payload);
+  }
 
   /**
    * Sends the message to the webhook API endpoint
-   * 
+   *
    * @param {string} appId App ID
    * @param {object} payload JSON payload
    * @returns {Promise<void>}
@@ -68,16 +82,18 @@ export class ApiService {
 
     if (appId !== EnvConfig.appId) {
       logger.debug(
-        "[sendMessage] Skipping message because not the expected app.", {
-        eventAppId: appId,
-        expectedAppId: EnvConfig.appId,
-      });
+        "[sendMessage] Skipping message because not the expected app.",
+        {
+          eventAppId: appId,
+          expectedAppId: EnvConfig.appId,
+        }
+      );
       return;
     }
 
     try {
       const res = await axios.post(this.webhook.url, payload);
-      logger.info('[sendCrashlyticsMessage] Webhook call OK', res.status);
+      logger.info("[sendCrashlyticsMessage] Webhook call OK", res.status);
     } catch (error) {
       logger.error("[sendCrashlyticsMessage] Failed posting webhook.", {
         error,

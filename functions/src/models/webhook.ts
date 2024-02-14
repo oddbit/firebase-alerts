@@ -1,6 +1,7 @@
-import {AppCrash} from "./app-crash";
-import {Localization} from "../utils/localization";
+import { Localization } from "../utils/localization";
+import { AppCrash } from "./app-crash";
 import { InAppFeedback, NewTesterDevice } from "./app-distribution";
+import { PerformanceAlert } from "./performance-alert";
 
 export interface IWebhook {
   url: string;
@@ -39,7 +40,7 @@ export abstract class Webhook implements IWebhook {
    * @return {object} Message payload
    */
   public abstract createNewTesterDeviceMessage(
-    newTesterDevice: NewTesterDevice,
+    newTesterDevice: NewTesterDevice
   ): object;
 
   /**
@@ -49,4 +50,14 @@ export abstract class Webhook implements IWebhook {
    * @return {object} Message payload
    */
   public abstract createCrashlyticsMessage(appCrash: AppCrash): object;
+
+  /**
+   * Creates a JSON payload for a message about a performance alert
+   *
+   * @param performanceAlert {PerformanceAlert} Performance alert
+   * @return {object} Message payload
+   */
+  public abstract createPerformanceAlertMessage(
+    performanceAlert: PerformanceAlert
+  ): object;
 }

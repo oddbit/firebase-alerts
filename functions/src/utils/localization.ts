@@ -21,37 +21,58 @@ const l10n = {
   [CrashlyticsAlertType.Unknown]: {
     "en": "Unknown Issue",
   },
-  "labelAppInfo": {
-    "en": "App Info",
+  "alertCondition": {
+    "en": "Alert Condition",
   },
-  "labelVersion": {
-    "en": "Version",
+  "percentile": {
+    "en": "Percentile",
   },
-  "labelPlatform": {
+  "metricType": {
+    "en": "Metric Type",
+  },
+  "violation": {
+    "en": "Violation",
+  },
+  "numSamples": {
+    "en": "Number of samples",
+  },
+  "appVersion": {
+    "en": "App Version",
+  },
+  "platform": {
     "en": "Platform",
   },
-  "labelBundleId": {
+  "bundleId": {
     "en": "Bundle Id",
   },
-  "labelTester": {
+  "tester": {
     "en": "Tester",
   },
-  "openCrashlyticsIssue": {
+  "ctaViewIssueCrashlytics": {
     "en": "Open Crashlytics",
   },
-  "openAppFeedback": {
+  "ctaOpenAppFeedback": {
     "en": "Open App Feedback",
   },
-  "openScreenshot": {
+  "ctaViewScreenshot": {
     "en": "View Screenshot",
   },
-  "labelAppDistribution": {
+  "ctaInvestigate": {
+    "en": "Investigate",
+  },
+  "performance": {
+    "en": "Performance",
+  },
+  "imgAltPerformance": {
+    "en": "Firebase Performance logo",
+  },
+  "appDistribution": {
     "en": "App Distribution",
   },
   "imgAltAppDistribution": {
     "en": "App Distribution logo",
   },
-  "labelCrashlytics": {
+  "crashlytics": {
     "en": "Crashlytics",
   },
   "imgAltCrashlytics": {
@@ -78,11 +99,14 @@ const l10n = {
   "labelIssueTracker": {
     "en": "Issue Tracker",
   },
-  "createIssue": {
+  "ctaCreateIssue": {
     "en": "Create Issue",
   },
-  "searchIssue": {
+  "ctaSearchIssue": {
     "en": "Search Similar Issues",
+  },
+  "descriptionInvestigateFirebase": {
+    "en": "Investigate this issue in Firebase console",
   },
   "descriptionViewInCrashlytics": {
     "en": "View this issue in Firebase console",

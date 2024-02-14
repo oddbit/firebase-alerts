@@ -1,7 +1,8 @@
 ## 0.0.14
 
 - Stabilizing the extension for release
-- App Distribution 
+- Performance alert triggers
+- App Distribution alert triggers
   - In App Feedback
   - New Tester Device
 
