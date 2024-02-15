@@ -9,8 +9,8 @@ import { ApiService } from '../../src/services/chat.service';
 
 describe('End to end tests', () => {
   const webhooks: {[key: string]: string} = {
-    ['Google Chat']: 'WEBHOOK_URL_GOOGLE_CHAT',
-    ['Slack']: 'WEBHOOK_URL_SLACK',
+    ['Google Chat']: process.env.WEBHOOK_URL_GOOGLE_CHAT ?? 'WEBHOOK_URL_GOOGLE_CHAT_NOT_SET',
+    ['Slack']: process.env.WEBHOOK_URL_SLACK ?? 'WEBHOOK_URL_SLACK_NOT_SET',
   };
   
   before(() => {
