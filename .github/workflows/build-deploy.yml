@@ -50,8 +50,8 @@ jobs:
 
       - name: Replace Webhook URLs in Test File
         run: |
-          sed -i 's|WEBHOOK_URL_GOOGLE_CHAT|'"${{ secrets.WEBHOOK_URL_GOOGLE_CHAT }}"'|g' functions/test/e2e/chat.spec.ts
-          sed -i 's|WEBHOOK_URL_SLACK|'"${{ secrets.WEBHOOK_URL_SLACK }}"'|g' functions/test/e2e/chat.spec.ts
+          sed -i '' 's|WEBHOOK_URL_GOOGLE_CHAT|'"${{ secrets.WEBHOOK_URL_GOOGLE_CHAT }}"'|g' functions/test/e2e/chat.spec.ts
+          sed -i '' 's|WEBHOOK_URL_SLACK|'"${{ secrets.WEBHOOK_URL_SLACK }}"'|g' functions/test/e2e/chat.spec.ts
 
       - run: yarn --cwd functions install
 
