@@ -9,7 +9,8 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "serve": "yarn build && firebase emulators:start",
-    "test": "mocha -r ts-node/register test/unit/**/*.spec.ts --timeout 0 --exit",
+    "test": "yarn test:unit",
+    "test:unit": "mocha -r ts-node/register test/unit/**/*.spec.ts --timeout 0 --exit",
     "test:e2e": "mocha -r ts-node/register test/e2e/**/*.spec.ts --timeout 0 --exit",
     "test:emulated": "yarn build && firebase emulators:exec 'yarn test'",
     "logs": "firebase functions:log"

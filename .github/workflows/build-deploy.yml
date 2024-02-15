@@ -1,0 +1,109 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Testing
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        type:
+          - unit
+          - e2e
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout code
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
+          cache-dependency-path: functions/yarn.lock
+
+      - name: Install global NPM tools
+        run: |
+          yarn global add firebase-tools@latest
+          firebase --version
+
+      - name: Cache functions-ts NPM packages
+        uses: actions/cache@v3
+        with:
+          path: functions-ts/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Cache functions NPM packages
+        uses: actions/cache@v3
+        with:
+          path: functions-js/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Cache Firebase
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/firebase/
+          key: ${{ runner.os }}-firebase-${{ hashFiles('~/.cache/firebase/**') }}
+
+      - run: yarn --cwd functions install
+
+      - run: yarn --cwd functions build
+          
+      - name: Run testing
+        run: yarn --cwd functions test:${{ matrix.type }}
+
+  publish:    
+    name: Publish
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout code
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+          cache-dependency-path: functions/yarn.lock
+
+      - name: Install global NPM tools
+        run: |
+          yarn global add firebase-tools@latest
+          firebase --version
+
+      # The variable `FIREBASE_SA` must be a base64 encoded string
+      # of the service account JSON to avoid problems with quote escaping and
+      # conversion of '\n' characters generating invalid JSON
+      - name: Set service account for Firebase CLI
+        run: |
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
+          echo ${{ secrets.FIREBASE_SA }} | base64 -d -i - > service_account.json
+
+      - run: yarn --cwd functions install
+
+      - run: yarn --cwd functions build
+
+      - run: >- 
+          firebase ext:dev:upload
+          --local
+          --force
+          oddbit/firebase-alerts
+
+      # Try to save potential log files if something went wrong
+      - name: Upload debug log
+        uses: actions/upload-artifact@v3
+        if: ${{ failure() }}
+        with:
+          name: debug-log-functions
+          path: firebase-debug.log
+          if-no-files-found: ignore
