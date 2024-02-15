@@ -447,7 +447,7 @@ export class SlackWebhook extends Webhook {
           type: "header",
           text: {
             type: "plain_text",
-            text: ``,
+            text: `${performanceAlert.metricType}: ${performanceAlert.eventType}`,
           },
         },
       ]
@@ -459,7 +459,7 @@ export class SlackWebhook extends Webhook {
           type: "section",
           text: {
             type: "plain_text",
-            text: `${performanceAlert.metricType}: ${performanceAlert.eventType}`,
+            text: l10n.translate("descriptionInvestigateFirebase"),
           },
           accessory: {
             type: "button",
