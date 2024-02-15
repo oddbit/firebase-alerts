@@ -128,7 +128,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -143,7 +143,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -158,7 +158,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -173,7 +173,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -188,7 +188,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -203,7 +203,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
       eventTrigger:
@@ -218,7 +218,7 @@ resources:
     properties:
       location: ${LOCATION}
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs20
       serviceConfig:
         availableMemory: 512M
       eventTrigger:

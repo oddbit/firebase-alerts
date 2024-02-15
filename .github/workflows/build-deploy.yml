@@ -28,7 +28,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
           cache: "yarn"
           cache-dependency-path: functions/yarn.lock
 
@@ -37,19 +37,11 @@ jobs:
           yarn global add firebase-tools@latest
           firebase --version
 
-      - name: Cache functions-ts NPM packages
-        uses: actions/cache@v3
+      - uses: actions/setup-node@v3
         with:
-          path: functions-ts/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-
-      - name: Cache functions NPM packages
-        uses: actions/cache@v3
-        with:
-          path: functions-js/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: functions/yarn.lock
 
       - run: yarn --cwd functions install
 
@@ -69,7 +61,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
           cache: 'yarn'
           cache-dependency-path: functions/yarn.lock
 
