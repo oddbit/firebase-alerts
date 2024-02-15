@@ -29,20 +29,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "yarn"
-          cache-dependency-path: functions/yarn.lock
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
 
       - name: Install global NPM tools
         run: |
-          yarn global add firebase-tools@latest
+          npm install -g firebase-tools@latest
           firebase --version
 
-      - run: yarn --cwd functions install
+      - run: npm ci --prefix functions  # Use npm ci for faster installs
 
-      - run: yarn --cwd functions build
+      - run: npm run build --prefix functions
           
       - name: Run testing
-        run: yarn --cwd functions test:${{ matrix.type }}
+        run: npm run test:${{ matrix.type }} --prefix functions
 
   publish:    
     name: Publish
@@ -56,12 +56,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'yarn'
-          cache-dependency-path: functions/yarn.lock
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
 
       - name: Install global NPM tools
         run: |
-          yarn global add firebase-tools@latest
+          npm install -g firebase-tools@latest
           firebase --version
 
       # The variable `FIREBASE_SA` must be a base64 encoded string
@@ -72,9 +72,9 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
           echo ${{ secrets.FIREBASE_SA }} | base64 -d -i - > service_account.json
 
-      - run: yarn --cwd functions install
+      - run: npm ci --prefix functions 
 
-      - run: yarn --cwd functions build
+      - run: npm run build --prefix functions 
 
       - run: >- 
           firebase ext:dev:upload
@@ -89,4 +89,4 @@ jobs:
         with:
           name: debug-log-functions
           path: firebase-debug.log
-          if-no-files-found: ignore
+          if-no-files-found: ignore 
