@@ -233,7 +233,7 @@ export class DiscordWebhook extends Webhook {
         },
         {
           name: l10n.translate("percentile"),
-          value: performanceAlert.conditionPercentile,
+          value: `${performanceAlert.conditionPercentile}`,
         },
         {
           name: l10n.translate("metricType"),
@@ -241,7 +241,7 @@ export class DiscordWebhook extends Webhook {
         },
         {
           name: l10n.translate("numSamples"),
-          value: performanceAlert.numSamples,
+          value: `${performanceAlert.numSamples}`,
         },
       ] as object[],
     };

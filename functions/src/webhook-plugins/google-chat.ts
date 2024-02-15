@@ -340,7 +340,7 @@ export class GoogleChatWebhook extends Webhook {
               {
                 decoratedText: {
                   topLabel: l10n.translate("percentile"),
-                  text: performanceAlert.conditionPercentile,
+                  text: `${performanceAlert.conditionPercentile}`,
                 },
               },
               {
@@ -352,7 +352,7 @@ export class GoogleChatWebhook extends Webhook {
               {
                 decoratedText: {
                   topLabel: l10n.translate("numSamples"),
-                  text: performanceAlert.numSamples,
+                  text: `${performanceAlert.numSamples}`,
                 },
               },
               {
