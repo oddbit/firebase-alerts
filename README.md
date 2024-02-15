@@ -1,11 +1,6 @@
 # About
 Empower your team with timely Firebase notifications sent directly to your preferred communication platform.
 
-
-| Crashlytics | Performance |
-| ----------- | ----------- |
-| ![Google Chat Crashlytics Message](https://github.com/oddbit/firebase-alerts/raw/main/doc/images/message-google-chat-crashlytics.png) | ![Google Chat Performance Alert Message](https://github.com/oddbit/firebase-alerts/raw/main/doc/images/message-google-chat-performance.png) |
-
 ## Key Features
 
 * **Alerts:** Receive immediate notifications, enabling rapid debugging and issue resolution.
@@ -24,6 +19,14 @@ Empower your team with timely Firebase notifications sent directly to your prefe
 | Slack       | ✅  | ✅ | ✅ | 
 | Discord     | ✅  | ✅ | ✅ | 
 | MS Teams    | ❌  | ❌ | ❌ | 
+
+## Screenshots
+
+
+| App Distribution | Crashlytics | Performance |
+| :--------------: | :---------: | :---------: |
+| ![Google Chat App Distribution New Device](https://github.com/oddbit/firebase-alerts/raw/main/doc/images/message-google-chat-app-dist-new.png) | ![Google Chat Crashlytics Message](https://github.com/oddbit/firebase-alerts/raw/main/doc/images/message-google-chat-crashlytics.png) | ![Google Chat Performance Alert Message](https://github.com/oddbit/firebase-alerts/raw/main/doc/images/message-google-chat-performance.png) |
+
 
 # Installation
 
