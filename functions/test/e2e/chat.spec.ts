@@ -3,6 +3,7 @@ import { logger } from "firebase-functions/v2";
 import * as sinon from 'sinon';
 import { AppCrash } from '../../src/models/app-crash';
 import { InAppFeedback, NewTesterDevice } from '../../src/models/app-distribution';
+import { PerformanceAlert } from '../../src/models/performance-alert';
 import { ApiService } from '../../src/services/chat.service';
 
 
@@ -43,7 +44,7 @@ describe('End to end tests', () => {
       });
       
       it(`should generate a valid ${webhook} App Distribution Feedback message`, async () => {
-        const inAppFeedback = require('../data/app-distribution/in-app-feedback.json');
+        const inAppFeedback = require('../data/app-distribution-feedback.json');
         const data = InAppFeedback.fromFirebaseAlert(inAppFeedback);
         const apiService = new ApiService(webhooks[webhook]);
         try {
@@ -54,11 +55,22 @@ describe('End to end tests', () => {
       });
 
       it(`should generate a valid ${webhook} App Distribution New Device message`, async () => {
-        const inAppFeedback = require('../data/app-distribution/new-tester-device.json');
+        const inAppFeedback = require('../data/app-distribution-new-device.json');
         const data = NewTesterDevice.fromFirebaseAlert(inAppFeedback);
         const apiService = new ApiService(webhooks[webhook]);
         try {
           await apiService.sendNewTesterDeviceMessage(data);
+        } catch (error) {
+          expect.fail('Expected not to throw an error but it did.');
+        }
+      });
+
+      it(`should generate a valid ${webhook} performance alert message`, async () => {
+        const tresholdAlert = require('../data/performance-treshold.json');
+        const data = PerformanceAlert.fromPerformanceEvent(tresholdAlert);
+        const apiService = new ApiService(webhooks[webhook]);
+        try {
+          await apiService.sendPerformanceAlertMessage(data);
         } catch (error) {
           expect.fail('Expected not to throw an error but it did.');
         }

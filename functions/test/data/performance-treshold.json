@@ -1,0 +1,23 @@
+{
+  "id": "some-unique-event-id",
+  "source": "firebase/performance-monitoring",
+  "type": "firebase.alerts.performance.threshold",
+  "alertType": "performance.threshold",
+  "appId": "1:269808624035:android:296863cf1f5b6817c87a16",
+  "data": {
+    "createTime": "2023-11-25T20:43:51.345Z",
+    "payload": {
+      "eventName": "my_custom_trace",
+      "eventType": "trace",
+      "metricType": "response time",
+      "numSamples": 150,
+      "thresholdValue": 1.5,
+      "thresholdUnit": "seconds",
+      "conditionPercentile": 95,
+      "appVersion": "2.0.1",
+      "violationValue": 1.72,
+      "violationUnit": "seconds",
+      "investigateUri": "https://console.firebase.google.com/u/0/project/your-firebase-app-id/performance/...."
+    }
+  }
+}
