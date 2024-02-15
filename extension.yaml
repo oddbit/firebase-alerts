@@ -1,5 +1,5 @@
 name: firebase-alerts
-version: 0.0.14-alpha.7
+version: 0.0.14-stable
 specVersion: v1beta
 
 displayName: Firebase Alerts
