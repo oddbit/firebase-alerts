@@ -79,7 +79,7 @@ jobs:
       - run: >- 
           firebase ext:dev:upload
           --stage stable
-          --repo https://github.com/oddbit/firebase-alerts
+          --local
           --force
           oddbit/firebase-alerts
 
