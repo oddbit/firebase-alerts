@@ -35,7 +35,7 @@ You can install this extension from source by forking the repository and run the
 following command from your Firebase project root.
 
 ```bash
-firebase ext:install ../path/to/oddbit/firebase-alerts
+firebase ext:install oddbit/firebase-alerts
 firebase deploy --only extensions
 ```
 
