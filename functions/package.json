@@ -16,7 +16,7 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "20"
+    "node": "18"
   },
   "main": "lib/src/index.js",
   "dependencies": {
