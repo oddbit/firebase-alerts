@@ -48,11 +48,11 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-yarn-
 
-      - name: Cache Firebase
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/firebase/
-          key: ${{ runner.os }}-firebase-${{ hashFiles('~/.cache/firebase/**') }}
+
+      - name: Replace Webhook URLs in test file
+        run: |
+          sed -i 's/WEBHOOK_URL_GOOGLE_CHAT/${{ secrets.WEBHOOK_URL_GOOGLE_CHAT }}/g' functions/test/e2e/chat.spec.ts
+          sed -i 's/WEBHOOK_URL_SLACK/${{ secrets.WEBHOOK_URL_SLACK }}/g' functions/test/e2e/chat.spec.ts
 
       - run: yarn --cwd functions install
 
