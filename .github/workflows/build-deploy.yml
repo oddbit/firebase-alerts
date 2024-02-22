@@ -80,7 +80,7 @@ jobs:
           firebase ext:dev:upload
           --force
           --stage stable
-          --local
+          --repo https://github.com/oddbit/firebase-alerts
           oddbit/firebase-alerts
 
       # Try to save potential log files if something went wrong
