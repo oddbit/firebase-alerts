@@ -37,14 +37,14 @@ jobs:
           npm install -g firebase-tools@latest
           firebase --version
 
-      - run: npm ci --prefix functions  # Use npm ci for faster installs
+      - run: npm ci --prefix functions # Use npm ci for faster installs
 
       - run: npm run build --prefix functions
-          
+
       - name: Run testing
         run: npm run test:${{ matrix.type }} --prefix functions
 
-  publish:    
+  publish:
     name: Publish
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -72,15 +72,15 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
           echo ${{ secrets.FIREBASE_SA }} | base64 -d -i - > service_account.json
 
-      - run: npm ci --prefix functions 
+      - run: npm ci --prefix functions
 
-      - run: npm run build --prefix functions 
+      - run: npm run build --prefix functions
 
-      - run: >- 
+      - run: >-
           firebase ext:dev:upload
           --force
           --stage stable
-          --repo https://github.com/oddbit/firebase-alerts
+          --local
           oddbit/firebase-alerts
 
       # Try to save potential log files if something went wrong
@@ -90,4 +90,4 @@ jobs:
         with:
           name: debug-log-functions
           path: firebase-debug.log
-          if-no-files-found: ignore 
+          if-no-files-found: ignore

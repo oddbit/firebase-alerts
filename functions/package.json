@@ -1,6 +1,6 @@
 {
   "name": "firebase-alerts",
-  "version": "0.0.8",
+  "version": "0.0.15",
   "description": "Firebase alert integration with webhook push notifications to various platforms",
   "license": "Apache-2.0",
   "homepage": "https://github.com/oddbit/firebase-alerts#readme",
