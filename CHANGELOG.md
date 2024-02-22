@@ -1,3 +1,7 @@
+## 0.0.15
+
+- Adding icon and tags to extension config
+
 ## 0.0.14
 
 - Stabilizing the extension for release

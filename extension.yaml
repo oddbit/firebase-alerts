@@ -1,11 +1,13 @@
 name: firebase-alerts
-version: 0.0.14
+version: 0.0.15
 specVersion: v1beta
 billingRequired: true
 license: Apache-2.0
 
 displayName: Firebase Alerts
 description: Empower your team with timely Firebase notifications sent directly to your preferred communication platform.
+icon: icon.png
+tags: [messaging, utilities]
 
 author:
   authorName: Oddbit
