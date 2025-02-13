@@ -1,7 +1,7 @@
 {
   "name": "Firebase Alerts Extension",
   "platforms": [
-    "Web"
+    "Admin"
   ],
   "content": "README.md",
   "pages": {
