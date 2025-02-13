@@ -1,0 +1,13 @@
+{
+  "name": "Firebase Alerts Extension",
+  "platforms": [
+    "Web"
+  ],
+  "content": "README.md",
+  "pages": {
+    "PREINSTALL.md": "Pre install instructions",
+    "POSTINSTALL.md": "Post install instructions",    
+    "CHANGELOG.md": "Changelog"
+  },
+  "related": []
+}
